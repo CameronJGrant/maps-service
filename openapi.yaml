@@ -213,6 +213,26 @@ components:
         Date:
           type: integer
           format: int64
+        Submitter:
+          type: integer
+          format: int64
+        AssetID:
+          type: integer
+          format: int64
+        AssetVersion:
+          type: integer
+          format: int64
+        Completed:
+          type: boolean
+        SubmissionType:
+          type: integer
+          format: int32
+        TargetAssetID:
+          type: integer
+          format: int64
+        StatusID:
+          type: integer
+          format: int32
     SubmissionFilter:
       type: object
       properties:
