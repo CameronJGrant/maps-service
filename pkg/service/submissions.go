@@ -16,7 +16,23 @@ func (svc *Service) CreateSubmission(ctx context.Context) (*api.Submission, erro
 //
 // GET /submissions/{SubmissionID}
 func (svc *Service) GetSubmission(ctx context.Context, params api.GetSubmissionParams) (*api.Submission, error) {
-	return nil, nil
+	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
+	if err != nil{
+		return nil, err
+	}
+	return &api.Submission{
+		ID:             api.NewOptInt64(submission.ID),
+		DisplayName:    api.NewOptString(submission.DisplayName),
+		Creator:        api.NewOptString(submission.Creator),
+		GameID:         api.NewOptInt32(submission.GameID),
+		Date:           api.NewOptInt64(submission.Date.Unix()),
+		Submitter:      api.NewOptInt64(submission.Submitter),
+		AssetID:        api.NewOptInt64(submission.AssetID),
+		AssetVersion:   api.NewOptInt64(submission.AssetVersion),
+		Completed:      api.NewOptBool(submission.Completed),
+		TargetAssetID:  api.NewOptInt64(submission.TargetAssetID),
+		StatusID:       api.NewOptInt32(submission.StatusID),
+	}, nil
 }
 
 // ListSubmissions implements listSubmissions operation.
