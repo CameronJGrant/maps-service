@@ -1,17 +1,23 @@
 openapi: 3.1.0
 info:
-  title: StrafesNET Maps - OpenAPI 3.0
-  description: Browse and manage maps.
+  title: StrafesNET Maptest - OpenAPI 3.1
+  description: Browse and manage maps in the staging pipeline.
   version: 0.1.0
 servers:
-  - url: https://maps.strafes.net/v1
+  - url: https://maptest.strafes.net/v1
 tags:
   - name: Maps
     description: Map operations
 paths:
+# create
+# status
+# 	submit
+# 	accept
+# 	publish
+# complete
   /maps:
     get:
-      summary: Get list of maps
+      summary: Get list of submissions
       operationId: listMaps
       tags:
         - Maps
@@ -35,6 +41,30 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Map"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create new submission
+      operationId: createMap
+      tags:
+        - Maps
+      parameters:
+        - name: map
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/MapCreate"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Map"
         default:
           description: General Error
           content:
