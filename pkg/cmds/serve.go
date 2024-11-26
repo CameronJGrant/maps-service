@@ -1,11 +1,20 @@
-package cmd
+package cmds
 
-import "github.com/urfave/cli/v2"
+import (
+	"fmt"
+	"git.itzana.me/strafesnet/maps-service/pkg/api"
+	"git.itzana.me/strafesnet/maps-service/pkg/datastore/gormstore"
+	"git.itzana.me/strafesnet/maps-service/pkg/service"
+	log "github.com/sirupsen/logrus"
+	"github.com/urfave/cli/v2"
+	"net/http"
+)
 
-func NewRunCommand() *cli.Command {
+func NewServeCommand() *cli.Command {
 	return &cli.Command{
-		Name:  "run",
-		Usage: "Run maps service",
+		Name:   "serve",
+		Usage:  "Run maps service",
+		Action: serve,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:     "pg-host",
@@ -37,6 +46,32 @@ func NewRunCommand() *cli.Command {
 				EnvVars:  []string{"PG_PASSWORD"},
 				Required: true,
 			},
+			&cli.BoolFlag{
+				Name:    "migrate",
+				Usage:   "Run database migrations",
+				Value:   true,
+				EnvVars: []string{"MIGRATE"},
+			},
+			&cli.IntFlag{
+				Name:    "port",
+				Usage:   "Port to listen on",
+				Value:   8080,
+				EnvVars: []string{"PORT"},
+			},
 		},
 	}
+}
+
+func serve(ctx *cli.Context) error {
+	db, err := gormstore.New(ctx)
+	if err != nil {
+		log.WithError(err).Fatal("failed to connect database")
+	}
+
+	srv, err := api.NewServer(&service.Service{DB: db}, api.WithPathPrefix("/v2"))
+	if err != nil {
+		log.WithError(err).Fatal("failed to initialize api server")
+	}
+
+	return http.ListenAndServe(fmt.Sprintf(":%d", ctx.Int("port")), srv)
 }

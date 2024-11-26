@@ -1,4 +1,4 @@
-package controller
+package service
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 )
 
 // POST /submissions
-func CreateSubmission(ctx context.Context) (*api.Submission, error) {
+func (svc *Service) CreateSubmission(ctx context.Context) (*api.Submission, error) {
 	return nil, nil
 }
 
@@ -15,7 +15,7 @@ func CreateSubmission(ctx context.Context) (*api.Submission, error) {
 // Retrieve map with ID.
 //
 // GET /submissions/{SubmissionID}
-func GetSubmission(ctx context.Context, params api.GetSubmissionParams) (*api.Submission, error) {
+func (svc *Service) GetSubmission(ctx context.Context, params api.GetSubmissionParams) (*api.Submission, error) {
 	return nil, nil
 }
 
@@ -24,7 +24,7 @@ func GetSubmission(ctx context.Context, params api.GetSubmissionParams) (*api.Su
 // Get list of submissions.
 //
 // GET /submissions
-func ListSubmissions(ctx context.Context, params api.ListSubmissionsParams) ([]api.Submission, error) {
+func (svc *Service) ListSubmissions(ctx context.Context, params api.ListSubmissionsParams) ([]api.Submission, error) {
 	return nil, nil
 }
 
@@ -33,7 +33,7 @@ func ListSubmissions(ctx context.Context, params api.ListSubmissionsParams) ([]a
 // Retrieve map with ID.
 //
 // PATCH /submissions/{SubmissionID}/completed
-func PatchSubmissionCompleted(ctx context.Context, params api.PatchSubmissionCompletedParams) error {
+func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.PatchSubmissionCompletedParams) error {
 	return nil
 }
 
@@ -42,7 +42,7 @@ func PatchSubmissionCompleted(ctx context.Context, params api.PatchSubmissionCom
 // Update model following role restrictions.
 //
 // PATCH /submissions/{SubmissionID}/model
-func PatchSubmissionModel(ctx context.Context, params api.PatchSubmissionModelParams) error {
+func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSubmissionModelParams) error {
 	return nil
 }
 
@@ -51,6 +51,6 @@ func PatchSubmissionModel(ctx context.Context, params api.PatchSubmissionModelPa
 // Update status following role restrictions.
 //
 // PATCH /submissions/{SubmissionID}/status
-func PatchSubmissionStatus(ctx context.Context, params api.PatchSubmissionStatusParams) error {
+func (svc *Service) PatchSubmissionStatus(ctx context.Context, params api.PatchSubmissionStatusParams) error {
 	return nil
 }

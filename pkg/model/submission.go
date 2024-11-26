@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type Map struct {
+type Submission struct {
 	ID          int64
 	DisplayName string
 	Creator     string
