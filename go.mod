@@ -1,15 +1,17 @@
 module git.itzana.me/strafesnet/public-api
 
-go 1.21.5
+go 1.22
+
+toolchain go1.23.3
 
 require (
 	git.itzana.me/strafesnet/go-grpc v0.0.0-20240302215338-8ebbc7cffb0a
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.1.0
 	github.com/ogen-go/ogen v1.2.1
-	go.opentelemetry.io/otel v1.27.0
-	go.opentelemetry.io/otel/metric v1.27.0
-	go.opentelemetry.io/otel/trace v1.27.0
+	go.opentelemetry.io/otel v1.32.0
+	go.opentelemetry.io/otel/metric v1.32.0
+	go.opentelemetry.io/otel/trace v1.32.0
 	google.golang.org/grpc v1.64.0
 )
 
