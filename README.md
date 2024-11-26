@@ -8,7 +8,7 @@
     ```
 2. Build the project.
     ```bash
-    go build git.itzana.me/strafesnet/public-api
+    go build git.itzana.me/strafesnet/maps-service
     ```
 
     By default, the project opens at `localhost:8080`.

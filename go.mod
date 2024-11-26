@@ -1,4 +1,4 @@
-module git.itzana.me/strafesnet/public-api
+module git.itzana.me/strafesnet/maps-service
 
 go 1.22
 
