@@ -1,11 +1,10 @@
 openapi: 3.0.0
 info:
-  title: StrafesNET - OpenAPI 3.0
-  description: |-
-    TBD
+  title: StrafesNET Maps - OpenAPI 3.0
+  description: Browse and manage maps.
   version: 0.1.0
 servers:
-  - url: https://api.strafes.net/v2
+  - url: https://maps.strafes.net/v1
 tags:
   - name: Times
     description: Retrieve player times
@@ -114,38 +113,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /ranks:
-    get:
-      summary: Get list of ranks
-      operationId: listRanks
-      tags:
-        - User
-      parameters:
-        - name: page
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/Pagination"
-        - name: filter
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/RankFilter"
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Rank"
-        default:
-          description: General Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
 components:
   schemas:
     User:
@@ -177,7 +144,7 @@ components:
           format: int64
     Time:
       type: object
-      properties: 
+      properties:
         ID:
           type: integer
           format: int64
@@ -226,7 +193,7 @@ components:
           format: int32
     Rank:
       type: object
-      properties: 
+      properties:
         ID:
           type: integer
           format: int64
