@@ -3,7 +3,6 @@
 package api
 
 import (
-	"fmt"
 	"io"
 	"mime"
 	"net/http"
@@ -15,7 +14,7 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func decodeGetUserResponse(resp *http.Response) (res *User, _ error) {
+func decodeCreateSubmissionResponse(resp *http.Response) (res *Submission, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -31,7 +30,7 @@ func decodeGetUserResponse(resp *http.Response) (res *User, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response User
+			var response Submission
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -98,7 +97,7 @@ func decodeGetUserResponse(resp *http.Response) (res *User, _ error) {
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeGetUserRankResponse(resp *http.Response) (res *Rank, _ error) {
+func decodeGetSubmissionResponse(resp *http.Response) (res *Submission, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -114,7 +113,7 @@ func decodeGetUserRankResponse(resp *http.Response) (res *Rank, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response Rank
+			var response Submission
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -130,15 +129,6 @@ func decodeGetUserRankResponse(resp *http.Response) (res *Rank, _ error) {
 					Err:         err,
 				}
 				return res, err
-			}
-			// Validate response.
-			if err := func() error {
-				if err := response.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return res, errors.Wrap(err, "validate")
 			}
 			return &response, nil
 		default:
@@ -190,7 +180,7 @@ func decodeGetUserRankResponse(resp *http.Response) (res *Rank, _ error) {
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeListRanksResponse(resp *http.Response) (res []Rank, _ error) {
+func decodeListSubmissionsResponse(resp *http.Response) (res []Submission, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -206,11 +196,11 @@ func decodeListRanksResponse(resp *http.Response) (res []Rank, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response []Rank
+			var response []Submission
 			if err := func() error {
-				response = make([]Rank, 0)
+				response = make([]Submission, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem Rank
+					var elem Submission
 					if err := elem.Decode(d); err != nil {
 						return err
 					}
@@ -235,23 +225,6 @@ func decodeListRanksResponse(resp *http.Response) (res []Rank, _ error) {
 			if err := func() error {
 				if response == nil {
 					return errors.New("nil is invalid value")
-				}
-				var failures []validate.FieldError
-				for i, elem := range response {
-					if err := func() error {
-						if err := elem.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						failures = append(failures, validate.FieldError{
-							Name:  fmt.Sprintf("[%d]", i),
-							Error: err,
-						})
-					}
-				}
-				if len(failures) > 0 {
-					return &validate.Error{Fields: failures}
 				}
 				return nil
 			}(); err != nil {
@@ -307,10 +280,14 @@ func decodeListRanksResponse(resp *http.Response) (res []Rank, _ error) {
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeListTimesResponse(resp *http.Response) (res []Time, _ error) {
+func decodePatchSubmissionCompletedResponse(resp *http.Response) (res *PatchSubmissionCompletedOK, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
+		return &PatchSubmissionCompletedOK{}, nil
+	}
+	// Convenient error response.
+	defRes, err := func() (res *ErrorStatusCode, err error) {
 		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
 		if err != nil {
 			return res, errors.Wrap(err, "parse media type")
@@ -323,17 +300,9 @@ func decodeListTimesResponse(resp *http.Response) (res []Time, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response []Time
+			var response Error
 			if err := func() error {
-				response = make([]Time, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem Time
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					response = append(response, elem)
-					return nil
-				}); err != nil {
+				if err := response.Decode(d); err != nil {
 					return err
 				}
 				if err := d.Skip(); err != io.EOF {
@@ -348,19 +317,76 @@ func decodeListTimesResponse(resp *http.Response) (res []Time, _ error) {
 				}
 				return res, err
 			}
-			// Validate response.
-			if err := func() error {
-				if response == nil {
-					return errors.New("nil is invalid value")
-				}
-				return nil
-			}(); err != nil {
-				return res, errors.Wrap(err, "validate")
-			}
-			return response, nil
+			return &ErrorStatusCode{
+				StatusCode: resp.StatusCode,
+				Response:   response,
+			}, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}
+	}()
+	if err != nil {
+		return res, errors.Wrapf(err, "default (code %d)", resp.StatusCode)
+	}
+	return res, errors.Wrap(defRes, "error")
+}
+
+func decodePatchSubmissionModelResponse(resp *http.Response) (res *PatchSubmissionModelOK, _ error) {
+	switch resp.StatusCode {
+	case 200:
+		// Code 200.
+		return &PatchSubmissionModelOK{}, nil
+	}
+	// Convenient error response.
+	defRes, err := func() (res *ErrorStatusCode, err error) {
+		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
+		if err != nil {
+			return res, errors.Wrap(err, "parse media type")
+		}
+		switch {
+		case ct == "application/json":
+			buf, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return res, err
+			}
+			d := jx.DecodeBytes(buf)
+
+			var response Error
+			if err := func() error {
+				if err := response.Decode(d); err != nil {
+					return err
+				}
+				if err := d.Skip(); err != io.EOF {
+					return errors.New("unexpected trailing data")
+				}
+				return nil
+			}(); err != nil {
+				err = &ogenerrors.DecodeBodyError{
+					ContentType: ct,
+					Body:        buf,
+					Err:         err,
+				}
+				return res, err
+			}
+			return &ErrorStatusCode{
+				StatusCode: resp.StatusCode,
+				Response:   response,
+			}, nil
+		default:
+			return res, validate.InvalidContentType(ct)
+		}
+	}()
+	if err != nil {
+		return res, errors.Wrapf(err, "default (code %d)", resp.StatusCode)
+	}
+	return res, errors.Wrap(defRes, "error")
+}
+
+func decodePatchSubmissionStatusResponse(resp *http.Response) (res *PatchSubmissionStatusOK, _ error) {
+	switch resp.StatusCode {
+	case 200:
+		// Code 200.
+		return &PatchSubmissionStatusOK{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {

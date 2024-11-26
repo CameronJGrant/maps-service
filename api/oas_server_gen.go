@@ -8,30 +8,42 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// GetUser implements getUser operation.
+	// CreateSubmission implements createSubmission operation.
 	//
-	// Retrieve user with ID.
+	// Create new submission.
 	//
-	// GET /users/{UserID}
-	GetUser(ctx context.Context, params GetUserParams) (*User, error)
-	// GetUserRank implements getUserRank operation.
+	// POST /submissions
+	CreateSubmission(ctx context.Context) (*Submission, error)
+	// GetSubmission implements getSubmission operation.
 	//
-	// Retrieve rank of user.
+	// Retrieve map with ID.
 	//
-	// GET /users/{UserID}/rank
-	GetUserRank(ctx context.Context, params GetUserRankParams) (*Rank, error)
-	// ListRanks implements listRanks operation.
+	// GET /submissions/{SubmissionID}
+	GetSubmission(ctx context.Context, params GetSubmissionParams) (*Submission, error)
+	// ListSubmissions implements listSubmissions operation.
 	//
-	// Get list of ranks.
+	// Get list of submissions.
 	//
-	// GET /ranks
-	ListRanks(ctx context.Context, params ListRanksParams) ([]Rank, error)
-	// ListTimes implements listTimes operation.
+	// GET /submissions
+	ListSubmissions(ctx context.Context, params ListSubmissionsParams) ([]Submission, error)
+	// PatchSubmissionCompleted implements patchSubmissionCompleted operation.
 	//
-	// Get list of times.
+	// Retrieve map with ID.
 	//
-	// GET /times
-	ListTimes(ctx context.Context, params ListTimesParams) ([]Time, error)
+	// PATCH /submissions/{SubmissionID}/completed
+	PatchSubmissionCompleted(ctx context.Context, params PatchSubmissionCompletedParams) error
+	// PatchSubmissionModel implements patchSubmissionModel operation.
+	//
+	// Update model following role restrictions.
+	//
+	// PATCH /submissions/{SubmissionID}/model
+	PatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) error
+	// PatchSubmissionStatus implements patchSubmissionStatus operation.
+	//
+	// Update status following role restrictions.
+	//
+	// PATCH /submissions/{SubmissionID}/status
+	PatchSubmissionStatus(ctx context.Context, params PatchSubmissionStatusParams) error
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

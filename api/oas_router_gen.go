@@ -49,69 +49,36 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/"
+		case '/': // Prefix: "/submissions"
 			origElem := elem
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+			if l := len("/submissions"); len(elem) >= l && elem[0:l] == "/submissions" {
 				elem = elem[l:]
 			} else {
 				break
 			}
 
 			if len(elem) == 0 {
-				break
+				switch r.Method {
+				case "GET":
+					s.handleListSubmissionsRequest([0]string{}, elemIsEscaped, w, r)
+				case "POST":
+					s.handleCreateSubmissionRequest([0]string{}, elemIsEscaped, w, r)
+				default:
+					s.notAllowed(w, r, "GET,POST")
+				}
+
+				return
 			}
 			switch elem[0] {
-			case 'r': // Prefix: "ranks"
+			case '/': // Prefix: "/"
 				origElem := elem
-				if l := len("ranks"); len(elem) >= l && elem[0:l] == "ranks" {
+				if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "GET":
-						s.handleListRanksRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET")
-					}
-
-					return
-				}
-
-				elem = origElem
-			case 't': // Prefix: "times"
-				origElem := elem
-				if l := len("times"); len(elem) >= l && elem[0:l] == "times" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "GET":
-						s.handleListTimesRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET")
-					}
-
-					return
-				}
-
-				elem = origElem
-			case 'u': // Prefix: "users/"
-				origElem := elem
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "UserID"
+				// Param: "SubmissionID"
 				// Match until "/"
 				idx := strings.IndexByte(elem, '/')
 				if idx < 0 {
@@ -123,7 +90,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleGetUserRequest([1]string{
+						s.handleGetSubmissionRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					default:
@@ -133,26 +100,87 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/rank"
+				case '/': // Prefix: "/"
 					origElem := elem
-					if l := len("/rank"); len(elem) >= l && elem[0:l] == "/rank" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "GET":
-							s.handleGetUserRankRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "GET")
+						break
+					}
+					switch elem[0] {
+					case 'c': // Prefix: "completed"
+						origElem := elem
+						if l := len("completed"); len(elem) >= l && elem[0:l] == "completed" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "PATCH":
+								s.handlePatchSubmissionCompletedRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "PATCH")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'm': // Prefix: "model"
+						origElem := elem
+						if l := len("model"); len(elem) >= l && elem[0:l] == "model" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "PATCH":
+								s.handlePatchSubmissionModelRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "PATCH")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 's': // Prefix: "status"
+						origElem := elem
+						if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "PATCH":
+								s.handlePatchSubmissionStatusRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "PATCH")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -242,77 +270,46 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/"
+		case '/': // Prefix: "/submissions"
 			origElem := elem
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+			if l := len("/submissions"); len(elem) >= l && elem[0:l] == "/submissions" {
 				elem = elem[l:]
 			} else {
 				break
 			}
 
 			if len(elem) == 0 {
-				break
+				switch method {
+				case "GET":
+					r.name = "ListSubmissions"
+					r.summary = "Get list of submissions"
+					r.operationID = "listSubmissions"
+					r.pathPattern = "/submissions"
+					r.args = args
+					r.count = 0
+					return r, true
+				case "POST":
+					r.name = "CreateSubmission"
+					r.summary = "Create new submission"
+					r.operationID = "createSubmission"
+					r.pathPattern = "/submissions"
+					r.args = args
+					r.count = 0
+					return r, true
+				default:
+					return
+				}
 			}
 			switch elem[0] {
-			case 'r': // Prefix: "ranks"
+			case '/': // Prefix: "/"
 				origElem := elem
-				if l := len("ranks"); len(elem) >= l && elem[0:l] == "ranks" {
+				if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "GET":
-						r.name = "ListRanks"
-						r.summary = "Get list of ranks"
-						r.operationID = "listRanks"
-						r.pathPattern = "/ranks"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
-					}
-				}
-
-				elem = origElem
-			case 't': // Prefix: "times"
-				origElem := elem
-				if l := len("times"); len(elem) >= l && elem[0:l] == "times" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "GET":
-						r.name = "ListTimes"
-						r.summary = "Get list of times"
-						r.operationID = "listTimes"
-						r.pathPattern = "/times"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
-					}
-				}
-
-				elem = origElem
-			case 'u': // Prefix: "users/"
-				origElem := elem
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "UserID"
+				// Param: "SubmissionID"
 				// Match until "/"
 				idx := strings.IndexByte(elem, '/')
 				if idx < 0 {
@@ -324,10 +321,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						r.name = "GetUser"
-						r.summary = "Retrieve user with ID"
-						r.operationID = "getUser"
-						r.pathPattern = "/users/{UserID}"
+						r.name = "GetSubmission"
+						r.summary = "Retrieve map with ID"
+						r.operationID = "getSubmission"
+						r.pathPattern = "/submissions/{SubmissionID}"
 						r.args = args
 						r.count = 1
 						return r, true
@@ -336,28 +333,93 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/rank"
+				case '/': // Prefix: "/"
 					origElem := elem
-					if l := len("/rank"); len(elem) >= l && elem[0:l] == "/rank" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "GET":
-							r.name = "GetUserRank"
-							r.summary = "Retrieve rank of user"
-							r.operationID = "getUserRank"
-							r.pathPattern = "/users/{UserID}/rank"
-							r.args = args
-							r.count = 1
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'c': // Prefix: "completed"
+						origElem := elem
+						if l := len("completed"); len(elem) >= l && elem[0:l] == "completed" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "PATCH":
+								r.name = "PatchSubmissionCompleted"
+								r.summary = "Retrieve map with ID"
+								r.operationID = "patchSubmissionCompleted"
+								r.pathPattern = "/submissions/{SubmissionID}/completed"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'm': // Prefix: "model"
+						origElem := elem
+						if l := len("model"); len(elem) >= l && elem[0:l] == "model" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "PATCH":
+								r.name = "PatchSubmissionModel"
+								r.summary = "Update model following role restrictions"
+								r.operationID = "patchSubmissionModel"
+								r.pathPattern = "/submissions/{SubmissionID}/model"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 's': // Prefix: "status"
+						origElem := elem
+						if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "PATCH":
+								r.name = "PatchSubmissionStatus"
+								r.summary = "Update status following role restrictions"
+								r.operationID = "patchSubmissionStatus"
+								r.pathPattern = "/submissions/{SubmissionID}/status"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem

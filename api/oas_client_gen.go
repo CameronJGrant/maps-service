@@ -12,7 +12,7 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
-	semconv "go.opentelemetry.io/otel/semconv/v1.19.0"
+	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/ogen-go/ogen/conv"
@@ -23,30 +23,42 @@ import (
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
-	// GetUser invokes getUser operation.
+	// CreateSubmission invokes createSubmission operation.
 	//
-	// Retrieve user with ID.
+	// Create new submission.
 	//
-	// GET /users/{UserID}
-	GetUser(ctx context.Context, params GetUserParams) (*User, error)
-	// GetUserRank invokes getUserRank operation.
+	// POST /submissions
+	CreateSubmission(ctx context.Context) (*Submission, error)
+	// GetSubmission invokes getSubmission operation.
 	//
-	// Retrieve rank of user.
+	// Retrieve map with ID.
 	//
-	// GET /users/{UserID}/rank
-	GetUserRank(ctx context.Context, params GetUserRankParams) (*Rank, error)
-	// ListRanks invokes listRanks operation.
+	// GET /submissions/{SubmissionID}
+	GetSubmission(ctx context.Context, params GetSubmissionParams) (*Submission, error)
+	// ListSubmissions invokes listSubmissions operation.
 	//
-	// Get list of ranks.
+	// Get list of submissions.
 	//
-	// GET /ranks
-	ListRanks(ctx context.Context, params ListRanksParams) ([]Rank, error)
-	// ListTimes invokes listTimes operation.
+	// GET /submissions
+	ListSubmissions(ctx context.Context, params ListSubmissionsParams) ([]Submission, error)
+	// PatchSubmissionCompleted invokes patchSubmissionCompleted operation.
 	//
-	// Get list of times.
+	// Retrieve map with ID.
 	//
-	// GET /times
-	ListTimes(ctx context.Context, params ListTimesParams) ([]Time, error)
+	// PATCH /submissions/{SubmissionID}/completed
+	PatchSubmissionCompleted(ctx context.Context, params PatchSubmissionCompletedParams) error
+	// PatchSubmissionModel invokes patchSubmissionModel operation.
+	//
+	// Update model following role restrictions.
+	//
+	// PATCH /submissions/{SubmissionID}/model
+	PatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) error
+	// PatchSubmissionStatus invokes patchSubmissionStatus operation.
+	//
+	// Update status following role restrictions.
+	//
+	// PATCH /submissions/{SubmissionID}/status
+	PatchSubmissionStatus(ctx context.Context, params PatchSubmissionStatusParams) error
 }
 
 // Client implements OAS client.
@@ -101,21 +113,21 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 	return u
 }
 
-// GetUser invokes getUser operation.
+// CreateSubmission invokes createSubmission operation.
 //
-// Retrieve user with ID.
+// Create new submission.
 //
-// GET /users/{UserID}
-func (c *Client) GetUser(ctx context.Context, params GetUserParams) (*User, error) {
-	res, err := c.sendGetUser(ctx, params)
+// POST /submissions
+func (c *Client) CreateSubmission(ctx context.Context) (*Submission, error) {
+	res, err := c.sendCreateSubmission(ctx)
 	return res, err
 }
 
-func (c *Client) sendGetUser(ctx context.Context, params GetUserParams) (res *User, err error) {
+func (c *Client) sendCreateSubmission(ctx context.Context) (res *Submission, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("getUser"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/users/{UserID}"),
+		otelogen.OperationID("createSubmission"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/submissions"),
 	}
 
 	// Run stopwatch.
@@ -130,7 +142,79 @@ func (c *Client) sendGetUser(ctx context.Context, params GetUserParams) (res *Us
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetUser",
+	ctx, span := c.cfg.Tracer.Start(ctx, "CreateSubmission",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/submissions"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeCreateSubmissionResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// GetSubmission invokes getSubmission operation.
+//
+// Retrieve map with ID.
+//
+// GET /submissions/{SubmissionID}
+func (c *Client) GetSubmission(ctx context.Context, params GetSubmissionParams) (*Submission, error) {
+	res, err := c.sendGetSubmission(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendGetSubmission(ctx context.Context, params GetSubmissionParams) (res *Submission, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getSubmission"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "GetSubmission",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -148,16 +232,16 @@ func (c *Client) sendGetUser(ctx context.Context, params GetUserParams) (res *Us
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [2]string
-	pathParts[0] = "/users/"
+	pathParts[0] = "/submissions/"
 	{
-		// Encode "UserID" parameter.
+		// Encode "SubmissionID" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "UserID",
+			Param:   "SubmissionID",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.Int64ToString(params.UserID))
+			return e.EncodeValue(conv.Int64ToString(params.SubmissionID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -183,7 +267,7 @@ func (c *Client) sendGetUser(ctx context.Context, params GetUserParams) (res *Us
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeGetUserResponse(resp)
+	result, err := decodeGetSubmissionResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -191,21 +275,21 @@ func (c *Client) sendGetUser(ctx context.Context, params GetUserParams) (res *Us
 	return result, nil
 }
 
-// GetUserRank invokes getUserRank operation.
+// ListSubmissions invokes listSubmissions operation.
 //
-// Retrieve rank of user.
+// Get list of submissions.
 //
-// GET /users/{UserID}/rank
-func (c *Client) GetUserRank(ctx context.Context, params GetUserRankParams) (*Rank, error) {
-	res, err := c.sendGetUserRank(ctx, params)
+// GET /submissions
+func (c *Client) ListSubmissions(ctx context.Context, params ListSubmissionsParams) ([]Submission, error) {
+	res, err := c.sendListSubmissions(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendGetUserRank(ctx context.Context, params GetUserRankParams) (res *Rank, err error) {
+func (c *Client) sendListSubmissions(ctx context.Context, params ListSubmissionsParams) (res []Submission, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("getUserRank"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/users/{UserID}/rank"),
+		otelogen.OperationID("listSubmissions"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/submissions"),
 	}
 
 	// Run stopwatch.
@@ -220,7 +304,114 @@ func (c *Client) sendGetUserRank(ctx context.Context, params GetUserRankParams) 
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetUserRank",
+	ctx, span := c.cfg.Tracer.Start(ctx, "ListSubmissions",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/submissions"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return params.Page.EncodeURI(e)
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "filter" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "filter",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Filter.Get(); ok {
+				return val.EncodeURI(e)
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeListSubmissionsResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// PatchSubmissionCompleted invokes patchSubmissionCompleted operation.
+//
+// Retrieve map with ID.
+//
+// PATCH /submissions/{SubmissionID}/completed
+func (c *Client) PatchSubmissionCompleted(ctx context.Context, params PatchSubmissionCompletedParams) error {
+	_, err := c.sendPatchSubmissionCompleted(ctx, params)
+	return err
+}
+
+func (c *Client) sendPatchSubmissionCompleted(ctx context.Context, params PatchSubmissionCompletedParams) (res *PatchSubmissionCompletedOK, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("patchSubmissionCompleted"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/completed"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "PatchSubmissionCompleted",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -238,16 +429,16 @@ func (c *Client) sendGetUserRank(ctx context.Context, params GetUserRankParams) 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [3]string
-	pathParts[0] = "/users/"
+	pathParts[0] = "/submissions/"
 	{
-		// Encode "UserID" parameter.
+		// Encode "SubmissionID" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "UserID",
+			Param:   "SubmissionID",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.Int64ToString(params.UserID))
+			return e.EncodeValue(conv.Int64ToString(params.SubmissionID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -257,49 +448,21 @@ func (c *Client) sendGetUserRank(ctx context.Context, params GetUserRankParams) 
 		}
 		pathParts[1] = encoded
 	}
-	pathParts[2] = "/rank"
+	pathParts[2] = "/completed"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
 	{
-		// Encode "StyleID" parameter.
+		// Encode "Completed" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "StyleID",
+			Name:    "Completed",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			return e.EncodeValue(conv.Int32ToString(params.StyleID))
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "GameID" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "GameID",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			return e.EncodeValue(conv.Int32ToString(params.GameID))
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "ModeID" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "ModeID",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			return e.EncodeValue(conv.Int32ToString(params.ModeID))
+			return e.EncodeValue(conv.BoolToString(params.Completed))
 		}); err != nil {
 			return res, errors.Wrap(err, "encode query")
 		}
@@ -307,7 +470,7 @@ func (c *Client) sendGetUserRank(ctx context.Context, params GetUserRankParams) 
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
+	r, err := ht.NewRequest(ctx, "PATCH", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -320,7 +483,7 @@ func (c *Client) sendGetUserRank(ctx context.Context, params GetUserRankParams) 
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeGetUserRankResponse(resp)
+	result, err := decodePatchSubmissionCompletedResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -328,21 +491,21 @@ func (c *Client) sendGetUserRank(ctx context.Context, params GetUserRankParams) 
 	return result, nil
 }
 
-// ListRanks invokes listRanks operation.
+// PatchSubmissionModel invokes patchSubmissionModel operation.
 //
-// Get list of ranks.
+// Update model following role restrictions.
 //
-// GET /ranks
-func (c *Client) ListRanks(ctx context.Context, params ListRanksParams) ([]Rank, error) {
-	res, err := c.sendListRanks(ctx, params)
-	return res, err
+// PATCH /submissions/{SubmissionID}/model
+func (c *Client) PatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) error {
+	_, err := c.sendPatchSubmissionModel(ctx, params)
+	return err
 }
 
-func (c *Client) sendListRanks(ctx context.Context, params ListRanksParams) (res []Rank, err error) {
+func (c *Client) sendPatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) (res *PatchSubmissionModelOK, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("listRanks"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/ranks"),
+		otelogen.OperationID("patchSubmissionModel"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/model"),
 	}
 
 	// Run stopwatch.
@@ -357,7 +520,7 @@ func (c *Client) sendListRanks(ctx context.Context, params ListRanksParams) (res
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListRanks",
+	ctx, span := c.cfg.Tracer.Start(ctx, "PatchSubmissionModel",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -374,39 +537,55 @@ func (c *Client) sendListRanks(ctx context.Context, params ListRanksParams) (res
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/ranks"
+	var pathParts [3]string
+	pathParts[0] = "/submissions/"
+	{
+		// Encode "SubmissionID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "SubmissionID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.Int64ToString(params.SubmissionID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/model"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
 	{
-		// Encode "page" parameter.
+		// Encode "ModelID" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "page",
+			Name:    "ModelID",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			return params.Page.EncodeURI(e)
+			return e.EncodeValue(conv.Int64ToString(params.ModelID))
 		}); err != nil {
 			return res, errors.Wrap(err, "encode query")
 		}
 	}
 	{
-		// Encode "filter" parameter.
+		// Encode "VersionID" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "filter",
+			Name:    "VersionID",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Filter.Get(); ok {
-				return val.EncodeURI(e)
-			}
-			return nil
+			return e.EncodeValue(conv.Int64ToString(params.VersionID))
 		}); err != nil {
 			return res, errors.Wrap(err, "encode query")
 		}
@@ -414,7 +593,7 @@ func (c *Client) sendListRanks(ctx context.Context, params ListRanksParams) (res
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
+	r, err := ht.NewRequest(ctx, "PATCH", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -427,7 +606,7 @@ func (c *Client) sendListRanks(ctx context.Context, params ListRanksParams) (res
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeListRanksResponse(resp)
+	result, err := decodePatchSubmissionModelResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -435,21 +614,21 @@ func (c *Client) sendListRanks(ctx context.Context, params ListRanksParams) (res
 	return result, nil
 }
 
-// ListTimes invokes listTimes operation.
+// PatchSubmissionStatus invokes patchSubmissionStatus operation.
 //
-// Get list of times.
+// Update status following role restrictions.
 //
-// GET /times
-func (c *Client) ListTimes(ctx context.Context, params ListTimesParams) ([]Time, error) {
-	res, err := c.sendListTimes(ctx, params)
-	return res, err
+// PATCH /submissions/{SubmissionID}/status
+func (c *Client) PatchSubmissionStatus(ctx context.Context, params PatchSubmissionStatusParams) error {
+	_, err := c.sendPatchSubmissionStatus(ctx, params)
+	return err
 }
 
-func (c *Client) sendListTimes(ctx context.Context, params ListTimesParams) (res []Time, err error) {
+func (c *Client) sendPatchSubmissionStatus(ctx context.Context, params PatchSubmissionStatusParams) (res *PatchSubmissionStatusOK, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("listTimes"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/times"),
+		otelogen.OperationID("patchSubmissionStatus"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status"),
 	}
 
 	// Run stopwatch.
@@ -464,7 +643,7 @@ func (c *Client) sendListTimes(ctx context.Context, params ListTimesParams) (res
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListTimes",
+	ctx, span := c.cfg.Tracer.Start(ctx, "PatchSubmissionStatus",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -481,39 +660,41 @@ func (c *Client) sendListTimes(ctx context.Context, params ListTimesParams) (res
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/times"
+	var pathParts [3]string
+	pathParts[0] = "/submissions/"
+	{
+		// Encode "SubmissionID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "SubmissionID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.Int64ToString(params.SubmissionID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/status"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
 	{
-		// Encode "page" parameter.
+		// Encode "Status" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "page",
+			Name:    "Status",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			return params.Page.EncodeURI(e)
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "filter" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "filter",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Filter.Get(); ok {
-				return val.EncodeURI(e)
-			}
-			return nil
+			return e.EncodeValue(conv.Int32ToString(params.Status))
 		}); err != nil {
 			return res, errors.Wrap(err, "encode query")
 		}
@@ -521,7 +702,7 @@ func (c *Client) sendListTimes(ctx context.Context, params ListTimesParams) (res
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
+	r, err := ht.NewRequest(ctx, "PATCH", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -534,7 +715,7 @@ func (c *Client) sendListTimes(ctx context.Context, params ListTimesParams) (res
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeListTimesResponse(resp)
+	result, err := decodePatchSubmissionStatusResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

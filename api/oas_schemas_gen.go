@@ -63,111 +63,6 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
-// Ref: #/components/schemas/Map
-type Map struct {
-	ID          OptInt64  `json:"ID"`
-	DisplayName OptString `json:"DisplayName"`
-	Creator     OptString `json:"Creator"`
-	GameID      OptInt32  `json:"GameID"`
-	Date        OptInt64  `json:"Date"`
-}
-
-// GetID returns the value of ID.
-func (s *Map) GetID() OptInt64 {
-	return s.ID
-}
-
-// GetDisplayName returns the value of DisplayName.
-func (s *Map) GetDisplayName() OptString {
-	return s.DisplayName
-}
-
-// GetCreator returns the value of Creator.
-func (s *Map) GetCreator() OptString {
-	return s.Creator
-}
-
-// GetGameID returns the value of GameID.
-func (s *Map) GetGameID() OptInt32 {
-	return s.GameID
-}
-
-// GetDate returns the value of Date.
-func (s *Map) GetDate() OptInt64 {
-	return s.Date
-}
-
-// SetID sets the value of ID.
-func (s *Map) SetID(val OptInt64) {
-	s.ID = val
-}
-
-// SetDisplayName sets the value of DisplayName.
-func (s *Map) SetDisplayName(val OptString) {
-	s.DisplayName = val
-}
-
-// SetCreator sets the value of Creator.
-func (s *Map) SetCreator(val OptString) {
-	s.Creator = val
-}
-
-// SetGameID sets the value of GameID.
-func (s *Map) SetGameID(val OptInt32) {
-	s.GameID = val
-}
-
-// SetDate sets the value of Date.
-func (s *Map) SetDate(val OptInt64) {
-	s.Date = val
-}
-
-// NewOptFloat64 returns new OptFloat64 with value set to v.
-func NewOptFloat64(v float64) OptFloat64 {
-	return OptFloat64{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptFloat64 is optional float64.
-type OptFloat64 struct {
-	Value float64
-	Set   bool
-}
-
-// IsSet returns true if OptFloat64 was set.
-func (o OptFloat64) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptFloat64) Reset() {
-	var v float64
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptFloat64) SetTo(v float64) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptFloat64) Get() (v float64, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptFloat64) Or(d float64) float64 {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptInt32 returns new OptInt32 with value set to v.
 func NewOptInt32(v int32) OptInt32 {
 	return OptInt32{
@@ -260,98 +155,6 @@ func (o OptInt64) Or(d int64) int64 {
 	return d
 }
 
-// NewOptMap returns new OptMap with value set to v.
-func NewOptMap(v Map) OptMap {
-	return OptMap{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptMap is optional Map.
-type OptMap struct {
-	Value Map
-	Set   bool
-}
-
-// IsSet returns true if OptMap was set.
-func (o OptMap) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptMap) Reset() {
-	var v Map
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptMap) SetTo(v Map) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptMap) Get() (v Map, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptMap) Or(d Map) Map {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptRankFilter returns new OptRankFilter with value set to v.
-func NewOptRankFilter(v RankFilter) OptRankFilter {
-	return OptRankFilter{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptRankFilter is optional RankFilter.
-type OptRankFilter struct {
-	Value RankFilter
-	Set   bool
-}
-
-// IsSet returns true if OptRankFilter was set.
-func (o OptRankFilter) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptRankFilter) Reset() {
-	var v RankFilter
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptRankFilter) SetTo(v RankFilter) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptRankFilter) Get() (v RankFilter, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptRankFilter) Or(d RankFilter) RankFilter {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
 	return OptString{
@@ -398,38 +201,38 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
-// NewOptTimeFilter returns new OptTimeFilter with value set to v.
-func NewOptTimeFilter(v TimeFilter) OptTimeFilter {
-	return OptTimeFilter{
+// NewOptSubmissionFilter returns new OptSubmissionFilter with value set to v.
+func NewOptSubmissionFilter(v SubmissionFilter) OptSubmissionFilter {
+	return OptSubmissionFilter{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptTimeFilter is optional TimeFilter.
-type OptTimeFilter struct {
-	Value TimeFilter
+// OptSubmissionFilter is optional SubmissionFilter.
+type OptSubmissionFilter struct {
+	Value SubmissionFilter
 	Set   bool
 }
 
-// IsSet returns true if OptTimeFilter was set.
-func (o OptTimeFilter) IsSet() bool { return o.Set }
+// IsSet returns true if OptSubmissionFilter was set.
+func (o OptSubmissionFilter) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptTimeFilter) Reset() {
-	var v TimeFilter
+func (o *OptSubmissionFilter) Reset() {
+	var v SubmissionFilter
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptTimeFilter) SetTo(v TimeFilter) {
+func (o *OptSubmissionFilter) SetTo(v SubmissionFilter) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptTimeFilter) Get() (v TimeFilter, ok bool) {
+func (o OptSubmissionFilter) Get() (v SubmissionFilter, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -437,53 +240,7 @@ func (o OptTimeFilter) Get() (v TimeFilter, ok bool) {
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptTimeFilter) Or(d TimeFilter) TimeFilter {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptUser returns new OptUser with value set to v.
-func NewOptUser(v User) OptUser {
-	return OptUser{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptUser is optional User.
-type OptUser struct {
-	Value User
-	Set   bool
-}
-
-// IsSet returns true if OptUser was set.
-func (o OptUser) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptUser) Reset() {
-	var v User
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptUser) SetTo(v User) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptUser) Get() (v User, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptUser) Or(d User) User {
+func (o OptSubmissionFilter) Or(d SubmissionFilter) SubmissionFilter {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -516,352 +273,129 @@ func (s *Pagination) SetLimit(val int32) {
 	s.Limit = val
 }
 
-// Ref: #/components/schemas/Rank
-type Rank struct {
-	ID        OptInt64   `json:"ID"`
-	User      OptUser    `json:"User"`
-	StyleID   OptInt32   `json:"StyleID"`
-	ModeID    OptInt32   `json:"ModeID"`
-	GameID    OptInt32   `json:"GameID"`
-	Rank      OptFloat64 `json:"Rank"`
-	Skill     OptFloat64 `json:"Skill"`
-	UpdatedAt OptInt64   `json:"UpdatedAt"`
+// PatchSubmissionCompletedOK is response for PatchSubmissionCompleted operation.
+type PatchSubmissionCompletedOK struct{}
+
+// PatchSubmissionModelOK is response for PatchSubmissionModel operation.
+type PatchSubmissionModelOK struct{}
+
+// PatchSubmissionStatusOK is response for PatchSubmissionStatus operation.
+type PatchSubmissionStatusOK struct{}
+
+// Ref: #/components/schemas/Submission
+type Submission struct {
+	ID          OptInt64  `json:"ID"`
+	DisplayName OptString `json:"DisplayName"`
+	Creator     OptString `json:"Creator"`
+	GameID      OptInt32  `json:"GameID"`
+	Date        OptInt64  `json:"Date"`
 }
 
 // GetID returns the value of ID.
-func (s *Rank) GetID() OptInt64 {
+func (s *Submission) GetID() OptInt64 {
 	return s.ID
 }
 
-// GetUser returns the value of User.
-func (s *Rank) GetUser() OptUser {
-	return s.User
+// GetDisplayName returns the value of DisplayName.
+func (s *Submission) GetDisplayName() OptString {
+	return s.DisplayName
 }
 
-// GetStyleID returns the value of StyleID.
-func (s *Rank) GetStyleID() OptInt32 {
-	return s.StyleID
-}
-
-// GetModeID returns the value of ModeID.
-func (s *Rank) GetModeID() OptInt32 {
-	return s.ModeID
+// GetCreator returns the value of Creator.
+func (s *Submission) GetCreator() OptString {
+	return s.Creator
 }
 
 // GetGameID returns the value of GameID.
-func (s *Rank) GetGameID() OptInt32 {
+func (s *Submission) GetGameID() OptInt32 {
 	return s.GameID
-}
-
-// GetRank returns the value of Rank.
-func (s *Rank) GetRank() OptFloat64 {
-	return s.Rank
-}
-
-// GetSkill returns the value of Skill.
-func (s *Rank) GetSkill() OptFloat64 {
-	return s.Skill
-}
-
-// GetUpdatedAt returns the value of UpdatedAt.
-func (s *Rank) GetUpdatedAt() OptInt64 {
-	return s.UpdatedAt
-}
-
-// SetID sets the value of ID.
-func (s *Rank) SetID(val OptInt64) {
-	s.ID = val
-}
-
-// SetUser sets the value of User.
-func (s *Rank) SetUser(val OptUser) {
-	s.User = val
-}
-
-// SetStyleID sets the value of StyleID.
-func (s *Rank) SetStyleID(val OptInt32) {
-	s.StyleID = val
-}
-
-// SetModeID sets the value of ModeID.
-func (s *Rank) SetModeID(val OptInt32) {
-	s.ModeID = val
-}
-
-// SetGameID sets the value of GameID.
-func (s *Rank) SetGameID(val OptInt32) {
-	s.GameID = val
-}
-
-// SetRank sets the value of Rank.
-func (s *Rank) SetRank(val OptFloat64) {
-	s.Rank = val
-}
-
-// SetSkill sets the value of Skill.
-func (s *Rank) SetSkill(val OptFloat64) {
-	s.Skill = val
-}
-
-// SetUpdatedAt sets the value of UpdatedAt.
-func (s *Rank) SetUpdatedAt(val OptInt64) {
-	s.UpdatedAt = val
-}
-
-// Ref: #/components/schemas/RankFilter
-type RankFilter struct {
-	StyleID OptInt32 `json:"StyleID"`
-	GameID  OptInt32 `json:"GameID"`
-	ModeID  OptInt32 `json:"ModeID"`
-	Sort    OptInt64 `json:"Sort"`
-}
-
-// GetStyleID returns the value of StyleID.
-func (s *RankFilter) GetStyleID() OptInt32 {
-	return s.StyleID
-}
-
-// GetGameID returns the value of GameID.
-func (s *RankFilter) GetGameID() OptInt32 {
-	return s.GameID
-}
-
-// GetModeID returns the value of ModeID.
-func (s *RankFilter) GetModeID() OptInt32 {
-	return s.ModeID
-}
-
-// GetSort returns the value of Sort.
-func (s *RankFilter) GetSort() OptInt64 {
-	return s.Sort
-}
-
-// SetStyleID sets the value of StyleID.
-func (s *RankFilter) SetStyleID(val OptInt32) {
-	s.StyleID = val
-}
-
-// SetGameID sets the value of GameID.
-func (s *RankFilter) SetGameID(val OptInt32) {
-	s.GameID = val
-}
-
-// SetModeID sets the value of ModeID.
-func (s *RankFilter) SetModeID(val OptInt32) {
-	s.ModeID = val
-}
-
-// SetSort sets the value of Sort.
-func (s *RankFilter) SetSort(val OptInt64) {
-	s.Sort = val
-}
-
-// Ref: #/components/schemas/Time
-type Time struct {
-	ID      OptInt64 `json:"ID"`
-	Time    OptInt64 `json:"Time"`
-	User    OptUser  `json:"User"`
-	Map     OptMap   `json:"Map"`
-	Date    OptInt64 `json:"Date"`
-	StyleID OptInt32 `json:"StyleID"`
-	ModeID  OptInt32 `json:"ModeID"`
-	GameID  OptInt32 `json:"GameID"`
-}
-
-// GetID returns the value of ID.
-func (s *Time) GetID() OptInt64 {
-	return s.ID
-}
-
-// GetTime returns the value of Time.
-func (s *Time) GetTime() OptInt64 {
-	return s.Time
-}
-
-// GetUser returns the value of User.
-func (s *Time) GetUser() OptUser {
-	return s.User
-}
-
-// GetMap returns the value of Map.
-func (s *Time) GetMap() OptMap {
-	return s.Map
 }
 
 // GetDate returns the value of Date.
-func (s *Time) GetDate() OptInt64 {
+func (s *Submission) GetDate() OptInt64 {
 	return s.Date
 }
 
-// GetStyleID returns the value of StyleID.
-func (s *Time) GetStyleID() OptInt32 {
-	return s.StyleID
-}
-
-// GetModeID returns the value of ModeID.
-func (s *Time) GetModeID() OptInt32 {
-	return s.ModeID
-}
-
-// GetGameID returns the value of GameID.
-func (s *Time) GetGameID() OptInt32 {
-	return s.GameID
-}
-
 // SetID sets the value of ID.
-func (s *Time) SetID(val OptInt64) {
+func (s *Submission) SetID(val OptInt64) {
 	s.ID = val
 }
 
-// SetTime sets the value of Time.
-func (s *Time) SetTime(val OptInt64) {
-	s.Time = val
+// SetDisplayName sets the value of DisplayName.
+func (s *Submission) SetDisplayName(val OptString) {
+	s.DisplayName = val
 }
 
-// SetUser sets the value of User.
-func (s *Time) SetUser(val OptUser) {
-	s.User = val
+// SetCreator sets the value of Creator.
+func (s *Submission) SetCreator(val OptString) {
+	s.Creator = val
 }
 
-// SetMap sets the value of Map.
-func (s *Time) SetMap(val OptMap) {
-	s.Map = val
+// SetGameID sets the value of GameID.
+func (s *Submission) SetGameID(val OptInt32) {
+	s.GameID = val
 }
 
 // SetDate sets the value of Date.
-func (s *Time) SetDate(val OptInt64) {
+func (s *Submission) SetDate(val OptInt64) {
 	s.Date = val
 }
 
-// SetStyleID sets the value of StyleID.
-func (s *Time) SetStyleID(val OptInt32) {
-	s.StyleID = val
-}
-
-// SetModeID sets the value of ModeID.
-func (s *Time) SetModeID(val OptInt32) {
-	s.ModeID = val
-}
-
-// SetGameID sets the value of GameID.
-func (s *Time) SetGameID(val OptInt32) {
-	s.GameID = val
-}
-
-// Ref: #/components/schemas/TimeFilter
-type TimeFilter struct {
-	ID      OptInt64 `json:"ID"`
-	Time    OptInt64 `json:"Time"`
-	UserID  OptInt64 `json:"UserID"`
-	MapID   OptInt64 `json:"MapID"`
-	StyleID OptInt32 `json:"StyleID"`
-	ModeID  OptInt32 `json:"ModeID"`
-	GameID  OptInt32 `json:"GameID"`
+// Ref: #/components/schemas/SubmissionFilter
+type SubmissionFilter struct {
+	ID          OptInt64  `json:"ID"`
+	DisplayName OptString `json:"DisplayName"`
+	Creator     OptString `json:"Creator"`
+	GameID      OptInt32  `json:"GameID"`
+	Date        OptInt64  `json:"Date"`
 }
 
 // GetID returns the value of ID.
-func (s *TimeFilter) GetID() OptInt64 {
+func (s *SubmissionFilter) GetID() OptInt64 {
 	return s.ID
 }
 
-// GetTime returns the value of Time.
-func (s *TimeFilter) GetTime() OptInt64 {
-	return s.Time
+// GetDisplayName returns the value of DisplayName.
+func (s *SubmissionFilter) GetDisplayName() OptString {
+	return s.DisplayName
 }
 
-// GetUserID returns the value of UserID.
-func (s *TimeFilter) GetUserID() OptInt64 {
-	return s.UserID
-}
-
-// GetMapID returns the value of MapID.
-func (s *TimeFilter) GetMapID() OptInt64 {
-	return s.MapID
-}
-
-// GetStyleID returns the value of StyleID.
-func (s *TimeFilter) GetStyleID() OptInt32 {
-	return s.StyleID
-}
-
-// GetModeID returns the value of ModeID.
-func (s *TimeFilter) GetModeID() OptInt32 {
-	return s.ModeID
+// GetCreator returns the value of Creator.
+func (s *SubmissionFilter) GetCreator() OptString {
+	return s.Creator
 }
 
 // GetGameID returns the value of GameID.
-func (s *TimeFilter) GetGameID() OptInt32 {
+func (s *SubmissionFilter) GetGameID() OptInt32 {
 	return s.GameID
 }
 
+// GetDate returns the value of Date.
+func (s *SubmissionFilter) GetDate() OptInt64 {
+	return s.Date
+}
+
 // SetID sets the value of ID.
-func (s *TimeFilter) SetID(val OptInt64) {
+func (s *SubmissionFilter) SetID(val OptInt64) {
 	s.ID = val
 }
 
-// SetTime sets the value of Time.
-func (s *TimeFilter) SetTime(val OptInt64) {
-	s.Time = val
+// SetDisplayName sets the value of DisplayName.
+func (s *SubmissionFilter) SetDisplayName(val OptString) {
+	s.DisplayName = val
 }
 
-// SetUserID sets the value of UserID.
-func (s *TimeFilter) SetUserID(val OptInt64) {
-	s.UserID = val
-}
-
-// SetMapID sets the value of MapID.
-func (s *TimeFilter) SetMapID(val OptInt64) {
-	s.MapID = val
-}
-
-// SetStyleID sets the value of StyleID.
-func (s *TimeFilter) SetStyleID(val OptInt32) {
-	s.StyleID = val
-}
-
-// SetModeID sets the value of ModeID.
-func (s *TimeFilter) SetModeID(val OptInt32) {
-	s.ModeID = val
+// SetCreator sets the value of Creator.
+func (s *SubmissionFilter) SetCreator(val OptString) {
+	s.Creator = val
 }
 
 // SetGameID sets the value of GameID.
-func (s *TimeFilter) SetGameID(val OptInt32) {
+func (s *SubmissionFilter) SetGameID(val OptInt32) {
 	s.GameID = val
 }
 
-// Ref: #/components/schemas/User
-type User struct {
-	ID       OptInt64  `json:"ID"`
-	Username OptString `json:"Username"`
-	StateID  OptInt32  `json:"StateID"`
-}
-
-// GetID returns the value of ID.
-func (s *User) GetID() OptInt64 {
-	return s.ID
-}
-
-// GetUsername returns the value of Username.
-func (s *User) GetUsername() OptString {
-	return s.Username
-}
-
-// GetStateID returns the value of StateID.
-func (s *User) GetStateID() OptInt32 {
-	return s.StateID
-}
-
-// SetID sets the value of ID.
-func (s *User) SetID(val OptInt64) {
-	s.ID = val
-}
-
-// SetUsername sets the value of Username.
-func (s *User) SetUsername(val OptString) {
-	s.Username = val
-}
-
-// SetStateID sets the value of StateID.
-func (s *User) SetStateID(val OptInt32) {
-	s.StateID = val
+// SetDate sets the value of Date.
+func (s *SubmissionFilter) SetDate(val OptInt64) {
+	s.Date = val
 }

@@ -13,40 +13,58 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// GetUser implements getUser operation.
+// CreateSubmission implements createSubmission operation.
 //
-// Retrieve user with ID.
+// Create new submission.
 //
-// GET /users/{UserID}
-func (UnimplementedHandler) GetUser(ctx context.Context, params GetUserParams) (r *User, _ error) {
+// POST /submissions
+func (UnimplementedHandler) CreateSubmission(ctx context.Context) (r *Submission, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// GetUserRank implements getUserRank operation.
+// GetSubmission implements getSubmission operation.
 //
-// Retrieve rank of user.
+// Retrieve map with ID.
 //
-// GET /users/{UserID}/rank
-func (UnimplementedHandler) GetUserRank(ctx context.Context, params GetUserRankParams) (r *Rank, _ error) {
+// GET /submissions/{SubmissionID}
+func (UnimplementedHandler) GetSubmission(ctx context.Context, params GetSubmissionParams) (r *Submission, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// ListRanks implements listRanks operation.
+// ListSubmissions implements listSubmissions operation.
 //
-// Get list of ranks.
+// Get list of submissions.
 //
-// GET /ranks
-func (UnimplementedHandler) ListRanks(ctx context.Context, params ListRanksParams) (r []Rank, _ error) {
+// GET /submissions
+func (UnimplementedHandler) ListSubmissions(ctx context.Context, params ListSubmissionsParams) (r []Submission, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// ListTimes implements listTimes operation.
+// PatchSubmissionCompleted implements patchSubmissionCompleted operation.
 //
-// Get list of times.
+// Retrieve map with ID.
 //
-// GET /times
-func (UnimplementedHandler) ListTimes(ctx context.Context, params ListTimesParams) (r []Time, _ error) {
-	return r, ht.ErrNotImplemented
+// PATCH /submissions/{SubmissionID}/completed
+func (UnimplementedHandler) PatchSubmissionCompleted(ctx context.Context, params PatchSubmissionCompletedParams) error {
+	return ht.ErrNotImplemented
+}
+
+// PatchSubmissionModel implements patchSubmissionModel operation.
+//
+// Update model following role restrictions.
+//
+// PATCH /submissions/{SubmissionID}/model
+func (UnimplementedHandler) PatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) error {
+	return ht.ErrNotImplemented
+}
+
+// PatchSubmissionStatus implements patchSubmissionStatus operation.
+//
+// Update status following role restrictions.
+//
+// PATCH /submissions/{SubmissionID}/status
+func (UnimplementedHandler) PatchSubmissionStatus(ctx context.Context, params PatchSubmissionStatusParams) error {
+	return ht.ErrNotImplemented
 }
 
 // NewError creates *ErrorStatusCode from error returned by handler.

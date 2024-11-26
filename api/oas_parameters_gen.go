@@ -15,24 +15,24 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// GetUserParams is parameters of getUser operation.
-type GetUserParams struct {
-	UserID int64
+// GetSubmissionParams is parameters of getSubmission operation.
+type GetSubmissionParams struct {
+	SubmissionID int64
 }
 
-func unpackGetUserParams(packed middleware.Parameters) (params GetUserParams) {
+func unpackGetSubmissionParams(packed middleware.Parameters) (params GetSubmissionParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "UserID",
+			Name: "SubmissionID",
 			In:   "path",
 		}
-		params.UserID = packed[key].(int64)
+		params.SubmissionID = packed[key].(int64)
 	}
 	return params
 }
 
-func decodeGetUserParams(args [1]string, argsEscaped bool, r *http.Request) (params GetUserParams, _ error) {
-	// Decode path: UserID.
+func decodeGetSubmissionParams(args [1]string, argsEscaped bool, r *http.Request) (params GetSubmissionParams, _ error) {
+	// Decode path: SubmissionID.
 	if err := func() error {
 		param := args[0]
 		if argsEscaped {
@@ -44,7 +44,7 @@ func decodeGetUserParams(args [1]string, argsEscaped bool, r *http.Request) (par
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "UserID",
+				Param:   "SubmissionID",
 				Value:   param,
 				Style:   uri.PathStyleSimple,
 				Explode: false,
@@ -61,7 +61,7 @@ func decodeGetUserParams(args [1]string, argsEscaped bool, r *http.Request) (par
 					return err
 				}
 
-				params.UserID = c
+				params.SubmissionID = c
 				return nil
 			}(); err != nil {
 				return err
@@ -72,7 +72,7 @@ func decodeGetUserParams(args [1]string, argsEscaped bool, r *http.Request) (par
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "UserID",
+			Name: "SubmissionID",
 			In:   "path",
 			Err:  err,
 		}
@@ -80,211 +80,13 @@ func decodeGetUserParams(args [1]string, argsEscaped bool, r *http.Request) (par
 	return params, nil
 }
 
-// GetUserRankParams is parameters of getUserRank operation.
-type GetUserRankParams struct {
-	UserID  int64
-	StyleID int32
-	GameID  int32
-	ModeID  int32
-}
-
-func unpackGetUserRankParams(packed middleware.Parameters) (params GetUserRankParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "UserID",
-			In:   "path",
-		}
-		params.UserID = packed[key].(int64)
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "StyleID",
-			In:   "query",
-		}
-		params.StyleID = packed[key].(int32)
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "GameID",
-			In:   "query",
-		}
-		params.GameID = packed[key].(int32)
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "ModeID",
-			In:   "query",
-		}
-		params.ModeID = packed[key].(int32)
-	}
-	return params
-}
-
-func decodeGetUserRankParams(args [1]string, argsEscaped bool, r *http.Request) (params GetUserRankParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
-	// Decode path: UserID.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "UserID",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToInt64(val)
-				if err != nil {
-					return err
-				}
-
-				params.UserID = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "UserID",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	// Decode query: StyleID.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "StyleID",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToInt32(val)
-				if err != nil {
-					return err
-				}
-
-				params.StyleID = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "StyleID",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Decode query: GameID.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "GameID",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToInt32(val)
-				if err != nil {
-					return err
-				}
-
-				params.GameID = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "GameID",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Decode query: ModeID.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "ModeID",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToInt32(val)
-				if err != nil {
-					return err
-				}
-
-				params.ModeID = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "ModeID",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// ListRanksParams is parameters of listRanks operation.
-type ListRanksParams struct {
+// ListSubmissionsParams is parameters of listSubmissions operation.
+type ListSubmissionsParams struct {
 	Page   Pagination
-	Filter OptRankFilter
+	Filter OptSubmissionFilter
 }
 
-func unpackListRanksParams(packed middleware.Parameters) (params ListRanksParams) {
+func unpackListSubmissionsParams(packed middleware.Parameters) (params ListSubmissionsParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "page",
@@ -298,13 +100,13 @@ func unpackListRanksParams(packed middleware.Parameters) (params ListRanksParams
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Filter = v.(OptRankFilter)
+			params.Filter = v.(OptSubmissionFilter)
 		}
 	}
 	return params
 }
 
-func decodeListRanksParams(args [0]string, argsEscaped bool, r *http.Request) (params ListRanksParams, _ error) {
+func decodeListSubmissionsParams(args [0]string, argsEscaped bool, r *http.Request) (params ListSubmissionsParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode query: page.
 	if err := func() error {
@@ -346,12 +148,12 @@ func decodeListRanksParams(args [0]string, argsEscaped bool, r *http.Request) (p
 			Name:    "filter",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
-			Fields:  []uri.QueryParameterObjectField{{Name: "StyleID", Required: false}, {Name: "GameID", Required: false}, {Name: "ModeID", Required: false}, {Name: "Sort", Required: false}},
+			Fields:  []uri.QueryParameterObjectField{{Name: "ID", Required: false}, {Name: "DisplayName", Required: false}, {Name: "Creator", Required: false}, {Name: "GameID", Required: false}, {Name: "Date", Required: false}},
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotFilterVal RankFilter
+				var paramsDotFilterVal SubmissionFilter
 				if err := func() error {
 					return paramsDotFilterVal.DecodeURI(d)
 				}(); err != nil {
@@ -374,53 +176,62 @@ func decodeListRanksParams(args [0]string, argsEscaped bool, r *http.Request) (p
 	return params, nil
 }
 
-// ListTimesParams is parameters of listTimes operation.
-type ListTimesParams struct {
-	Page   Pagination
-	Filter OptTimeFilter
+// PatchSubmissionCompletedParams is parameters of patchSubmissionCompleted operation.
+type PatchSubmissionCompletedParams struct {
+	SubmissionID int64
+	Completed    bool
 }
 
-func unpackListTimesParams(packed middleware.Parameters) (params ListTimesParams) {
+func unpackPatchSubmissionCompletedParams(packed middleware.Parameters) (params PatchSubmissionCompletedParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "page",
-			In:   "query",
+			Name: "SubmissionID",
+			In:   "path",
 		}
-		params.Page = packed[key].(Pagination)
+		params.SubmissionID = packed[key].(int64)
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "filter",
+			Name: "Completed",
 			In:   "query",
 		}
-		if v, ok := packed[key]; ok {
-			params.Filter = v.(OptTimeFilter)
-		}
+		params.Completed = packed[key].(bool)
 	}
 	return params
 }
 
-func decodeListTimesParams(args [0]string, argsEscaped bool, r *http.Request) (params ListTimesParams, _ error) {
+func decodePatchSubmissionCompletedParams(args [1]string, argsEscaped bool, r *http.Request) (params PatchSubmissionCompletedParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
-	// Decode query: page.
+	// Decode path: SubmissionID.
 	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-			Fields:  []uri.QueryParameterObjectField{{Name: "Page", Required: true}, {Name: "Limit", Required: true}},
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				return params.Page.DecodeURI(d)
-			}); err != nil {
-				return err
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
 			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "SubmissionID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
 			if err := func() error {
-				if err := params.Page.Validate(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.SubmissionID = c
 				return nil
 			}(); err != nil {
 				return err
@@ -431,38 +242,307 @@ func decodeListTimesParams(args [0]string, argsEscaped bool, r *http.Request) (p
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "page",
-			In:   "query",
+			Name: "SubmissionID",
+			In:   "path",
 			Err:  err,
 		}
 	}
-	// Decode query: filter.
+	// Decode query: Completed.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "filter",
+			Name:    "Completed",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
-			Fields:  []uri.QueryParameterObjectField{{Name: "ID", Required: false}, {Name: "Time", Required: false}, {Name: "UserID", Required: false}, {Name: "MapID", Required: false}, {Name: "StyleID", Required: false}, {Name: "ModeID", Required: false}, {Name: "GameID", Required: false}},
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotFilterVal TimeFilter
-				if err := func() error {
-					return paramsDotFilterVal.DecodeURI(d)
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.Filter.SetTo(paramsDotFilterVal)
+
+				c, err := conv.ToBool(val)
+				if err != nil {
+					return err
+				}
+
+				params.Completed = c
 				return nil
 			}); err != nil {
 				return err
 			}
+		} else {
+			return validate.ErrFieldRequired
 		}
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "filter",
+			Name: "Completed",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// PatchSubmissionModelParams is parameters of patchSubmissionModel operation.
+type PatchSubmissionModelParams struct {
+	SubmissionID int64
+	ModelID      int64
+	VersionID    int64
+}
+
+func unpackPatchSubmissionModelParams(packed middleware.Parameters) (params PatchSubmissionModelParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SubmissionID",
+			In:   "path",
+		}
+		params.SubmissionID = packed[key].(int64)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "ModelID",
+			In:   "query",
+		}
+		params.ModelID = packed[key].(int64)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "VersionID",
+			In:   "query",
+		}
+		params.VersionID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodePatchSubmissionModelParams(args [1]string, argsEscaped bool, r *http.Request) (params PatchSubmissionModelParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode path: SubmissionID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "SubmissionID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.SubmissionID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SubmissionID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode query: ModelID.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "ModelID",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.ModelID = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "ModelID",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Decode query: VersionID.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "VersionID",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.VersionID = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "VersionID",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// PatchSubmissionStatusParams is parameters of patchSubmissionStatus operation.
+type PatchSubmissionStatusParams struct {
+	SubmissionID int64
+	Status       int32
+}
+
+func unpackPatchSubmissionStatusParams(packed middleware.Parameters) (params PatchSubmissionStatusParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SubmissionID",
+			In:   "path",
+		}
+		params.SubmissionID = packed[key].(int64)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "Status",
+			In:   "query",
+		}
+		params.Status = packed[key].(int32)
+	}
+	return params
+}
+
+func decodePatchSubmissionStatusParams(args [1]string, argsEscaped bool, r *http.Request) (params PatchSubmissionStatusParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode path: SubmissionID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "SubmissionID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.SubmissionID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SubmissionID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode query: Status.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "Status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt32(val)
+				if err != nil {
+					return err
+				}
+
+				params.Status = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "Status",
 			In:   "query",
 			Err:  err,
 		}

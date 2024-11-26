@@ -13,7 +13,7 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeGetUserResponse(response *User, w http.ResponseWriter, span trace.Span) error {
+func encodeCreateSubmissionResponse(response *Submission, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
@@ -27,7 +27,7 @@ func encodeGetUserResponse(response *User, w http.ResponseWriter, span trace.Spa
 	return nil
 }
 
-func encodeGetUserRankResponse(response *Rank, w http.ResponseWriter, span trace.Span) error {
+func encodeGetSubmissionResponse(response *Submission, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
@@ -41,7 +41,7 @@ func encodeGetUserRankResponse(response *Rank, w http.ResponseWriter, span trace
 	return nil
 }
 
-func encodeListRanksResponse(response []Rank, w http.ResponseWriter, span trace.Span) error {
+func encodeListSubmissionsResponse(response []Submission, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
@@ -59,20 +59,23 @@ func encodeListRanksResponse(response []Rank, w http.ResponseWriter, span trace.
 	return nil
 }
 
-func encodeListTimesResponse(response []Time, w http.ResponseWriter, span trace.Span) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+func encodePatchSubmissionCompletedResponse(response *PatchSubmissionCompletedOK, w http.ResponseWriter, span trace.Span) error {
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
 
-	e := new(jx.Encoder)
-	e.ArrStart()
-	for _, elem := range response {
-		elem.Encode(e)
-	}
-	e.ArrEnd()
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
+	return nil
+}
+
+func encodePatchSubmissionModelResponse(response *PatchSubmissionModelOK, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	return nil
+}
+
+func encodePatchSubmissionStatusResponse(response *PatchSubmissionStatusOK, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	return nil
 }

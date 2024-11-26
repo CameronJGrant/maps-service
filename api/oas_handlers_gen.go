@@ -11,7 +11,7 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
-	semconv "go.opentelemetry.io/otel/semconv/v1.19.0"
+	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 	"go.opentelemetry.io/otel/trace"
 
 	ht "github.com/ogen-go/ogen/http"
@@ -20,20 +20,20 @@ import (
 	"github.com/ogen-go/ogen/otelogen"
 )
 
-// handleGetUserRequest handles getUser operation.
+// handleCreateSubmissionRequest handles createSubmission operation.
 //
-// Retrieve user with ID.
+// Create new submission.
 //
-// GET /users/{UserID}
-func (s *Server) handleGetUserRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /submissions
+func (s *Server) handleCreateSubmissionRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("getUser"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/users/{UserID}"),
+		otelogen.OperationID("createSubmission"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/submissions"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "GetUser",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreateSubmission",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -62,44 +62,25 @@ func (s *Server) handleGetUserRequest(args [1]string, argsEscaped bool, w http.R
 			span.SetStatus(codes.Error, stage)
 			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
 		}
-		err          error
-		opErrContext = ogenerrors.OperationContext{
-			Name: "GetUser",
-			ID:   "getUser",
-		}
+		err error
 	)
-	params, err := decodeGetUserParams(args, argsEscaped, r)
-	if err != nil {
-		err = &ogenerrors.DecodeParamsError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeParams", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
 
-	var response *User
+	var response *Submission
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "GetUser",
-			OperationSummary: "Retrieve user with ID",
-			OperationID:      "getUser",
+			OperationName:    "CreateSubmission",
+			OperationSummary: "Create new submission",
+			OperationID:      "createSubmission",
 			Body:             nil,
-			Params: middleware.Parameters{
-				{
-					Name: "UserID",
-					In:   "path",
-				}: params.UserID,
-			},
-			Raw: r,
+			Params:           middleware.Parameters{},
+			Raw:              r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = GetUserParams
-			Response = *User
+			Params   = struct{}
+			Response = *Submission
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -108,14 +89,14 @@ func (s *Server) handleGetUserRequest(args [1]string, argsEscaped bool, w http.R
 		](
 			m,
 			mreq,
-			unpackGetUserParams,
+			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.GetUser(ctx, params)
+				response, err = s.h.CreateSubmission(ctx)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.GetUser(ctx, params)
+		response, err = s.h.CreateSubmission(ctx)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -134,7 +115,7 @@ func (s *Server) handleGetUserRequest(args [1]string, argsEscaped bool, w http.R
 		return
 	}
 
-	if err := encodeGetUserResponse(response, w, span); err != nil {
+	if err := encodeCreateSubmissionResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -143,20 +124,20 @@ func (s *Server) handleGetUserRequest(args [1]string, argsEscaped bool, w http.R
 	}
 }
 
-// handleGetUserRankRequest handles getUserRank operation.
+// handleGetSubmissionRequest handles getSubmission operation.
 //
-// Retrieve rank of user.
+// Retrieve map with ID.
 //
-// GET /users/{UserID}/rank
-func (s *Server) handleGetUserRankRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /submissions/{SubmissionID}
+func (s *Server) handleGetSubmissionRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("getUserRank"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/users/{UserID}/rank"),
+		otelogen.OperationID("getSubmission"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "GetUserRank",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "GetSubmission",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -187,11 +168,11 @@ func (s *Server) handleGetUserRankRequest(args [1]string, argsEscaped bool, w ht
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "GetUserRank",
-			ID:   "getUserRank",
+			Name: "GetSubmission",
+			ID:   "getSubmission",
 		}
 	)
-	params, err := decodeGetUserRankParams(args, argsEscaped, r)
+	params, err := decodeGetSubmissionParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -202,39 +183,27 @@ func (s *Server) handleGetUserRankRequest(args [1]string, argsEscaped bool, w ht
 		return
 	}
 
-	var response *Rank
+	var response *Submission
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "GetUserRank",
-			OperationSummary: "Retrieve rank of user",
-			OperationID:      "getUserRank",
+			OperationName:    "GetSubmission",
+			OperationSummary: "Retrieve map with ID",
+			OperationID:      "getSubmission",
 			Body:             nil,
 			Params: middleware.Parameters{
 				{
-					Name: "UserID",
+					Name: "SubmissionID",
 					In:   "path",
-				}: params.UserID,
-				{
-					Name: "StyleID",
-					In:   "query",
-				}: params.StyleID,
-				{
-					Name: "GameID",
-					In:   "query",
-				}: params.GameID,
-				{
-					Name: "ModeID",
-					In:   "query",
-				}: params.ModeID,
+				}: params.SubmissionID,
 			},
 			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = GetUserRankParams
-			Response = *Rank
+			Params   = GetSubmissionParams
+			Response = *Submission
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -243,14 +212,14 @@ func (s *Server) handleGetUserRankRequest(args [1]string, argsEscaped bool, w ht
 		](
 			m,
 			mreq,
-			unpackGetUserRankParams,
+			unpackGetSubmissionParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.GetUserRank(ctx, params)
+				response, err = s.h.GetSubmission(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.GetUserRank(ctx, params)
+		response, err = s.h.GetSubmission(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -269,7 +238,7 @@ func (s *Server) handleGetUserRankRequest(args [1]string, argsEscaped bool, w ht
 		return
 	}
 
-	if err := encodeGetUserRankResponse(response, w, span); err != nil {
+	if err := encodeGetSubmissionResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -278,20 +247,20 @@ func (s *Server) handleGetUserRankRequest(args [1]string, argsEscaped bool, w ht
 	}
 }
 
-// handleListRanksRequest handles listRanks operation.
+// handleListSubmissionsRequest handles listSubmissions operation.
 //
-// Get list of ranks.
+// Get list of submissions.
 //
-// GET /ranks
-func (s *Server) handleListRanksRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /submissions
+func (s *Server) handleListSubmissionsRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("listRanks"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/ranks"),
+		otelogen.OperationID("listSubmissions"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/submissions"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "ListRanks",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ListSubmissions",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -322,11 +291,11 @@ func (s *Server) handleListRanksRequest(args [0]string, argsEscaped bool, w http
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "ListRanks",
-			ID:   "listRanks",
+			Name: "ListSubmissions",
+			ID:   "listSubmissions",
 		}
 	)
-	params, err := decodeListRanksParams(args, argsEscaped, r)
+	params, err := decodeListSubmissionsParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -337,13 +306,13 @@ func (s *Server) handleListRanksRequest(args [0]string, argsEscaped bool, w http
 		return
 	}
 
-	var response []Rank
+	var response []Submission
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "ListRanks",
-			OperationSummary: "Get list of ranks",
-			OperationID:      "listRanks",
+			OperationName:    "ListSubmissions",
+			OperationSummary: "Get list of submissions",
+			OperationID:      "listSubmissions",
 			Body:             nil,
 			Params: middleware.Parameters{
 				{
@@ -360,8 +329,8 @@ func (s *Server) handleListRanksRequest(args [0]string, argsEscaped bool, w http
 
 		type (
 			Request  = struct{}
-			Params   = ListRanksParams
-			Response = []Rank
+			Params   = ListSubmissionsParams
+			Response = []Submission
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -370,14 +339,14 @@ func (s *Server) handleListRanksRequest(args [0]string, argsEscaped bool, w http
 		](
 			m,
 			mreq,
-			unpackListRanksParams,
+			unpackListSubmissionsParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.ListRanks(ctx, params)
+				response, err = s.h.ListSubmissions(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.ListRanks(ctx, params)
+		response, err = s.h.ListSubmissions(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -396,7 +365,7 @@ func (s *Server) handleListRanksRequest(args [0]string, argsEscaped bool, w http
 		return
 	}
 
-	if err := encodeListRanksResponse(response, w, span); err != nil {
+	if err := encodeListSubmissionsResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -405,20 +374,20 @@ func (s *Server) handleListRanksRequest(args [0]string, argsEscaped bool, w http
 	}
 }
 
-// handleListTimesRequest handles listTimes operation.
+// handlePatchSubmissionCompletedRequest handles patchSubmissionCompleted operation.
 //
-// Get list of times.
+// Retrieve map with ID.
 //
-// GET /times
-func (s *Server) handleListTimesRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// PATCH /submissions/{SubmissionID}/completed
+func (s *Server) handlePatchSubmissionCompletedRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("listTimes"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/times"),
+		otelogen.OperationID("patchSubmissionCompleted"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/completed"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "ListTimes",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "PatchSubmissionCompleted",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -449,11 +418,11 @@ func (s *Server) handleListTimesRequest(args [0]string, argsEscaped bool, w http
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "ListTimes",
-			ID:   "listTimes",
+			Name: "PatchSubmissionCompleted",
+			ID:   "patchSubmissionCompleted",
 		}
 	)
-	params, err := decodeListTimesParams(args, argsEscaped, r)
+	params, err := decodePatchSubmissionCompletedParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -464,31 +433,31 @@ func (s *Server) handleListTimesRequest(args [0]string, argsEscaped bool, w http
 		return
 	}
 
-	var response []Time
+	var response *PatchSubmissionCompletedOK
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "ListTimes",
-			OperationSummary: "Get list of times",
-			OperationID:      "listTimes",
+			OperationName:    "PatchSubmissionCompleted",
+			OperationSummary: "Retrieve map with ID",
+			OperationID:      "patchSubmissionCompleted",
 			Body:             nil,
 			Params: middleware.Parameters{
 				{
-					Name: "page",
-					In:   "query",
-				}: params.Page,
+					Name: "SubmissionID",
+					In:   "path",
+				}: params.SubmissionID,
 				{
-					Name: "filter",
+					Name: "Completed",
 					In:   "query",
-				}: params.Filter,
+				}: params.Completed,
 			},
 			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = ListTimesParams
-			Response = []Time
+			Params   = PatchSubmissionCompletedParams
+			Response = *PatchSubmissionCompletedOK
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -497,14 +466,14 @@ func (s *Server) handleListTimesRequest(args [0]string, argsEscaped bool, w http
 		](
 			m,
 			mreq,
-			unpackListTimesParams,
+			unpackPatchSubmissionCompletedParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.ListTimes(ctx, params)
+				err = s.h.PatchSubmissionCompleted(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.ListTimes(ctx, params)
+		err = s.h.PatchSubmissionCompleted(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -523,7 +492,265 @@ func (s *Server) handleListTimesRequest(args [0]string, argsEscaped bool, w http
 		return
 	}
 
-	if err := encodeListTimesResponse(response, w, span); err != nil {
+	if err := encodePatchSubmissionCompletedResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handlePatchSubmissionModelRequest handles patchSubmissionModel operation.
+//
+// Update model following role restrictions.
+//
+// PATCH /submissions/{SubmissionID}/model
+func (s *Server) handlePatchSubmissionModelRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("patchSubmissionModel"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/model"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "PatchSubmissionModel",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		attrOpt := metric.WithAttributeSet(labeler.AttributeSet())
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "PatchSubmissionModel",
+			ID:   "patchSubmissionModel",
+		}
+	)
+	params, err := decodePatchSubmissionModelParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var response *PatchSubmissionModelOK
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "PatchSubmissionModel",
+			OperationSummary: "Update model following role restrictions",
+			OperationID:      "patchSubmissionModel",
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "SubmissionID",
+					In:   "path",
+				}: params.SubmissionID,
+				{
+					Name: "ModelID",
+					In:   "query",
+				}: params.ModelID,
+				{
+					Name: "VersionID",
+					In:   "query",
+				}: params.VersionID,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = PatchSubmissionModelParams
+			Response = *PatchSubmissionModelOK
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackPatchSubmissionModelParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				err = s.h.PatchSubmissionModel(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		err = s.h.PatchSubmissionModel(ctx, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w, span); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w, span); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodePatchSubmissionModelResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handlePatchSubmissionStatusRequest handles patchSubmissionStatus operation.
+//
+// Update status following role restrictions.
+//
+// PATCH /submissions/{SubmissionID}/status
+func (s *Server) handlePatchSubmissionStatusRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("patchSubmissionStatus"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "PatchSubmissionStatus",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		attrOpt := metric.WithAttributeSet(labeler.AttributeSet())
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "PatchSubmissionStatus",
+			ID:   "patchSubmissionStatus",
+		}
+	)
+	params, err := decodePatchSubmissionStatusParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var response *PatchSubmissionStatusOK
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "PatchSubmissionStatus",
+			OperationSummary: "Update status following role restrictions",
+			OperationID:      "patchSubmissionStatus",
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "SubmissionID",
+					In:   "path",
+				}: params.SubmissionID,
+				{
+					Name: "Status",
+					In:   "query",
+				}: params.Status,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = PatchSubmissionStatusParams
+			Response = *PatchSubmissionStatusOK
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackPatchSubmissionStatusParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				err = s.h.PatchSubmissionStatus(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		err = s.h.PatchSubmissionStatus(ctx, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w, span); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w, span); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodePatchSubmissionStatusResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

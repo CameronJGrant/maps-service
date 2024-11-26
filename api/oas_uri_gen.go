@@ -121,167 +121,8 @@ func (s *Pagination) DecodeURI(d uri.Decoder) error {
 	return nil
 }
 
-// EncodeURI encodes RankFilter as URI form.
-func (s *RankFilter) EncodeURI(e uri.Encoder) error {
-	if err := e.EncodeField("StyleID", func(e uri.Encoder) error {
-		if val, ok := s.StyleID.Get(); ok {
-			return e.EncodeValue(conv.Int32ToString(val))
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "encode field \"StyleID\"")
-	}
-	if err := e.EncodeField("GameID", func(e uri.Encoder) error {
-		if val, ok := s.GameID.Get(); ok {
-			return e.EncodeValue(conv.Int32ToString(val))
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "encode field \"GameID\"")
-	}
-	if err := e.EncodeField("ModeID", func(e uri.Encoder) error {
-		if val, ok := s.ModeID.Get(); ok {
-			return e.EncodeValue(conv.Int32ToString(val))
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "encode field \"ModeID\"")
-	}
-	if err := e.EncodeField("Sort", func(e uri.Encoder) error {
-		if val, ok := s.Sort.Get(); ok {
-			return e.EncodeValue(conv.Int64ToString(val))
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "encode field \"Sort\"")
-	}
-	return nil
-}
-
-var uriFieldsNameOfRankFilter = [4]string{
-	0: "StyleID",
-	1: "GameID",
-	2: "ModeID",
-	3: "Sort",
-}
-
-// DecodeURI decodes RankFilter from URI form.
-func (s *RankFilter) DecodeURI(d uri.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode RankFilter to nil")
-	}
-
-	if err := d.DecodeFields(func(k string, d uri.Decoder) error {
-		switch k {
-		case "StyleID":
-			if err := func() error {
-				var sDotStyleIDVal int32
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt32(val)
-					if err != nil {
-						return err
-					}
-
-					sDotStyleIDVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				s.StyleID.SetTo(sDotStyleIDVal)
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"StyleID\"")
-			}
-		case "GameID":
-			if err := func() error {
-				var sDotGameIDVal int32
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt32(val)
-					if err != nil {
-						return err
-					}
-
-					sDotGameIDVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				s.GameID.SetTo(sDotGameIDVal)
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"GameID\"")
-			}
-		case "ModeID":
-			if err := func() error {
-				var sDotModeIDVal int32
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt32(val)
-					if err != nil {
-						return err
-					}
-
-					sDotModeIDVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				s.ModeID.SetTo(sDotModeIDVal)
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"ModeID\"")
-			}
-		case "Sort":
-			if err := func() error {
-				var sDotSortVal int64
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt64(val)
-					if err != nil {
-						return err
-					}
-
-					sDotSortVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				s.Sort.SetTo(sDotSortVal)
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"Sort\"")
-			}
-		default:
-			return nil
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode RankFilter")
-	}
-
-	return nil
-}
-
-// EncodeURI encodes TimeFilter as URI form.
-func (s *TimeFilter) EncodeURI(e uri.Encoder) error {
+// EncodeURI encodes SubmissionFilter as URI form.
+func (s *SubmissionFilter) EncodeURI(e uri.Encoder) error {
 	if err := e.EncodeField("ID", func(e uri.Encoder) error {
 		if val, ok := s.ID.Get(); ok {
 			return e.EncodeValue(conv.Int64ToString(val))
@@ -290,45 +131,21 @@ func (s *TimeFilter) EncodeURI(e uri.Encoder) error {
 	}); err != nil {
 		return errors.Wrap(err, "encode field \"ID\"")
 	}
-	if err := e.EncodeField("Time", func(e uri.Encoder) error {
-		if val, ok := s.Time.Get(); ok {
-			return e.EncodeValue(conv.Int64ToString(val))
+	if err := e.EncodeField("DisplayName", func(e uri.Encoder) error {
+		if val, ok := s.DisplayName.Get(); ok {
+			return e.EncodeValue(conv.StringToString(val))
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "encode field \"Time\"")
+		return errors.Wrap(err, "encode field \"DisplayName\"")
 	}
-	if err := e.EncodeField("UserID", func(e uri.Encoder) error {
-		if val, ok := s.UserID.Get(); ok {
-			return e.EncodeValue(conv.Int64ToString(val))
+	if err := e.EncodeField("Creator", func(e uri.Encoder) error {
+		if val, ok := s.Creator.Get(); ok {
+			return e.EncodeValue(conv.StringToString(val))
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "encode field \"UserID\"")
-	}
-	if err := e.EncodeField("MapID", func(e uri.Encoder) error {
-		if val, ok := s.MapID.Get(); ok {
-			return e.EncodeValue(conv.Int64ToString(val))
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "encode field \"MapID\"")
-	}
-	if err := e.EncodeField("StyleID", func(e uri.Encoder) error {
-		if val, ok := s.StyleID.Get(); ok {
-			return e.EncodeValue(conv.Int32ToString(val))
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "encode field \"StyleID\"")
-	}
-	if err := e.EncodeField("ModeID", func(e uri.Encoder) error {
-		if val, ok := s.ModeID.Get(); ok {
-			return e.EncodeValue(conv.Int32ToString(val))
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "encode field \"ModeID\"")
+		return errors.Wrap(err, "encode field \"Creator\"")
 	}
 	if err := e.EncodeField("GameID", func(e uri.Encoder) error {
 		if val, ok := s.GameID.Get(); ok {
@@ -338,23 +155,29 @@ func (s *TimeFilter) EncodeURI(e uri.Encoder) error {
 	}); err != nil {
 		return errors.Wrap(err, "encode field \"GameID\"")
 	}
+	if err := e.EncodeField("Date", func(e uri.Encoder) error {
+		if val, ok := s.Date.Get(); ok {
+			return e.EncodeValue(conv.Int64ToString(val))
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "encode field \"Date\"")
+	}
 	return nil
 }
 
-var uriFieldsNameOfTimeFilter = [7]string{
+var uriFieldsNameOfSubmissionFilter = [5]string{
 	0: "ID",
-	1: "Time",
-	2: "UserID",
-	3: "MapID",
-	4: "StyleID",
-	5: "ModeID",
-	6: "GameID",
+	1: "DisplayName",
+	2: "Creator",
+	3: "GameID",
+	4: "Date",
 }
 
-// DecodeURI decodes TimeFilter from URI form.
-func (s *TimeFilter) DecodeURI(d uri.Decoder) error {
+// DecodeURI decodes SubmissionFilter from URI form.
+func (s *SubmissionFilter) DecodeURI(d uri.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode TimeFilter to nil")
+		return errors.New("invalid: unable to decode SubmissionFilter to nil")
 	}
 
 	if err := d.DecodeFields(func(k string, d uri.Decoder) error {
@@ -383,125 +206,53 @@ func (s *TimeFilter) DecodeURI(d uri.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"ID\"")
 			}
-		case "Time":
+		case "DisplayName":
 			if err := func() error {
-				var sDotTimeVal int64
+				var sDotDisplayNameVal string
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt64(val)
+					c, err := conv.ToString(val)
 					if err != nil {
 						return err
 					}
 
-					sDotTimeVal = c
+					sDotDisplayNameVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				s.Time.SetTo(sDotTimeVal)
+				s.DisplayName.SetTo(sDotDisplayNameVal)
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"Time\"")
+				return errors.Wrap(err, "decode field \"DisplayName\"")
 			}
-		case "UserID":
+		case "Creator":
 			if err := func() error {
-				var sDotUserIDVal int64
+				var sDotCreatorVal string
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt64(val)
+					c, err := conv.ToString(val)
 					if err != nil {
 						return err
 					}
 
-					sDotUserIDVal = c
+					sDotCreatorVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				s.UserID.SetTo(sDotUserIDVal)
+				s.Creator.SetTo(sDotCreatorVal)
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"UserID\"")
-			}
-		case "MapID":
-			if err := func() error {
-				var sDotMapIDVal int64
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt64(val)
-					if err != nil {
-						return err
-					}
-
-					sDotMapIDVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				s.MapID.SetTo(sDotMapIDVal)
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"MapID\"")
-			}
-		case "StyleID":
-			if err := func() error {
-				var sDotStyleIDVal int32
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt32(val)
-					if err != nil {
-						return err
-					}
-
-					sDotStyleIDVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				s.StyleID.SetTo(sDotStyleIDVal)
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"StyleID\"")
-			}
-		case "ModeID":
-			if err := func() error {
-				var sDotModeIDVal int32
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt32(val)
-					if err != nil {
-						return err
-					}
-
-					sDotModeIDVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				s.ModeID.SetTo(sDotModeIDVal)
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"ModeID\"")
+				return errors.Wrap(err, "decode field \"Creator\"")
 			}
 		case "GameID":
 			if err := func() error {
@@ -527,12 +278,36 @@ func (s *TimeFilter) DecodeURI(d uri.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"GameID\"")
 			}
+		case "Date":
+			if err := func() error {
+				var sDotDateVal int64
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt64(val)
+					if err != nil {
+						return err
+					}
+
+					sDotDateVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				s.Date.SetTo(sDotDateVal)
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"Date\"")
+			}
 		default:
 			return nil
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode TimeFilter")
+		return errors.Wrap(err, "decode SubmissionFilter")
 	}
 
 	return nil
