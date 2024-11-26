@@ -146,7 +146,7 @@ paths:
           in: query
           required: true
           schema:
-            type: bool
+            type: boolean
       responses:
         "200":
           description: Successful response
