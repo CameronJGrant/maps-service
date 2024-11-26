@@ -5,46 +5,19 @@ import (
 	"log"
 	"net/http"
 
-	"git.itzana.me/strafesnet/go-grpc/ranks"
-	"git.itzana.me/strafesnet/go-grpc/times"
-	"git.itzana.me/strafesnet/go-grpc/users"
-	"git.itzana.me/strafesnet/public-api/api"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"git.itzana.me/strafesnet/maps-service/api"
+	"git.itzana.me/strafesnet/maps-service/internal/controller/submissions"
+	"git.itzana.me/strafesnet/maps-service/internal/controller/users"
 )
 
 type apiServer struct {
-	client *grpc.ClientConn
+	submissions *submissions.Submissions
+	users *users.Users
 }
 
 // GetUserRank implements api.Handler.
-func (m *apiServer) GetUserRank(ctx context.Context, params api.GetUserRankParams) (*api.Rank, error) {
-	client := ranks.NewRanksServiceClient(m.client)
-
-	response, err := client.Get(ctx, &ranks.GetRequest{
-		UserID:  params.UserID,
-		StyleID: params.StyleID,
-		ModeID:  params.ModeID,
-		GameID:  params.GameID,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return &api.Rank{
-		ID: api.NewOptInt64(response.ID),
-		User: api.NewOptUser(api.User{
-			ID:       api.NewOptInt64(response.User.ID),
-			Username: api.NewOptString(response.User.Username),
-			StateID:  api.NewOptInt32(response.User.StateID),
-		}),
-		StyleID:   api.NewOptInt32(response.StyleID),
-		ModeID:    api.NewOptInt32(response.ModeID),
-		GameID:    api.NewOptInt32(response.GameID),
-		Rank:      api.NewOptFloat64(response.Rank),
-		Skill:     api.NewOptFloat64(response.Skill),
-		UpdatedAt: api.NewOptInt64(response.UpdatedAt),
-	}, nil
+func (m *apiServer) GetSubmission(ctx context.Context, params api.GetSubmissionParams) (*api.Submission, error) {
+	return m.submissions.Get(params.SubmissionID)
 }
 
 // NewError implements api.Handler.
