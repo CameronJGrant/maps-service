@@ -1,26 +1,25 @@
 openapi: 3.1.0
 info:
-  title: StrafesNET Maptest - OpenAPI 3.1
-  description: Browse and manage maps in the staging pipeline.
+  title: StrafesNET Submissions - OpenAPI 3.1
+  description: Browse and manage map submissions in the staging pipeline.
   version: 0.1.0
 servers:
-  - url: https://maptest.strafes.net/v1
+  - url: https://submissions.strafes.net/v1
 tags:
-  - name: Maps
-    description: Map operations
+  - name: Submissions
+    description: Submission operations
 paths:
-# create
 # status
 # 	submit
 # 	accept
 # 	publish
 # complete
-  /maps:
+  /submissions:
     get:
       summary: Get list of submissions
-      operationId: listMaps
+      operationId: listSubmissions
       tags:
-        - Maps
+        - Submissions
       parameters:
         - name: page
           in: query
@@ -31,7 +30,7 @@ paths:
           in: query
           required: false
           schema:
-            $ref: "#/components/schemas/MapFilter"
+            $ref: "#/components/schemas/SubmissionFilter"
       responses:
         "200":
           description: Successful response
@@ -40,7 +39,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Map"
+                  $ref: "#/components/schemas/Submission"
         default:
           description: General Error
           content:
@@ -49,36 +48,35 @@ paths:
                 $ref: "#/components/schemas/Error"
     post:
       summary: Create new submission
-      operationId: createMap
+      operationId: createSubmission
       tags:
-        - Maps
-      parameters:
-        - name: map
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/MapCreate"
+        - Submissions
+# how to do this? body should have the submission in json or something
+#      content:
+#        application/json:
+#          schema:
+#           	$ref: "#/components/schemas/SubmissionCreate"
       responses:
         "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Map"
+                $ref: "#/components/schemas/Submission"
         default:
           description: General Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /maps/{MapID}:
+  /submissions/{SubmissionID}:
     get:
       summary: Retrieve map with ID
-      operationId: getMap
+      operationId: getSubmission
       tags:
-        - Maps
+        - Submissions
       parameters:
-        - name: MapID
+        - name: SubmissionID
           in: path
           required: true
           schema:
@@ -90,7 +88,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Map"
+                $ref: "#/components/schemas/Submission"
         default:
           description: General Error
           content:
@@ -110,7 +108,7 @@ components:
         StateID:
           type: integer
           format: int32
-    Map:
+    Submission:
       type: object
       properties:
         ID:
@@ -126,7 +124,7 @@ components:
         Date:
           type: integer
           format: int64
-    MapFilter:
+    SubmissionFilter:
       type: object
       properties:
         ID:
