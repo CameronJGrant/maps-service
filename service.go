@@ -22,21 +22,11 @@ func main() {
 
 	// Postgres
 
-	if os.Getenv("CRON") == "true" {
-		db, err := gormstore.New(false)
-		if err != nil {
-			log.WithField("error", err).Fatalln("database startup failed")
-			return
-		}
-
-		cron(db, debug)
-	} else {
-		db, err := gormstore.New(true)
-		if err != nil {
-			log.WithField("error", err).Fatalln("database startup failed")
-			return
-		}
-
-		rpc(db, debug)
+	db, err := gormstore.New(true)
+	if err != nil {
+		log.WithField("error", err).Fatalln("database startup failed")
+		return
 	}
+
+	rpc(db, debug)
 }

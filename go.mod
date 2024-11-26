@@ -11,7 +11,6 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.9.0
 	google.golang.org/grpc v1.48.0
-	google.golang.org/protobuf v1.33.0
 	gorm.io/driver/postgres v1.1.0
 	gorm.io/gorm v1.21.11
 )
@@ -43,4 +42,5 @@ require (
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20200825200019-8632dd797987 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
 )

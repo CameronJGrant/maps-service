@@ -31,8 +31,6 @@ cloud.google.com/go/storage v1.6.0/go.mod h1:N7U0C8pVQ/+NIKOBQyamJIeKQKkZ+mxpohl
 cloud.google.com/go/storage v1.8.0/go.mod h1:Wv1Oy7z6Yz3DshWRJFhqM/UCfaWIRTdp0RXyy7KQOVs=
 cloud.google.com/go/storage v1.10.0/go.mod h1:FLPqc6j+Ki4BU591ie1oL6qBQGu2Bl/tZ9ullr3+Kg0=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
-git.itzana.me/strafesnet/go-grpc v0.0.0-20240302215338-8ebbc7cffb0a h1:679jxkSaW3ZEj0XW6v+sr3Wr3LcmHRbbDLmo80xty5s=
-git.itzana.me/strafesnet/go-grpc v0.0.0-20240302215338-8ebbc7cffb0a/go.mod h1:X7XTRUScRkBWq8q8bplbeso105RPDlnY7J6Wy1IwBMs=
 git.itzana.me/strafesnet/go-grpc v0.0.0-20240719190059-5e33b807d0f7 h1:QD8ejgS2ePLkrngJEiijYouv+W87jtl/oSGJ6z5pwCY=
 git.itzana.me/strafesnet/go-grpc v0.0.0-20240719190059-5e33b807d0f7/go.mod h1:X7XTRUScRkBWq8q8bplbeso105RPDlnY7J6Wy1IwBMs=
 git.itzana.me/strafesnet/utils v0.0.0-20220716194944-d8ca164052f9 h1:7lU6jyR7S7Rhh1dnUp7GyIRHUTBXZagw8F4n4hOyxLw=
