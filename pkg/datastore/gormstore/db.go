@@ -29,7 +29,7 @@ func New(ctx *cli.Context) (datastore.Datastore, error) {
 		return nil, err
 	}
 
-	if ctx.Bool("pg-migrate") {
+	if ctx.Bool("migrate") {
 		if err := db.AutoMigrate(&model.Submission{}); err != nil {
 			log.WithError(err).Errorln("database migration failed")
 			return nil, err
