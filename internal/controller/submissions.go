@@ -5,10 +5,8 @@ import (
 	"fmt"
 	"git.itzana.me/strafesnet/maps-service/internal/datastore"
 	"git.itzana.me/strafesnet/maps-service/internal/model"
-	"git.itzana.me/strafesnet/go-grpc/maps"
+	"git.itzana.me/strafesnet/maps-service/api"
 	"github.com/pkg/errors"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"time"
 )
 
@@ -17,8 +15,8 @@ type Maps struct {
 	Store datastore.Datastore
 }
 
-func (m Maps) Get(ctx context.Context, message *maps.IdMessage) (*maps.MapResponse, error) {
-	item, err := m.Store.Maps().Get(ctx, message.GetID())
+func (m Maps) Get(ctx context.Context, params *api.GetSubmissionParams) (*api.Submission, error) {
+	item, err := m.Store.Maps().Get(ctx, params.SubmissionID)
 	if err != nil {
 		if err == datastore.ErrNotExist {
 			return nil, status.Error(codes.NotFound, "map does not exit")

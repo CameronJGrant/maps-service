@@ -17,7 +17,7 @@ type apiServer struct {
 
 // GetUserRank implements api.Handler.
 func (m *apiServer) GetSubmission(ctx context.Context, params api.GetSubmissionParams) (*api.Submission, error) {
-	return m.submissions.Get(params.SubmissionID)
+	return m.submissions.Get(ctx,params)
 }
 
 // NewError implements api.Handler.
