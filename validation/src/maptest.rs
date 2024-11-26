@@ -12,12 +12,29 @@ enum Status{
 	// Phase 2: Staging
 	Publishing,// Admin clicked the publish button, publishing is in progress and should only take a second
 	Validated,// Validator validated the map, expose a "Publish" button to Admins
-	Accepted,// Reviewer accepts the map, trigger validation once and expose a "Validate" button to Reviewers
+	Validating,// Validator has been invoked
+	Accepted,// Map failed validation but is still accepted
 	// Phase 1: Maptest
 	ChangesRequested,// map council requests changes
 	Submitted,// Submitted by owner for review by map council, expose "Accept" / "Reject" / "ChangesRequested" to reviewers
 	UnderConstruction,// default state upon pipeline creation
 }
+/* Valid state transitions and their required permission roles
+Submitter:
+	UnderConstruction -> Submitted
+	ChangesRequested -> Submitted
+Reviewer:
+	Submitted -> Validating
+	Submitted -> Rejected
+	Accepted -> ChangesRequested
+	Validated -> ChangesRequested
+	Accepted -> Validating // re-validate
+Validator:
+	Validating -> Validated
+	Publishing -> Published
+Admin:
+	Validated -> Publishing
+*/
 
 enum MaptestType{
 	// mapfixes change an existing map on staging game, so they know what map_id they upload to.
@@ -44,7 +61,7 @@ struct Map{
 	date:u64,
 	// int64 UserID who created the submission
 	// this user is allowed to change any data in the maptest phase, except for mapfix target map id
-	owner:u64,
+	submitter:u64,
 	model_id:u64,// asset id of the most recently submitted model
 	model_version:u64,// snapshot of the model to prevent tampering
 	is_completed:bool,// has this asset version been completed by any player
