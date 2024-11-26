@@ -1,0 +1,294 @@
+openapi: 3.0.0
+info:
+  title: StrafesNET - OpenAPI 3.0
+  description: |-
+    TBD
+  version: 0.1.0
+servers:
+  - url: https://api.strafes.net/v2
+tags:
+  - name: Times
+    description: Retrieve player times
+  - name: User
+    description: User operations
+paths:
+  /times:
+    get:
+      summary: Get list of times
+      operationId: listTimes
+      tags:
+        - Times
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pagination"
+        - name: filter
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/TimeFilter"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Time"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{UserID}:
+    get:
+      summary: Retrieve user with ID
+      operationId: getUser
+      tags:
+        - User
+      parameters:
+        - name: UserID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{UserID}/rank:
+    get:
+      summary: Retrieve rank of user
+      operationId: getUserRank
+      tags:
+        - User
+      parameters:
+        - name: UserID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: StyleID
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: GameID
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: ModeID
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Rank"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /ranks:
+    get:
+      summary: Get list of ranks
+      operationId: listRanks
+      tags:
+        - User
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pagination"
+        - name: filter
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/RankFilter"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Rank"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int64
+        Username:
+          type: string
+        StateID:
+          type: integer
+          format: int32
+    Map:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int64
+        DisplayName:
+          type: string
+        Creator:
+          type: string
+        GameID:
+          type: integer
+          format: int32
+        Date:
+          type: integer
+          format: int64
+    Time:
+      type: object
+      properties: 
+        ID:
+          type: integer
+          format: int64
+        Time:
+          type: integer
+          format: int64
+        User:
+          $ref: "#/components/schemas/User"
+        Map:
+          $ref: "#/components/schemas/Map"
+        Date:
+          type: integer
+          format: int64
+        StyleID:
+          type: integer
+          format: int32
+        ModeID:
+          type: integer
+          format: int32
+        GameID:
+          type: integer
+          format: int32
+    TimeFilter:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int64
+        Time:
+          type: integer
+          format: int64
+        UserID:
+          type: integer
+          format: int64
+        MapID:
+          type: integer
+          format: int64
+        StyleID:
+          type: integer
+          format: int32
+        ModeID:
+          type: integer
+          format: int32
+        GameID:
+          type: integer
+          format: int32
+    Rank:
+      type: object
+      properties: 
+        ID:
+          type: integer
+          format: int64
+        User:
+          $ref: "#/components/schemas/User"
+        StyleID:
+          type: integer
+          format: int32
+        ModeID:
+          type: integer
+          format: int32
+        GameID:
+          type: integer
+          format: int32
+        Rank:
+          type: number
+          format: double
+        Skill:
+          type: number
+          format: double
+        UpdatedAt:
+          type: integer
+          format: int64
+    RankFilter:
+      type: object
+      properties:
+        StyleID:
+          type: integer
+          format: int32
+        GameID:
+          type: integer
+          format: int32
+        ModeID:
+          type: integer
+          format: int32
+        Sort:
+          type: integer
+          format: int64
+    Pagination:
+      type: object
+      required:
+        - Page
+        - Limit
+      properties:
+        Page:
+          type: integer
+          format: int32
+          minimum: 1
+        Limit:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 100
+    Error:
+      description: Represents error object
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int64
+        message:
+          type: string
+      required:
+        - code
+        - message
