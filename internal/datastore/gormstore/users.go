@@ -2,8 +2,8 @@ package gormstore
 
 import (
 	"context"
-	"git.itzana.me/strafesnet/data-service/internal/datastore"
-	"git.itzana.me/strafesnet/data-service/internal/model"
+	"git.itzana.me/strafesnet/maps-service/internal/datastore"
+	"git.itzana.me/strafesnet/maps-service/internal/model"
 	"gorm.io/gorm"
 )
 

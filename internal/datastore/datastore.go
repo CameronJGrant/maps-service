@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"git.itzana.me/strafesnet/data-service/internal/model"
+	"git.itzana.me/strafesnet/maps-service/internal/model"
 )
 
 var (

@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"git.itzana.me/strafesnet/data-service/internal/datastore"
-	"git.itzana.me/strafesnet/data-service/internal/model"
+	"git.itzana.me/strafesnet/maps-service/internal/datastore"
+	"git.itzana.me/strafesnet/maps-service/internal/model"
 	"git.itzana.me/strafesnet/utils/logger"
 	"github.com/eko/gocache/lib/v4/cache"
 	gocache_store "github.com/eko/gocache/store/go_cache/v4"

@@ -2,8 +2,8 @@ package controller
 
 import (
 	"context"
-	"git.itzana.me/strafesnet/data-service/internal/datastore"
-	"git.itzana.me/strafesnet/data-service/internal/model"
+	"git.itzana.me/strafesnet/maps-service/internal/datastore"
+	"git.itzana.me/strafesnet/maps-service/internal/model"
 	"git.itzana.me/strafesnet/go-grpc/users"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc/codes"

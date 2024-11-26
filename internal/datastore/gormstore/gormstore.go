@@ -1,7 +1,7 @@
 package gormstore
 
 import (
-	"git.itzana.me/strafesnet/data-service/internal/datastore"
+	"git.itzana.me/strafesnet/maps-service/internal/datastore"
 	"github.com/eko/gocache/lib/v4/cache"
 	"gorm.io/gorm"
 )
