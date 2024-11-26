@@ -95,6 +95,95 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /submissions/{SubmissionID}/model:
+    patch:
+      summary: Update model following role restrictions
+      operationId: patchSubmissionModel
+      tags:
+        - Submissions
+      parameters:
+        - name: SubmissionID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: ModelID
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: VersionID
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful response
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /submissions/{SubmissionID}/completed:
+    patch:
+      summary: Retrieve map with ID
+      operationId: patchSubmissionCompleted
+      tags:
+        - Submissions
+      parameters:
+        - name: SubmissionID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Completed
+          in: query
+          required: true
+          schema:
+            type: bool
+      responses:
+        "200":
+          description: Successful response
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /submissions/{SubmissionID}/status:
+    patch:
+      summary: Update status following role restrictions
+      operationId: patchSubmissionStatus
+      tags:
+        - Submissions
+      parameters:
+        - name: SubmissionID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Status
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Successful response
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     User:
