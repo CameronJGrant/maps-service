@@ -125,6 +125,41 @@ func (s *Error) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes bool as json.
+func (o OptBool) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Bool(bool(o.Value))
+}
+
+// Decode decodes bool from json.
+func (o *OptBool) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptBool to nil")
+	}
+	o.Set = true
+	v, err := d.Bool()
+	if err != nil {
+		return err
+	}
+	o.Value = bool(v)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptBool) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptBool) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes int32 as json.
 func (o OptInt32) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -269,14 +304,63 @@ func (s *Submission) encodeFields(e *jx.Encoder) {
 			s.Date.Encode(e)
 		}
 	}
+	{
+		if s.Submitter.Set {
+			e.FieldStart("Submitter")
+			s.Submitter.Encode(e)
+		}
+	}
+	{
+		if s.AssetID.Set {
+			e.FieldStart("AssetID")
+			s.AssetID.Encode(e)
+		}
+	}
+	{
+		if s.AssetVersion.Set {
+			e.FieldStart("AssetVersion")
+			s.AssetVersion.Encode(e)
+		}
+	}
+	{
+		if s.Completed.Set {
+			e.FieldStart("Completed")
+			s.Completed.Encode(e)
+		}
+	}
+	{
+		if s.SubmissionType.Set {
+			e.FieldStart("SubmissionType")
+			s.SubmissionType.Encode(e)
+		}
+	}
+	{
+		if s.TargetAssetID.Set {
+			e.FieldStart("TargetAssetID")
+			s.TargetAssetID.Encode(e)
+		}
+	}
+	{
+		if s.StatusID.Set {
+			e.FieldStart("StatusID")
+			s.StatusID.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfSubmission = [5]string{
-	0: "ID",
-	1: "DisplayName",
-	2: "Creator",
-	3: "GameID",
-	4: "Date",
+var jsonFieldsNameOfSubmission = [12]string{
+	0:  "ID",
+	1:  "DisplayName",
+	2:  "Creator",
+	3:  "GameID",
+	4:  "Date",
+	5:  "Submitter",
+	6:  "AssetID",
+	7:  "AssetVersion",
+	8:  "Completed",
+	9:  "SubmissionType",
+	10: "TargetAssetID",
+	11: "StatusID",
 }
 
 // Decode decodes Submission from json.
@@ -336,6 +420,76 @@ func (s *Submission) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"Date\"")
+			}
+		case "Submitter":
+			if err := func() error {
+				s.Submitter.Reset()
+				if err := s.Submitter.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"Submitter\"")
+			}
+		case "AssetID":
+			if err := func() error {
+				s.AssetID.Reset()
+				if err := s.AssetID.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"AssetID\"")
+			}
+		case "AssetVersion":
+			if err := func() error {
+				s.AssetVersion.Reset()
+				if err := s.AssetVersion.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"AssetVersion\"")
+			}
+		case "Completed":
+			if err := func() error {
+				s.Completed.Reset()
+				if err := s.Completed.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"Completed\"")
+			}
+		case "SubmissionType":
+			if err := func() error {
+				s.SubmissionType.Reset()
+				if err := s.SubmissionType.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"SubmissionType\"")
+			}
+		case "TargetAssetID":
+			if err := func() error {
+				s.TargetAssetID.Reset()
+				if err := s.TargetAssetID.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"TargetAssetID\"")
+			}
+		case "StatusID":
+			if err := func() error {
+				s.StatusID.Reset()
+				if err := s.StatusID.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"StatusID\"")
 			}
 		default:
 			return d.Skip()

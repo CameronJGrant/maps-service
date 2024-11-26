@@ -63,6 +63,52 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
+// NewOptBool returns new OptBool with value set to v.
+func NewOptBool(v bool) OptBool {
+	return OptBool{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBool is optional bool.
+type OptBool struct {
+	Value bool
+	Set   bool
+}
+
+// IsSet returns true if OptBool was set.
+func (o OptBool) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBool) Reset() {
+	var v bool
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBool) SetTo(v bool) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBool) Get() (v bool, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBool) Or(d bool) bool {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptInt32 returns new OptInt32 with value set to v.
 func NewOptInt32(v int32) OptInt32 {
 	return OptInt32{
@@ -284,11 +330,18 @@ type PatchSubmissionStatusOK struct{}
 
 // Ref: #/components/schemas/Submission
 type Submission struct {
-	ID          OptInt64  `json:"ID"`
-	DisplayName OptString `json:"DisplayName"`
-	Creator     OptString `json:"Creator"`
-	GameID      OptInt32  `json:"GameID"`
-	Date        OptInt64  `json:"Date"`
+	ID             OptInt64  `json:"ID"`
+	DisplayName    OptString `json:"DisplayName"`
+	Creator        OptString `json:"Creator"`
+	GameID         OptInt32  `json:"GameID"`
+	Date           OptInt64  `json:"Date"`
+	Submitter      OptInt64  `json:"Submitter"`
+	AssetID        OptInt64  `json:"AssetID"`
+	AssetVersion   OptInt64  `json:"AssetVersion"`
+	Completed      OptBool   `json:"Completed"`
+	SubmissionType OptInt32  `json:"SubmissionType"`
+	TargetAssetID  OptInt64  `json:"TargetAssetID"`
+	StatusID       OptInt32  `json:"StatusID"`
 }
 
 // GetID returns the value of ID.
@@ -316,6 +369,41 @@ func (s *Submission) GetDate() OptInt64 {
 	return s.Date
 }
 
+// GetSubmitter returns the value of Submitter.
+func (s *Submission) GetSubmitter() OptInt64 {
+	return s.Submitter
+}
+
+// GetAssetID returns the value of AssetID.
+func (s *Submission) GetAssetID() OptInt64 {
+	return s.AssetID
+}
+
+// GetAssetVersion returns the value of AssetVersion.
+func (s *Submission) GetAssetVersion() OptInt64 {
+	return s.AssetVersion
+}
+
+// GetCompleted returns the value of Completed.
+func (s *Submission) GetCompleted() OptBool {
+	return s.Completed
+}
+
+// GetSubmissionType returns the value of SubmissionType.
+func (s *Submission) GetSubmissionType() OptInt32 {
+	return s.SubmissionType
+}
+
+// GetTargetAssetID returns the value of TargetAssetID.
+func (s *Submission) GetTargetAssetID() OptInt64 {
+	return s.TargetAssetID
+}
+
+// GetStatusID returns the value of StatusID.
+func (s *Submission) GetStatusID() OptInt32 {
+	return s.StatusID
+}
+
 // SetID sets the value of ID.
 func (s *Submission) SetID(val OptInt64) {
 	s.ID = val
@@ -339,6 +427,41 @@ func (s *Submission) SetGameID(val OptInt32) {
 // SetDate sets the value of Date.
 func (s *Submission) SetDate(val OptInt64) {
 	s.Date = val
+}
+
+// SetSubmitter sets the value of Submitter.
+func (s *Submission) SetSubmitter(val OptInt64) {
+	s.Submitter = val
+}
+
+// SetAssetID sets the value of AssetID.
+func (s *Submission) SetAssetID(val OptInt64) {
+	s.AssetID = val
+}
+
+// SetAssetVersion sets the value of AssetVersion.
+func (s *Submission) SetAssetVersion(val OptInt64) {
+	s.AssetVersion = val
+}
+
+// SetCompleted sets the value of Completed.
+func (s *Submission) SetCompleted(val OptBool) {
+	s.Completed = val
+}
+
+// SetSubmissionType sets the value of SubmissionType.
+func (s *Submission) SetSubmissionType(val OptInt32) {
+	s.SubmissionType = val
+}
+
+// SetTargetAssetID sets the value of TargetAssetID.
+func (s *Submission) SetTargetAssetID(val OptInt64) {
+	s.TargetAssetID = val
+}
+
+// SetStatusID sets the value of StatusID.
+func (s *Submission) SetStatusID(val OptInt32) {
+	s.StatusID = val
 }
 
 // Ref: #/components/schemas/SubmissionFilter
