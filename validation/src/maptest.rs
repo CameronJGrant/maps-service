@@ -36,9 +36,9 @@ Admin:
 	Validated -> Publishing
 */
 
-enum MaptestType{
-	// mapfixes change an existing map on staging game, so they know what map_id they upload to.
-	Mapfix{
+enum SubmissionType{
+	// changes an existing map on publish
+	Fix{
 		//main game target asset id
 		asset_id:u64,
 		// How is this data entered?  It should be suggested by map maker and finalized by time deleter
@@ -47,24 +47,39 @@ enum MaptestType{
 		//affected times to be individually removed
 		delete_times:Option<HashSet<TimeID>>,
 	},
-	// map submissions create a new map entry in the staging map database when they are accepted.
-	Submission{
+	// creates a new map on publish
+	New{
 		games:HashSet<GameID>,
 		creator:String,
 		display_name:String,
 	},
 }
 
-struct Map{
+struct Submission{
+	// IMMUTABLE FIELDS
 	//maptest database entry id
 	id:u64,
 	date:u64,
 	// int64 UserID who created the submission
 	// this user is allowed to change any data in the maptest phase, except for mapfix target map id
 	submitter:u64,
+	// MUTABLE FIELDS (depending on roles and status)
 	model_id:u64,// asset id of the most recently submitted model
 	model_version:u64,// snapshot of the model to prevent tampering
 	is_completed:bool,// has this asset version been completed by any player
-	maptest_type:MaptestType,
+	submission_type:SubmissionType,
 	status:Status,
 }
+/*
+Mutability conditions:
+model_id:
+	Submitter - Phase 1
+model_version:
+	Submitter - Phase 1
+is_completed:
+	Maptest place - no status restriction
+maptest_type:
+	highly conditional
+status:
+	highly conditional
+*/
