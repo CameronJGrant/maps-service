@@ -2,6 +2,7 @@
 sequenceDiagram
     participant Player
     participant Maptest
+    participant Admin
     participant Reviewer
     participant Submitter
     participant Website
@@ -18,7 +19,7 @@ sequenceDiagram
     Validator-->>-Database: Pass validation
     Player->>Maptest: Complete map
     Maptest->>Database: Mark as completed
-    Reviewer->>Website: Click Publish
+    Admin->>Website: Click Publish
     Website->>Database: Publish
     Database->>+Validator: Publish message
     Validator-->>-Database: Retire pipeline
