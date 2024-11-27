@@ -15,7 +15,7 @@ func New(ctx *cli.Context) (datastore.Datastore, error) {
 	db, err := gorm.Open(
 		postgres.Open(
 			fmt.Sprintf(
-				"host=%s user=%s password=%s dbname=%s port=%s",
+				"host=%s user=%s password=%s dbname=%s port=%d",
 				ctx.String("pg-host"),
 				ctx.String("pg-user"),
 				ctx.String("pg-password"),
