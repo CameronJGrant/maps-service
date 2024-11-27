@@ -16,4 +16,9 @@ type Datastore interface {
 
 type Submissions interface {
 	Get(ctx context.Context, id int64) (model.Submission, error)
+	GetList(ctx context.Context, id []int64) ([]model.Submission, error)
+	Create(ctx context.Context, smap model.Submission) (model.Submission, error)
+	Update(ctx context.Context, id int64, values OptionalMap) error
+	Delete(ctx context.Context, id int64) error
+	List(ctx context.Context, filters OptionalMap, page model.Page) ([]model.Submission, error)
 }
