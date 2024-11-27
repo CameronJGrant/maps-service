@@ -68,7 +68,7 @@ func serve(ctx *cli.Context) error {
 		log.WithError(err).Fatal("failed to connect database")
 	}
 
-	srv, err := api.NewServer(&service.Service{DB: db}, api.WithPathPrefix("/v2"))
+	srv, err := api.NewServer(&service.Service{DB: db}, api.WithPathPrefix("/v1"))
 	if err != nil {
 		log.WithError(err).Fatal("failed to initialize api server")
 	}
