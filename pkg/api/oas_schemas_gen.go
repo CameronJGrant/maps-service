@@ -262,6 +262,52 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
+// NewOptSubmissionCreate returns new OptSubmissionCreate with value set to v.
+func NewOptSubmissionCreate(v SubmissionCreate) OptSubmissionCreate {
+	return OptSubmissionCreate{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptSubmissionCreate is optional SubmissionCreate.
+type OptSubmissionCreate struct {
+	Value SubmissionCreate
+	Set   bool
+}
+
+// IsSet returns true if OptSubmissionCreate was set.
+func (o OptSubmissionCreate) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptSubmissionCreate) Reset() {
+	var v SubmissionCreate
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptSubmissionCreate) SetTo(v SubmissionCreate) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptSubmissionCreate) Get() (v SubmissionCreate, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptSubmissionCreate) Or(d SubmissionCreate) SubmissionCreate {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptSubmissionFilter returns new OptSubmissionFilter with value set to v.
 func NewOptSubmissionFilter(v SubmissionFilter) OptSubmissionFilter {
 	return OptSubmissionFilter{
@@ -477,6 +523,98 @@ func (s *Submission) SetTargetAssetID(val OptInt64) {
 // SetStatusID sets the value of StatusID.
 func (s *Submission) SetStatusID(val OptInt32) {
 	s.StatusID = val
+}
+
+// Ref: #/components/schemas/SubmissionCreate
+type SubmissionCreate struct {
+	DisplayName    OptString `json:"DisplayName"`
+	Creator        OptString `json:"Creator"`
+	GameID         OptInt32  `json:"GameID"`
+	Submitter      OptInt64  `json:"Submitter"`
+	AssetID        OptInt64  `json:"AssetID"`
+	AssetVersion   OptInt64  `json:"AssetVersion"`
+	SubmissionType OptInt32  `json:"SubmissionType"`
+	TargetAssetID  OptInt64  `json:"TargetAssetID"`
+}
+
+// GetDisplayName returns the value of DisplayName.
+func (s *SubmissionCreate) GetDisplayName() OptString {
+	return s.DisplayName
+}
+
+// GetCreator returns the value of Creator.
+func (s *SubmissionCreate) GetCreator() OptString {
+	return s.Creator
+}
+
+// GetGameID returns the value of GameID.
+func (s *SubmissionCreate) GetGameID() OptInt32 {
+	return s.GameID
+}
+
+// GetSubmitter returns the value of Submitter.
+func (s *SubmissionCreate) GetSubmitter() OptInt64 {
+	return s.Submitter
+}
+
+// GetAssetID returns the value of AssetID.
+func (s *SubmissionCreate) GetAssetID() OptInt64 {
+	return s.AssetID
+}
+
+// GetAssetVersion returns the value of AssetVersion.
+func (s *SubmissionCreate) GetAssetVersion() OptInt64 {
+	return s.AssetVersion
+}
+
+// GetSubmissionType returns the value of SubmissionType.
+func (s *SubmissionCreate) GetSubmissionType() OptInt32 {
+	return s.SubmissionType
+}
+
+// GetTargetAssetID returns the value of TargetAssetID.
+func (s *SubmissionCreate) GetTargetAssetID() OptInt64 {
+	return s.TargetAssetID
+}
+
+// SetDisplayName sets the value of DisplayName.
+func (s *SubmissionCreate) SetDisplayName(val OptString) {
+	s.DisplayName = val
+}
+
+// SetCreator sets the value of Creator.
+func (s *SubmissionCreate) SetCreator(val OptString) {
+	s.Creator = val
+}
+
+// SetGameID sets the value of GameID.
+func (s *SubmissionCreate) SetGameID(val OptInt32) {
+	s.GameID = val
+}
+
+// SetSubmitter sets the value of Submitter.
+func (s *SubmissionCreate) SetSubmitter(val OptInt64) {
+	s.Submitter = val
+}
+
+// SetAssetID sets the value of AssetID.
+func (s *SubmissionCreate) SetAssetID(val OptInt64) {
+	s.AssetID = val
+}
+
+// SetAssetVersion sets the value of AssetVersion.
+func (s *SubmissionCreate) SetAssetVersion(val OptInt64) {
+	s.AssetVersion = val
+}
+
+// SetSubmissionType sets the value of SubmissionType.
+func (s *SubmissionCreate) SetSubmissionType(val OptInt32) {
+	s.SubmissionType = val
+}
+
+// SetTargetAssetID sets the value of TargetAssetID.
+func (s *SubmissionCreate) SetTargetAssetID(val OptInt64) {
+	s.TargetAssetID = val
 }
 
 // Ref: #/components/schemas/SubmissionFilter

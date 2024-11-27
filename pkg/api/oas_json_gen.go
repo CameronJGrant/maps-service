@@ -328,6 +328,39 @@ func (s *OptString) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes SubmissionCreate as json.
+func (o OptSubmissionCreate) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes SubmissionCreate from json.
+func (o *OptSubmissionCreate) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptSubmissionCreate to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptSubmissionCreate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptSubmissionCreate) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
 func (s *Submission) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -574,6 +607,188 @@ func (s *Submission) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Submission) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *SubmissionCreate) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *SubmissionCreate) encodeFields(e *jx.Encoder) {
+	{
+		if s.DisplayName.Set {
+			e.FieldStart("DisplayName")
+			s.DisplayName.Encode(e)
+		}
+	}
+	{
+		if s.Creator.Set {
+			e.FieldStart("Creator")
+			s.Creator.Encode(e)
+		}
+	}
+	{
+		if s.GameID.Set {
+			e.FieldStart("GameID")
+			s.GameID.Encode(e)
+		}
+	}
+	{
+		if s.Submitter.Set {
+			e.FieldStart("Submitter")
+			s.Submitter.Encode(e)
+		}
+	}
+	{
+		if s.AssetID.Set {
+			e.FieldStart("AssetID")
+			s.AssetID.Encode(e)
+		}
+	}
+	{
+		if s.AssetVersion.Set {
+			e.FieldStart("AssetVersion")
+			s.AssetVersion.Encode(e)
+		}
+	}
+	{
+		if s.SubmissionType.Set {
+			e.FieldStart("SubmissionType")
+			s.SubmissionType.Encode(e)
+		}
+	}
+	{
+		if s.TargetAssetID.Set {
+			e.FieldStart("TargetAssetID")
+			s.TargetAssetID.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfSubmissionCreate = [8]string{
+	0: "DisplayName",
+	1: "Creator",
+	2: "GameID",
+	3: "Submitter",
+	4: "AssetID",
+	5: "AssetVersion",
+	6: "SubmissionType",
+	7: "TargetAssetID",
+}
+
+// Decode decodes SubmissionCreate from json.
+func (s *SubmissionCreate) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode SubmissionCreate to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "DisplayName":
+			if err := func() error {
+				s.DisplayName.Reset()
+				if err := s.DisplayName.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"DisplayName\"")
+			}
+		case "Creator":
+			if err := func() error {
+				s.Creator.Reset()
+				if err := s.Creator.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"Creator\"")
+			}
+		case "GameID":
+			if err := func() error {
+				s.GameID.Reset()
+				if err := s.GameID.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"GameID\"")
+			}
+		case "Submitter":
+			if err := func() error {
+				s.Submitter.Reset()
+				if err := s.Submitter.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"Submitter\"")
+			}
+		case "AssetID":
+			if err := func() error {
+				s.AssetID.Reset()
+				if err := s.AssetID.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"AssetID\"")
+			}
+		case "AssetVersion":
+			if err := func() error {
+				s.AssetVersion.Reset()
+				if err := s.AssetVersion.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"AssetVersion\"")
+			}
+		case "SubmissionType":
+			if err := func() error {
+				s.SubmissionType.Reset()
+				if err := s.SubmissionType.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"SubmissionType\"")
+			}
+		case "TargetAssetID":
+			if err := func() error {
+				s.TargetAssetID.Reset()
+				if err := s.TargetAssetID.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"TargetAssetID\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode SubmissionCreate")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *SubmissionCreate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *SubmissionCreate) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

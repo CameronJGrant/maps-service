@@ -18,7 +18,7 @@ var _ Handler = UnimplementedHandler{}
 // Create new submission.
 //
 // POST /submissions
-func (UnimplementedHandler) CreateSubmission(ctx context.Context) (r *ID, _ error) {
+func (UnimplementedHandler) CreateSubmission(ctx context.Context, req OptSubmissionCreate) (r *ID, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

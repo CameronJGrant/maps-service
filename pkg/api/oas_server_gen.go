@@ -13,7 +13,7 @@ type Handler interface {
 	// Create new submission.
 	//
 	// POST /submissions
-	CreateSubmission(ctx context.Context) (*ID, error)
+	CreateSubmission(ctx context.Context, req OptSubmissionCreate) (*ID, error)
 	// GetSubmission implements getSubmission operation.
 	//
 	// Retrieve map with ID.

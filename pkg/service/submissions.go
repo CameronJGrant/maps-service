@@ -1,13 +1,34 @@
 package service
 
 import (
+	"time"
 	"context"
 	"git.itzana.me/strafesnet/maps-service/pkg/api"
+	"git.itzana.me/strafesnet/maps-service/pkg/model"
 )
 
 // POST /submissions
-func (svc *Service) CreateSubmission(ctx context.Context) (*api.ID, error) {
-	return nil, nil
+func (svc *Service) CreateSubmission(ctx context.Context, request api.OptSubmissionCreate) (*api.ID, error) {
+	//I don't know how to read the http body
+	submission, err := svc.DB.Submissions().Create(ctx, model.Submission{
+		ID:            0,
+		DisplayName:   request.Value.DisplayName.Value,
+		Creator:       request.Value.Creator.Value,
+		GameID:        request.Value.GameID.Value,
+		Date:          time.Now(),
+		Submitter:     request.Value.Submitter.Value,
+		AssetID:       request.Value.AssetID.Value,
+		AssetVersion:  request.Value.AssetVersion.Value,
+		Completed:     false,
+		TargetAssetID: request.Value.TargetAssetID.Value,
+		StatusID:      0,
+	})
+	if err != nil{
+		return nil, err
+	}
+	return &api.ID{
+		ID:api.NewOptInt64(submission.ID),
+	}, nil
 }
 
 // GetSubmission implements getSubmission operation.

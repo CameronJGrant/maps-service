@@ -62,8 +62,27 @@ func (s *Server) handleCreateSubmissionRequest(args [0]string, argsEscaped bool,
 			span.SetStatus(codes.Error, stage)
 			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
 		}
-		err error
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "CreateSubmission",
+			ID:   "createSubmission",
+		}
 	)
+	request, close, err := s.decodeCreateSubmissionRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
 
 	var response *ID
 	if m := s.cfg.Middleware; m != nil {
@@ -72,13 +91,13 @@ func (s *Server) handleCreateSubmissionRequest(args [0]string, argsEscaped bool,
 			OperationName:    "CreateSubmission",
 			OperationSummary: "Create new submission",
 			OperationID:      "createSubmission",
-			Body:             nil,
+			Body:             request,
 			Params:           middleware.Parameters{},
 			Raw:              r,
 		}
 
 		type (
-			Request  = struct{}
+			Request  = OptSubmissionCreate
 			Params   = struct{}
 			Response = *ID
 		)
@@ -91,12 +110,12 @@ func (s *Server) handleCreateSubmissionRequest(args [0]string, argsEscaped bool,
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.CreateSubmission(ctx)
+				response, err = s.h.CreateSubmission(ctx, request)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.CreateSubmission(ctx)
+		response, err = s.h.CreateSubmission(ctx, request)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {

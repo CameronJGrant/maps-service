@@ -51,11 +51,11 @@ paths:
       operationId: createSubmission
       tags:
         - Submissions
-# how to do this? body should have the submission in json or something
-#      content:
-#        application/json:
-#          schema:
-#           	$ref: "#/components/schemas/SubmissionCreate"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmissionCreate'
       responses:
         "200":
           description: Successful response
@@ -253,6 +253,31 @@ components:
           type: integer
           format: int32
         Date:
+          type: integer
+          format: int64
+    SubmissionCreate:
+      type: object
+      properties:
+        DisplayName:
+          type: string
+        Creator:
+          type: string
+        GameID:
+          type: integer
+          format: int32
+        Submitter:
+          type: integer
+          format: int64
+        AssetID:
+          type: integer
+          format: int64
+        AssetVersion:
+          type: integer
+          format: int64
+        SubmissionType:
+          type: integer
+          format: int32
+        TargetAssetID:
           type: integer
           format: int64
     Pagination:

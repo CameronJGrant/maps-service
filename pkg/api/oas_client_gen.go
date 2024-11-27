@@ -28,7 +28,7 @@ type Invoker interface {
 	// Create new submission.
 	//
 	// POST /submissions
-	CreateSubmission(ctx context.Context) (*ID, error)
+	CreateSubmission(ctx context.Context, request OptSubmissionCreate) (*ID, error)
 	// GetSubmission invokes getSubmission operation.
 	//
 	// Retrieve map with ID.
@@ -118,12 +118,12 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // Create new submission.
 //
 // POST /submissions
-func (c *Client) CreateSubmission(ctx context.Context) (*ID, error) {
-	res, err := c.sendCreateSubmission(ctx)
+func (c *Client) CreateSubmission(ctx context.Context, request OptSubmissionCreate) (*ID, error) {
+	res, err := c.sendCreateSubmission(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendCreateSubmission(ctx context.Context) (res *ID, err error) {
+func (c *Client) sendCreateSubmission(ctx context.Context, request OptSubmissionCreate) (res *ID, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createSubmission"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -167,6 +167,9 @@ func (c *Client) sendCreateSubmission(ctx context.Context) (res *ID, err error) 
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeCreateSubmissionRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
 	}
 
 	stage = "SendRequest"
