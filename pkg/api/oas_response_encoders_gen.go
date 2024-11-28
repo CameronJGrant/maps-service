@@ -13,6 +13,62 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
+func encodeActionSubmissionPublishResponse(response *ActionSubmissionPublishOK, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	return nil
+}
+
+func encodeActionSubmissionRejectResponse(response *ActionSubmissionRejectOK, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	return nil
+}
+
+func encodeActionSubmissionRequestChangesResponse(response *ActionSubmissionRequestChangesOK, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	return nil
+}
+
+func encodeActionSubmissionRevokeResponse(response *ActionSubmissionRevokeOK, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	return nil
+}
+
+func encodeActionSubmissionSubmitResponse(response *ActionSubmissionSubmitOK, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	return nil
+}
+
+func encodeActionSubmissionTriggerPublishResponse(response *ActionSubmissionTriggerPublishOK, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	return nil
+}
+
+func encodeActionSubmissionTriggerValidateResponse(response *ActionSubmissionTriggerValidateOK, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	return nil
+}
+
+func encodeActionSubmissionValidateResponse(response *ActionSubmissionValidateOK, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	return nil
+}
+
 func encodeCreateSubmissionResponse(response *ID, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
@@ -67,13 +123,6 @@ func encodePatchSubmissionCompletedResponse(response *PatchSubmissionCompletedOK
 }
 
 func encodePatchSubmissionModelResponse(response *PatchSubmissionModelOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
-
-	return nil
-}
-
-func encodePatchSubmissionStatusResponse(response *PatchSubmissionStatusOK, w http.ResponseWriter, span trace.Span) error {
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
 

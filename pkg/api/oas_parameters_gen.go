@@ -15,6 +15,526 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+// ActionSubmissionPublishParams is parameters of actionSubmissionPublish operation.
+type ActionSubmissionPublishParams struct {
+	SubmissionID int64
+}
+
+func unpackActionSubmissionPublishParams(packed middleware.Parameters) (params ActionSubmissionPublishParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SubmissionID",
+			In:   "path",
+		}
+		params.SubmissionID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeActionSubmissionPublishParams(args [1]string, argsEscaped bool, r *http.Request) (params ActionSubmissionPublishParams, _ error) {
+	// Decode path: SubmissionID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "SubmissionID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.SubmissionID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SubmissionID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// ActionSubmissionRejectParams is parameters of actionSubmissionReject operation.
+type ActionSubmissionRejectParams struct {
+	SubmissionID int64
+}
+
+func unpackActionSubmissionRejectParams(packed middleware.Parameters) (params ActionSubmissionRejectParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SubmissionID",
+			In:   "path",
+		}
+		params.SubmissionID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeActionSubmissionRejectParams(args [1]string, argsEscaped bool, r *http.Request) (params ActionSubmissionRejectParams, _ error) {
+	// Decode path: SubmissionID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "SubmissionID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.SubmissionID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SubmissionID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// ActionSubmissionRequestChangesParams is parameters of actionSubmissionRequestChanges operation.
+type ActionSubmissionRequestChangesParams struct {
+	SubmissionID int64
+}
+
+func unpackActionSubmissionRequestChangesParams(packed middleware.Parameters) (params ActionSubmissionRequestChangesParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SubmissionID",
+			In:   "path",
+		}
+		params.SubmissionID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeActionSubmissionRequestChangesParams(args [1]string, argsEscaped bool, r *http.Request) (params ActionSubmissionRequestChangesParams, _ error) {
+	// Decode path: SubmissionID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "SubmissionID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.SubmissionID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SubmissionID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// ActionSubmissionRevokeParams is parameters of actionSubmissionRevoke operation.
+type ActionSubmissionRevokeParams struct {
+	SubmissionID int64
+}
+
+func unpackActionSubmissionRevokeParams(packed middleware.Parameters) (params ActionSubmissionRevokeParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SubmissionID",
+			In:   "path",
+		}
+		params.SubmissionID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeActionSubmissionRevokeParams(args [1]string, argsEscaped bool, r *http.Request) (params ActionSubmissionRevokeParams, _ error) {
+	// Decode path: SubmissionID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "SubmissionID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.SubmissionID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SubmissionID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// ActionSubmissionSubmitParams is parameters of actionSubmissionSubmit operation.
+type ActionSubmissionSubmitParams struct {
+	SubmissionID int64
+}
+
+func unpackActionSubmissionSubmitParams(packed middleware.Parameters) (params ActionSubmissionSubmitParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SubmissionID",
+			In:   "path",
+		}
+		params.SubmissionID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeActionSubmissionSubmitParams(args [1]string, argsEscaped bool, r *http.Request) (params ActionSubmissionSubmitParams, _ error) {
+	// Decode path: SubmissionID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "SubmissionID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.SubmissionID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SubmissionID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// ActionSubmissionTriggerPublishParams is parameters of actionSubmissionTriggerPublish operation.
+type ActionSubmissionTriggerPublishParams struct {
+	SubmissionID int64
+}
+
+func unpackActionSubmissionTriggerPublishParams(packed middleware.Parameters) (params ActionSubmissionTriggerPublishParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SubmissionID",
+			In:   "path",
+		}
+		params.SubmissionID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeActionSubmissionTriggerPublishParams(args [1]string, argsEscaped bool, r *http.Request) (params ActionSubmissionTriggerPublishParams, _ error) {
+	// Decode path: SubmissionID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "SubmissionID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.SubmissionID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SubmissionID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// ActionSubmissionTriggerValidateParams is parameters of actionSubmissionTriggerValidate operation.
+type ActionSubmissionTriggerValidateParams struct {
+	SubmissionID int64
+}
+
+func unpackActionSubmissionTriggerValidateParams(packed middleware.Parameters) (params ActionSubmissionTriggerValidateParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SubmissionID",
+			In:   "path",
+		}
+		params.SubmissionID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeActionSubmissionTriggerValidateParams(args [1]string, argsEscaped bool, r *http.Request) (params ActionSubmissionTriggerValidateParams, _ error) {
+	// Decode path: SubmissionID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "SubmissionID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.SubmissionID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SubmissionID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// ActionSubmissionValidateParams is parameters of actionSubmissionValidate operation.
+type ActionSubmissionValidateParams struct {
+	SubmissionID int64
+}
+
+func unpackActionSubmissionValidateParams(packed middleware.Parameters) (params ActionSubmissionValidateParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SubmissionID",
+			In:   "path",
+		}
+		params.SubmissionID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeActionSubmissionValidateParams(args [1]string, argsEscaped bool, r *http.Request) (params ActionSubmissionValidateParams, _ error) {
+	// Decode path: SubmissionID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "SubmissionID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.SubmissionID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SubmissionID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // GetSubmissionParams is parameters of getSubmission operation.
 type GetSubmissionParams struct {
 	SubmissionID int64
@@ -388,116 +908,6 @@ func decodePatchSubmissionModelParams(args [1]string, argsEscaped bool, r *http.
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "VersionID",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// PatchSubmissionStatusParams is parameters of patchSubmissionStatus operation.
-type PatchSubmissionStatusParams struct {
-	SubmissionID int64
-	Status       int32
-}
-
-func unpackPatchSubmissionStatusParams(packed middleware.Parameters) (params PatchSubmissionStatusParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "SubmissionID",
-			In:   "path",
-		}
-		params.SubmissionID = packed[key].(int64)
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "Status",
-			In:   "query",
-		}
-		params.Status = packed[key].(int32)
-	}
-	return params
-}
-
-func decodePatchSubmissionStatusParams(args [1]string, argsEscaped bool, r *http.Request) (params PatchSubmissionStatusParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
-	// Decode path: SubmissionID.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "SubmissionID",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToInt64(val)
-				if err != nil {
-					return err
-				}
-
-				params.SubmissionID = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "SubmissionID",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	// Decode query: Status.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "Status",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToInt32(val)
-				if err != nil {
-					return err
-				}
-
-				params.Status = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "Status",
 			In:   "query",
 			Err:  err,
 		}

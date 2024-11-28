@@ -130,14 +130,67 @@ func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSu
 	return err
 }
 
-// PatchSubmissionStatus implements patchSubmissionStatus operation.
+// ActionSubmissionPublish invokes actionSubmissionPublish operation.
 //
-// Update status following role restrictions.
+// Role Validator changes status from Publishing -> Published.
 //
-// PATCH /submissions/{SubmissionID}/status
-func (svc *Service) PatchSubmissionStatus(ctx context.Context, params api.PatchSubmissionStatusParams) error {
-	pmap := datastore.Optional()
-	pmap.AddNotNil("status", params.Status)
-	err := svc.DB.Submissions().Update(ctx, params.SubmissionID, pmap)
-	return err
+// PATCH /submissions/{SubmissionID}/status/publish
+func (svc *Service) ActionSubmissionPublish(ctx context.Context, params api.ActionSubmissionPublishParams) error {
+	return nil
+}
+// ActionSubmissionReject invokes actionSubmissionReject operation.
+//
+// Role Reviewer changes status from Submitted -> Rejected.
+//
+// PATCH /submissions/{SubmissionID}/status/reject
+func (svc *Service) ActionSubmissionReject(ctx context.Context, params api.ActionSubmissionRejectParams) error {
+	return nil
+}
+// ActionSubmissionRequestChanges invokes actionSubmissionRequestChanges operation.
+//
+// Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested.
+//
+// PATCH /submissions/{SubmissionID}/status/request-changes
+func (svc *Service) ActionSubmissionRequestChanges(ctx context.Context, params api.ActionSubmissionRequestChangesParams) error {
+	return nil
+}
+// ActionSubmissionRevoke invokes actionSubmissionRevoke operation.
+//
+// Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction.
+//
+// PATCH /submissions/{SubmissionID}/status/revoke
+func (svc *Service) ActionSubmissionRevoke(ctx context.Context, params api.ActionSubmissionRevokeParams) error {
+	return nil
+}
+// ActionSubmissionSubmit invokes actionSubmissionSubmit operation.
+//
+// Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted.
+//
+// PATCH /submissions/{SubmissionID}/status/submit
+func (svc *Service) ActionSubmissionSubmit(ctx context.Context, params api.ActionSubmissionSubmitParams) error {
+	return nil
+}
+// ActionSubmissionTriggerPublish invokes actionSubmissionTriggerPublish operation.
+//
+// Role Admin changes status from Validated -> Publishing.
+//
+// PATCH /submissions/{SubmissionID}/status/trigger-publish
+func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params api.ActionSubmissionTriggerPublishParams) error {
+	return nil
+}
+// ActionSubmissionTriggerValidate invokes actionSubmissionTriggerValidate operation.
+//
+// Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating.
+//
+// PATCH /submissions/{SubmissionID}/status/trigger-validate
+func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params api.ActionSubmissionTriggerValidateParams) error {
+	return nil
+}
+// ActionSubmissionValidate invokes actionSubmissionValidate operation.
+//
+// Role Validator changes status from Validating -> Validated.
+//
+// PATCH /submissions/{SubmissionID}/status/validate
+func (svc *Service) ActionSubmissionValidate(ctx context.Context, params api.ActionSubmissionValidateParams) error {
+	return nil
 }

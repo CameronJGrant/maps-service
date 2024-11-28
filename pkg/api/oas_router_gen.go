@@ -158,26 +158,232 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
-					case 's': // Prefix: "status"
+					case 's': // Prefix: "status/"
 						origElem := elem
-						if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+						if l := len("status/"); len(elem) >= l && elem[0:l] == "status/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "PATCH":
-								s.handlePatchSubmissionStatusRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "PATCH")
+							break
+						}
+						switch elem[0] {
+						case 'p': // Prefix: "publish"
+							origElem := elem
+							if l := len("publish"); len(elem) >= l && elem[0:l] == "publish" {
+								elem = elem[l:]
+							} else {
+								break
 							}
 
-							return
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "PATCH":
+									s.handleActionSubmissionPublishRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "PATCH")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'r': // Prefix: "re"
+							origElem := elem
+							if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'j': // Prefix: "ject"
+								origElem := elem
+								if l := len("ject"); len(elem) >= l && elem[0:l] == "ject" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "PATCH":
+										s.handleActionSubmissionRejectRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "PATCH")
+									}
+
+									return
+								}
+
+								elem = origElem
+							case 'q': // Prefix: "quest-changes"
+								origElem := elem
+								if l := len("quest-changes"); len(elem) >= l && elem[0:l] == "quest-changes" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "PATCH":
+										s.handleActionSubmissionRequestChangesRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "PATCH")
+									}
+
+									return
+								}
+
+								elem = origElem
+							case 'v': // Prefix: "voke"
+								origElem := elem
+								if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "PATCH":
+										s.handleActionSubmissionRevokeRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "PATCH")
+									}
+
+									return
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						case 's': // Prefix: "submit"
+							origElem := elem
+							if l := len("submit"); len(elem) >= l && elem[0:l] == "submit" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "PATCH":
+									s.handleActionSubmissionSubmitRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "PATCH")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 't': // Prefix: "trigger-"
+							origElem := elem
+							if l := len("trigger-"); len(elem) >= l && elem[0:l] == "trigger-" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'p': // Prefix: "publish"
+								origElem := elem
+								if l := len("publish"); len(elem) >= l && elem[0:l] == "publish" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "PATCH":
+										s.handleActionSubmissionTriggerPublishRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "PATCH")
+									}
+
+									return
+								}
+
+								elem = origElem
+							case 'v': // Prefix: "validate"
+								origElem := elem
+								if l := len("validate"); len(elem) >= l && elem[0:l] == "validate" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "PATCH":
+										s.handleActionSubmissionTriggerValidateRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "PATCH")
+									}
+
+									return
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						case 'v': // Prefix: "validate"
+							origElem := elem
+							if l := len("validate"); len(elem) >= l && elem[0:l] == "validate" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "PATCH":
+									s.handleActionSubmissionValidateRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "PATCH")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
@@ -395,28 +601,248 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
-					case 's': // Prefix: "status"
+					case 's': // Prefix: "status/"
 						origElem := elem
-						if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+						if l := len("status/"); len(elem) >= l && elem[0:l] == "status/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "PATCH":
-								r.name = "PatchSubmissionStatus"
-								r.summary = "Update status following role restrictions"
-								r.operationID = "patchSubmissionStatus"
-								r.pathPattern = "/submissions/{SubmissionID}/status"
-								r.args = args
-								r.count = 1
-								return r, true
-							default:
-								return
+							break
+						}
+						switch elem[0] {
+						case 'p': // Prefix: "publish"
+							origElem := elem
+							if l := len("publish"); len(elem) >= l && elem[0:l] == "publish" {
+								elem = elem[l:]
+							} else {
+								break
 							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "PATCH":
+									r.name = "ActionSubmissionPublish"
+									r.summary = "Role Validator changes status from Publishing -> Published"
+									r.operationID = "actionSubmissionPublish"
+									r.pathPattern = "/submissions/{SubmissionID}/status/publish"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'r': // Prefix: "re"
+							origElem := elem
+							if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'j': // Prefix: "ject"
+								origElem := elem
+								if l := len("ject"); len(elem) >= l && elem[0:l] == "ject" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "PATCH":
+										r.name = "ActionSubmissionReject"
+										r.summary = "Role Reviewer changes status from Submitted -> Rejected"
+										r.operationID = "actionSubmissionReject"
+										r.pathPattern = "/submissions/{SubmissionID}/status/reject"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							case 'q': // Prefix: "quest-changes"
+								origElem := elem
+								if l := len("quest-changes"); len(elem) >= l && elem[0:l] == "quest-changes" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "PATCH":
+										r.name = "ActionSubmissionRequestChanges"
+										r.summary = "Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested"
+										r.operationID = "actionSubmissionRequestChanges"
+										r.pathPattern = "/submissions/{SubmissionID}/status/request-changes"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							case 'v': // Prefix: "voke"
+								origElem := elem
+								if l := len("voke"); len(elem) >= l && elem[0:l] == "voke" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "PATCH":
+										r.name = "ActionSubmissionRevoke"
+										r.summary = "Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction"
+										r.operationID = "actionSubmissionRevoke"
+										r.pathPattern = "/submissions/{SubmissionID}/status/revoke"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						case 's': // Prefix: "submit"
+							origElem := elem
+							if l := len("submit"); len(elem) >= l && elem[0:l] == "submit" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "PATCH":
+									r.name = "ActionSubmissionSubmit"
+									r.summary = "Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted"
+									r.operationID = "actionSubmissionSubmit"
+									r.pathPattern = "/submissions/{SubmissionID}/status/submit"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 't': // Prefix: "trigger-"
+							origElem := elem
+							if l := len("trigger-"); len(elem) >= l && elem[0:l] == "trigger-" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'p': // Prefix: "publish"
+								origElem := elem
+								if l := len("publish"); len(elem) >= l && elem[0:l] == "publish" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "PATCH":
+										r.name = "ActionSubmissionTriggerPublish"
+										r.summary = "Role Admin changes status from Validated -> Publishing"
+										r.operationID = "actionSubmissionTriggerPublish"
+										r.pathPattern = "/submissions/{SubmissionID}/status/trigger-publish"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							case 'v': // Prefix: "validate"
+								origElem := elem
+								if l := len("validate"); len(elem) >= l && elem[0:l] == "validate" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "PATCH":
+										r.name = "ActionSubmissionTriggerValidate"
+										r.summary = "Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating"
+										r.operationID = "actionSubmissionTriggerValidate"
+										r.pathPattern = "/submissions/{SubmissionID}/status/trigger-validate"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						case 'v': // Prefix: "validate"
+							origElem := elem
+							if l := len("validate"); len(elem) >= l && elem[0:l] == "validate" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "PATCH":
+									r.name = "ActionSubmissionValidate"
+									r.summary = "Role Validator changes status from Validating -> Validated"
+									r.operationID = "actionSubmissionValidate"
+									r.pathPattern = "/submissions/{SubmissionID}/status/validate"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem

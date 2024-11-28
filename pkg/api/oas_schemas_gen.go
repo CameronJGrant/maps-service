@@ -10,6 +10,30 @@ func (s *ErrorStatusCode) Error() string {
 	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
 }
 
+// ActionSubmissionPublishOK is response for ActionSubmissionPublish operation.
+type ActionSubmissionPublishOK struct{}
+
+// ActionSubmissionRejectOK is response for ActionSubmissionReject operation.
+type ActionSubmissionRejectOK struct{}
+
+// ActionSubmissionRequestChangesOK is response for ActionSubmissionRequestChanges operation.
+type ActionSubmissionRequestChangesOK struct{}
+
+// ActionSubmissionRevokeOK is response for ActionSubmissionRevoke operation.
+type ActionSubmissionRevokeOK struct{}
+
+// ActionSubmissionSubmitOK is response for ActionSubmissionSubmit operation.
+type ActionSubmissionSubmitOK struct{}
+
+// ActionSubmissionTriggerPublishOK is response for ActionSubmissionTriggerPublish operation.
+type ActionSubmissionTriggerPublishOK struct{}
+
+// ActionSubmissionTriggerValidateOK is response for ActionSubmissionTriggerValidate operation.
+type ActionSubmissionTriggerValidateOK struct{}
+
+// ActionSubmissionValidateOK is response for ActionSubmissionValidate operation.
+type ActionSubmissionValidateOK struct{}
+
 // Represents error object.
 // Ref: #/components/schemas/Error
 type Error struct {
@@ -385,9 +409,6 @@ type PatchSubmissionCompletedOK struct{}
 
 // PatchSubmissionModelOK is response for PatchSubmissionModel operation.
 type PatchSubmissionModelOK struct{}
-
-// PatchSubmissionStatusOK is response for PatchSubmissionStatus operation.
-type PatchSubmissionStatusOK struct{}
 
 // Ref: #/components/schemas/Submission
 type Submission struct {

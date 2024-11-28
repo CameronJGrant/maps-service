@@ -8,6 +8,54 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// ActionSubmissionPublish implements actionSubmissionPublish operation.
+	//
+	// Role Validator changes status from Publishing -> Published.
+	//
+	// PATCH /submissions/{SubmissionID}/status/publish
+	ActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) error
+	// ActionSubmissionReject implements actionSubmissionReject operation.
+	//
+	// Role Reviewer changes status from Submitted -> Rejected.
+	//
+	// PATCH /submissions/{SubmissionID}/status/reject
+	ActionSubmissionReject(ctx context.Context, params ActionSubmissionRejectParams) error
+	// ActionSubmissionRequestChanges implements actionSubmissionRequestChanges operation.
+	//
+	// Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested.
+	//
+	// PATCH /submissions/{SubmissionID}/status/request-changes
+	ActionSubmissionRequestChanges(ctx context.Context, params ActionSubmissionRequestChangesParams) error
+	// ActionSubmissionRevoke implements actionSubmissionRevoke operation.
+	//
+	// Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction.
+	//
+	// PATCH /submissions/{SubmissionID}/status/revoke
+	ActionSubmissionRevoke(ctx context.Context, params ActionSubmissionRevokeParams) error
+	// ActionSubmissionSubmit implements actionSubmissionSubmit operation.
+	//
+	// Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted.
+	//
+	// PATCH /submissions/{SubmissionID}/status/submit
+	ActionSubmissionSubmit(ctx context.Context, params ActionSubmissionSubmitParams) error
+	// ActionSubmissionTriggerPublish implements actionSubmissionTriggerPublish operation.
+	//
+	// Role Admin changes status from Validated -> Publishing.
+	//
+	// PATCH /submissions/{SubmissionID}/status/trigger-publish
+	ActionSubmissionTriggerPublish(ctx context.Context, params ActionSubmissionTriggerPublishParams) error
+	// ActionSubmissionTriggerValidate implements actionSubmissionTriggerValidate operation.
+	//
+	// Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating.
+	//
+	// PATCH /submissions/{SubmissionID}/status/trigger-validate
+	ActionSubmissionTriggerValidate(ctx context.Context, params ActionSubmissionTriggerValidateParams) error
+	// ActionSubmissionValidate implements actionSubmissionValidate operation.
+	//
+	// Role Validator changes status from Validating -> Validated.
+	//
+	// PATCH /submissions/{SubmissionID}/status/validate
+	ActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) error
 	// CreateSubmission implements createSubmission operation.
 	//
 	// Create new submission.
@@ -38,12 +86,6 @@ type Handler interface {
 	//
 	// PATCH /submissions/{SubmissionID}/model
 	PatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) error
-	// PatchSubmissionStatus implements patchSubmissionStatus operation.
-	//
-	// Update status following role restrictions.
-	//
-	// PATCH /submissions/{SubmissionID}/status
-	PatchSubmissionStatus(ctx context.Context, params PatchSubmissionStatusParams) error
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.
