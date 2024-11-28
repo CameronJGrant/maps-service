@@ -22,7 +22,7 @@ func (svc *Service) CreateSubmission(ctx context.Context, request api.OptSubmiss
 		AssetVersion:  request.Value.AssetVersion.Value,
 		Completed:     false,
 		TargetAssetID: request.Value.TargetAssetID.Value,
-		StatusID:      0,
+		StatusID:      model.UnderConstruction,
 	})
 	if err != nil{
 		return nil, err
@@ -53,7 +53,7 @@ func (svc *Service) GetSubmission(ctx context.Context, params api.GetSubmissionP
 		AssetVersion:   api.NewOptInt64(submission.AssetVersion),
 		Completed:      api.NewOptBool(submission.Completed),
 		TargetAssetID:  api.NewOptInt64(submission.TargetAssetID),
-		StatusID:       api.NewOptInt32(submission.StatusID),
+		StatusID:       api.NewOptInt32(int32(submission.StatusID)),
 	}, nil
 }
 
@@ -92,7 +92,7 @@ func (svc *Service) ListSubmissions(ctx context.Context, request api.ListSubmiss
 			AssetVersion:   api.NewOptInt64(items[i].AssetVersion),
 			Completed:      api.NewOptBool(items[i].Completed),
 			TargetAssetID:  api.NewOptInt64(items[i].TargetAssetID),
-			StatusID:       api.NewOptInt32(items[i].StatusID),
+			StatusID:       api.NewOptInt32(int32(items[i].StatusID)),
 		})
 	}
 
