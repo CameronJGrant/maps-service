@@ -127,6 +127,9 @@ func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.Pat
 // PATCH /submissions/{SubmissionID}/model
 func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSubmissionModelParams) error {
 	// check if caller has Submitter role
+	// if !CALLER_ROLES.INCLUDES(ROLE_SUBMITTER){
+	// 	return ErrPermissionDenied
+	// }
 	// check if Status is ChangesRequested|Submitted|UnderConstruction
 	pmap := datastore.Optional()
 	pmap.AddNotNil("asset_id", params.ModelID)
