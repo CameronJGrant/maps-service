@@ -105,6 +105,7 @@ func (svc *Service) ListSubmissions(ctx context.Context, request api.ListSubmiss
 //
 // PATCH /submissions/{SubmissionID}/completed
 func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.PatchSubmissionCompletedParams) error {
+	// check if caller has MaptestGame role (request must originate from a maptest roblox game)
 	pmap := datastore.Optional()
 	pmap.Add("completed", true)
 	err := svc.DB.Submissions().Update(ctx, params.SubmissionID, pmap)
@@ -117,6 +118,9 @@ func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.Pat
 //
 // PATCH /submissions/{SubmissionID}/model
 func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSubmissionModelParams) error {
+	// check if caller has Submitter role
+	// check if Status is ChangesRequested|Submitted|UnderConstruction
+	// PROBLEM how to deal with async? data may become out of date
 	pmap := datastore.Optional()
 	pmap.AddNotNil("asset_id", params.ModelID)
 	pmap.AddNotNil("asset_version", params.VersionID)
