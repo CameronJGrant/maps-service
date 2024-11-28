@@ -173,6 +173,160 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /submissions/{SubmissionID}/status/revoke:
+    patch:
+      summary: Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction
+      operationId: actionSubmissionRevoke
+      tags:
+        - Submissions
+      parameters:
+        - name: SubmissionID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful response
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /submissions/{SubmissionID}/status/trigger-validate:
+    patch:
+      summary: Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating
+      operationId: actionSubmissionTriggerValidate
+      tags:
+        - Submissions
+      parameters:
+        - name: SubmissionID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful response
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /submissions/{SubmissionID}/status/reject:
+    patch:
+      summary: Role Reviewer changes status from Submitted -> Rejected
+      operationId: actionSubmissionReject
+      tags:
+        - Submissions
+      parameters:
+        - name: SubmissionID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful response
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /submissions/{SubmissionID}/status/request-changes:
+    patch:
+      summary: Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested
+      operationId: actionSubmissionRequestChanges
+      tags:
+        - Submissions
+      parameters:
+        - name: SubmissionID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful response
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /submissions/{SubmissionID}/status/validate:
+    patch:
+      summary: Role Validator changes status from Validating -> Validated
+      operationId: actionSubmissionValidate
+      tags:
+        - Submissions
+      parameters:
+        - name: SubmissionID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful response
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /submissions/{SubmissionID}/status/publish:
+    patch:
+      summary: Role Validator changes status from Publishing -> Published
+      operationId: actionSubmissionPublish
+      tags:
+        - Submissions
+      parameters:
+        - name: SubmissionID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful response
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /submissions/{SubmissionID}/status/trigger-publish:
+    patch:
+      summary: Role Admin changes status from Validated -> Publishing
+      operationId: actionSubmissionTriggerPublish
+      tags:
+        - Submissions
+      parameters:
+        - name: SubmissionID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful response
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Id:
