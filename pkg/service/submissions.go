@@ -18,7 +18,6 @@ var (
 
 // POST /submissions
 func (svc *Service) CreateSubmission(ctx context.Context, request api.OptSubmissionCreate) (*api.ID, error) {
-	//I don't know how to read the http body
 	submission, err := svc.DB.Submissions().Create(ctx, model.Submission{
 		ID:            0,
 		DisplayName:   request.Value.DisplayName.Value,
