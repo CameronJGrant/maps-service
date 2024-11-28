@@ -465,10 +465,6 @@ func (s *Server) handlePatchSubmissionCompletedRequest(args [1]string, argsEscap
 					Name: "SubmissionID",
 					In:   "path",
 				}: params.SubmissionID,
-				{
-					Name: "Completed",
-					In:   "query",
-				}: params.Completed,
 			},
 			Raw: r,
 		}

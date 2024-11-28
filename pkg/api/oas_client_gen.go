@@ -454,24 +454,6 @@ func (c *Client) sendPatchSubmissionCompleted(ctx context.Context, params PatchS
 	pathParts[2] = "/completed"
 	uri.AddPathParts(u, pathParts[:]...)
 
-	stage = "EncodeQueryParams"
-	q := uri.NewQueryEncoder()
-	{
-		// Encode "Completed" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "Completed",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			return e.EncodeValue(conv.BoolToString(params.Completed))
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	u.RawQuery = q.Values().Encode()
-
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "PATCH", u)
 	if err != nil {

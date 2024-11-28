@@ -142,11 +142,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: Completed
-          in: query
-          required: true
-          schema:
-            type: boolean
       responses:
         "200":
           description: Successful response

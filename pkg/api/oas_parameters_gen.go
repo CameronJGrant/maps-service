@@ -179,7 +179,6 @@ func decodeListSubmissionsParams(args [0]string, argsEscaped bool, r *http.Reque
 // PatchSubmissionCompletedParams is parameters of patchSubmissionCompleted operation.
 type PatchSubmissionCompletedParams struct {
 	SubmissionID int64
-	Completed    bool
 }
 
 func unpackPatchSubmissionCompletedParams(packed middleware.Parameters) (params PatchSubmissionCompletedParams) {
@@ -190,18 +189,10 @@ func unpackPatchSubmissionCompletedParams(packed middleware.Parameters) (params 
 		}
 		params.SubmissionID = packed[key].(int64)
 	}
-	{
-		key := middleware.ParameterKey{
-			Name: "Completed",
-			In:   "query",
-		}
-		params.Completed = packed[key].(bool)
-	}
 	return params
 }
 
 func decodePatchSubmissionCompletedParams(args [1]string, argsEscaped bool, r *http.Request) (params PatchSubmissionCompletedParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: SubmissionID.
 	if err := func() error {
 		param := args[0]
@@ -244,42 +235,6 @@ func decodePatchSubmissionCompletedParams(args [1]string, argsEscaped bool, r *h
 		return params, &ogenerrors.DecodeParamError{
 			Name: "SubmissionID",
 			In:   "path",
-			Err:  err,
-		}
-	}
-	// Decode query: Completed.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "Completed",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToBool(val)
-				if err != nil {
-					return err
-				}
-
-				params.Completed = c
-				return nil
-			}); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "Completed",
-			In:   "query",
 			Err:  err,
 		}
 	}

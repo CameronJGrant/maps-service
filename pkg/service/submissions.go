@@ -106,7 +106,7 @@ func (svc *Service) ListSubmissions(ctx context.Context, request api.ListSubmiss
 // PATCH /submissions/{SubmissionID}/completed
 func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.PatchSubmissionCompletedParams) error {
 	pmap := datastore.Optional()
-	pmap.AddNotNil("completed", params.Completed)
+	pmap.Add("completed", true)
 	err := svc.DB.Submissions().Update(ctx, params.SubmissionID, pmap)
 	return err
 }
