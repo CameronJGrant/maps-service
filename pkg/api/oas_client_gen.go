@@ -28,7 +28,7 @@ type Invoker interface {
 	// Create new submission.
 	//
 	// POST /submissions
-	CreateSubmission(ctx context.Context) (*Submission, error)
+	CreateSubmission(ctx context.Context) (*ID, error)
 	// GetSubmission invokes getSubmission operation.
 	//
 	// Retrieve map with ID.
@@ -118,12 +118,12 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // Create new submission.
 //
 // POST /submissions
-func (c *Client) CreateSubmission(ctx context.Context) (*Submission, error) {
+func (c *Client) CreateSubmission(ctx context.Context) (*ID, error) {
 	res, err := c.sendCreateSubmission(ctx)
 	return res, err
 }
 
-func (c *Client) sendCreateSubmission(ctx context.Context) (res *Submission, err error) {
+func (c *Client) sendCreateSubmission(ctx context.Context) (res *ID, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createSubmission"),
 		semconv.HTTPRequestMethodKey.String("POST"),

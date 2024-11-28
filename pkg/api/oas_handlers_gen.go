@@ -65,7 +65,7 @@ func (s *Server) handleCreateSubmissionRequest(args [0]string, argsEscaped bool,
 		err error
 	)
 
-	var response *Submission
+	var response *ID
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -80,7 +80,7 @@ func (s *Server) handleCreateSubmissionRequest(args [0]string, argsEscaped bool,
 		type (
 			Request  = struct{}
 			Params   = struct{}
-			Response = *Submission
+			Response = *ID
 		)
 		response, err = middleware.HookMiddleware[
 			Request,

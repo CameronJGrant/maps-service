@@ -6,7 +6,7 @@ import (
 )
 
 // POST /submissions
-func (svc *Service) CreateSubmission(ctx context.Context) (*api.Submission, error) {
+func (svc *Service) CreateSubmission(ctx context.Context) (*api.ID, error) {
 	return nil, nil
 }
 

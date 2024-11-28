@@ -63,6 +63,21 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
+// Ref: #/components/schemas/Id
+type ID struct {
+	ID OptInt64 `json:"ID"`
+}
+
+// GetID returns the value of ID.
+func (s *ID) GetID() OptInt64 {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *ID) SetID(val OptInt64) {
+	s.ID = val
+}
+
 // NewOptBool returns new OptBool with value set to v.
 func NewOptBool(v bool) OptBool {
 	return OptBool{

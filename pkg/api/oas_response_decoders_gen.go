@@ -14,7 +14,7 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func decodeCreateSubmissionResponse(resp *http.Response) (res *Submission, _ error) {
+func decodeCreateSubmissionResponse(resp *http.Response) (res *ID, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -30,7 +30,7 @@ func decodeCreateSubmissionResponse(resp *http.Response) (res *Submission, _ err
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response Submission
+			var response ID
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

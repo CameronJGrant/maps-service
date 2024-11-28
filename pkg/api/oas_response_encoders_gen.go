@@ -13,7 +13,7 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeCreateSubmissionResponse(response *Submission, w http.ResponseWriter, span trace.Span) error {
+func encodeCreateSubmissionResponse(response *ID, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))

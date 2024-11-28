@@ -62,7 +62,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Submission"
+                $ref: "#/components/schemas/Id"
         default:
           description: General Error
           content:
@@ -186,6 +186,12 @@ paths:
                 $ref: "#/components/schemas/Error"
 components:
   schemas:
+    Id:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int64
     User:
       type: object
       properties:
