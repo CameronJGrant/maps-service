@@ -120,6 +120,8 @@ func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSu
 	pmap := datastore.Optional()
 	pmap.AddNotNil("asset_id", params.ModelID)
 	pmap.AddNotNil("asset_version", params.VersionID)
+	//always reset completed when model changes
+	pmap.Add("completed",false)
 	err := svc.DB.Submissions().Update(ctx, params.SubmissionID, pmap)
 	return err
 }
