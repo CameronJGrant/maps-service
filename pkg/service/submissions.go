@@ -128,13 +128,12 @@ func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.Pat
 func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSubmissionModelParams) error {
 	// check if caller has Submitter role
 	// check if Status is ChangesRequested|Submitted|UnderConstruction
-	// PROBLEM how to deal with async? data may become out of date
 	pmap := datastore.Optional()
 	pmap.AddNotNil("asset_id", params.ModelID)
 	pmap.AddNotNil("asset_version", params.VersionID)
 	//always reset completed when model changes
 	pmap.Add("completed",false)
-	err := svc.DB.Submissions().Update(ctx, params.SubmissionID, pmap)
+	err := svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusChangesRequested,model.StatusSubmitted,model.StatusUnderConstruction}, pmap)
 	return err
 }
 
