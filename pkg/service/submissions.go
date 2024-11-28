@@ -5,6 +5,7 @@ import (
 	"context"
 	"git.itzana.me/strafesnet/maps-service/pkg/api"
 	"git.itzana.me/strafesnet/maps-service/pkg/model"
+	"git.itzana.me/strafesnet/maps-service/pkg/datastore"
 )
 
 // POST /submissions
@@ -61,8 +62,41 @@ func (svc *Service) GetSubmission(ctx context.Context, params api.GetSubmissionP
 // Get list of submissions.
 //
 // GET /submissions
-func (svc *Service) ListSubmissions(ctx context.Context, params api.ListSubmissionsParams) ([]api.Submission, error) {
-	return nil, nil
+func (svc *Service) ListSubmissions(ctx context.Context, request api.ListSubmissionsParams) ([]api.Submission, error) {
+	filter := datastore.Optional()
+	//fmt.Println(request)
+	if request.Filter.IsSet() {
+		filter.AddNotNil("display_name", request.Filter.Value.DisplayName)
+		filter.AddNotNil("creator", request.Filter.Value.Creator)
+		filter.AddNotNil("game_id", request.Filter.Value.GameID)
+	}
+
+	items, err := svc.DB.Submissions().List(ctx, filter, model.Page{
+		Number: request.Page.GetPage(),
+		Size:   request.Page.GetLimit(),
+	})
+	if err != nil{
+		return nil, err
+	}
+
+	var resp []api.Submission
+	for i := 0; i < len(items); i++ {
+		resp = append(resp, api.Submission{
+			ID:             api.NewOptInt64(items[i].ID),
+			DisplayName:    api.NewOptString(items[i].DisplayName),
+			Creator:        api.NewOptString(items[i].Creator),
+			GameID:         api.NewOptInt32(items[i].GameID),
+			Date:           api.NewOptInt64(items[i].Date.Unix()),
+			Submitter:      api.NewOptInt64(items[i].Submitter),
+			AssetID:        api.NewOptInt64(items[i].AssetID),
+			AssetVersion:   api.NewOptInt64(items[i].AssetVersion),
+			Completed:      api.NewOptBool(items[i].Completed),
+			TargetAssetID:  api.NewOptInt64(items[i].TargetAssetID),
+			StatusID:       api.NewOptInt32(items[i].StatusID),
+		})
+	}
+
+	return resp, nil
 }
 
 // PatchSubmissionCompleted implements patchSubmissionCompleted operation.
