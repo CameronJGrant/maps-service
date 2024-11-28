@@ -3,6 +3,9 @@ package gormstore
 import (
 	"context"
 	"errors"
+	"fmt"
+	"strings"
+
 	"git.itzana.me/strafesnet/maps-service/pkg/datastore"
 	"git.itzana.me/strafesnet/maps-service/pkg/model"
 	"gorm.io/gorm"
@@ -41,6 +44,24 @@ func (env *Submissions) Create(ctx context.Context, smap model.Submission) (mode
 
 func (env *Submissions) Update(ctx context.Context, id int64, values datastore.OptionalMap) error {
 	if err := env.db.Model(&model.Submission{}).Where("id = ?", id).Updates(values.Map()).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return datastore.ErrNotExist
+		}
+		return err
+	}
+
+	return nil
+}
+
+// the update can only occur if the status matches one of the provided values.
+func (env *Submissions) IfStatusThenUpdate(ctx context.Context, id int64, statuses []model.Status, values datastore.OptionalMap) error {
+	tx := env.db.Model(&model.Submission{}).Where("id = ?", id)
+	expr := make([]string, 0,len(statuses))
+	for i, status := range statuses{
+		expr[i] = fmt.Sprintf("status = %d", int32(status))
+	}
+	tx = tx.Where(strings.Join(expr, " OR "))
+	if err := tx.Updates(values.Map()).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return datastore.ErrNotExist
 		}

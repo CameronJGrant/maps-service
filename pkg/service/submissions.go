@@ -144,22 +144,14 @@ func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSu
 //
 // PATCH /submissions/{SubmissionID}/status/publish
 func (svc *Service) ActionSubmissionPublish(ctx context.Context, params api.ActionSubmissionPublishParams) error {
-	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
-	if err != nil{
-		return err
-	}
 	// check if caller has required role
 	// if !CALLER_ROLES.INCLUDES(ROLE_VALIDATOR){
 	// 	return ErrPermissionDenied
 	// }
-	// check source status
-	if submission.StatusID != model.StatusPublishing{
-		return ErrInvalidSourceStatus
-	}
-	// set status
+	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusPublished)
-	return svc.DB.Submissions().Update(ctx, params.SubmissionID, smap)
+	return svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusPublishing}, smap)
 }
 // ActionSubmissionReject invokes actionSubmissionReject operation.
 //
@@ -167,22 +159,14 @@ func (svc *Service) ActionSubmissionPublish(ctx context.Context, params api.Acti
 //
 // PATCH /submissions/{SubmissionID}/status/reject
 func (svc *Service) ActionSubmissionReject(ctx context.Context, params api.ActionSubmissionRejectParams) error {
-	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
-	if err != nil{
-		return err
-	}
 	// check if caller has required role
 	// if !CALLER_ROLES.INCLUDES(ROLE_Reviewer){
 	// 	return ErrPermissionDenied
 	// }
-	// check source status
-	if submission.StatusID != model.StatusSubmitted{
-		return ErrInvalidSourceStatus
-	}
-	// set status
+	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusRejected)
-	return svc.DB.Submissions().Update(ctx, params.SubmissionID, smap)
+	return svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusSubmitted}, smap)
 }
 // ActionSubmissionRequestChanges invokes actionSubmissionRequestChanges operation.
 //
@@ -190,22 +174,14 @@ func (svc *Service) ActionSubmissionReject(ctx context.Context, params api.Actio
 //
 // PATCH /submissions/{SubmissionID}/status/request-changes
 func (svc *Service) ActionSubmissionRequestChanges(ctx context.Context, params api.ActionSubmissionRequestChangesParams) error {
-	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
-	if err != nil{
-		return err
-	}
 	// check if caller has required role
 	// if !CALLER_ROLES.INCLUDES(ROLE_Reviewer){
 	// 	return ErrPermissionDenied
 	// }
-	// check source status
-	if !(submission.StatusID == model.StatusValidated||submission.StatusID == model.StatusAccepted||submission.StatusID == model.StatusSubmitted){
-		return ErrInvalidSourceStatus
-	}
-	// set status
+	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusChangesRequested)
-	return svc.DB.Submissions().Update(ctx, params.SubmissionID, smap)
+	return svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusValidated,model.StatusAccepted,model.StatusSubmitted}, smap)
 }
 // ActionSubmissionRevoke invokes actionSubmissionRevoke operation.
 //
@@ -213,22 +189,14 @@ func (svc *Service) ActionSubmissionRequestChanges(ctx context.Context, params a
 //
 // PATCH /submissions/{SubmissionID}/status/revoke
 func (svc *Service) ActionSubmissionRevoke(ctx context.Context, params api.ActionSubmissionRevokeParams) error {
-	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
-	if err != nil{
-		return err
-	}
 	// check if caller has required role
 	// if !CALLER_ROLES.INCLUDES(ROLE_Submitter){
 	// 	return ErrPermissionDenied
 	// }
-	// check source status
-	if !(submission.StatusID == model.StatusSubmitted||submission.StatusID == model.StatusChangesRequested){
-		return ErrInvalidSourceStatus
-	}
-	// set status
+	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusUnderConstruction)
-	return svc.DB.Submissions().Update(ctx, params.SubmissionID, smap)
+	return svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusSubmitted,model.StatusChangesRequested}, smap)
 }
 // ActionSubmissionSubmit invokes actionSubmissionSubmit operation.
 //
@@ -236,22 +204,14 @@ func (svc *Service) ActionSubmissionRevoke(ctx context.Context, params api.Actio
 //
 // PATCH /submissions/{SubmissionID}/status/submit
 func (svc *Service) ActionSubmissionSubmit(ctx context.Context, params api.ActionSubmissionSubmitParams) error {
-	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
-	if err != nil{
-		return err
-	}
 	// check if caller has required role
 	// if !CALLER_ROLES.INCLUDES(ROLE_Submitter){
 	// 	return ErrPermissionDenied
 	// }
-	// check source status
-	if !(submission.StatusID == model.StatusUnderConstruction||submission.StatusID == model.StatusChangesRequested){
-		return ErrInvalidSourceStatus
-	}
-	// set status
+	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusSubmitted)
-	return svc.DB.Submissions().Update(ctx, params.SubmissionID, smap)
+	return svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusUnderConstruction,model.StatusChangesRequested}, smap)
 }
 // ActionSubmissionTriggerPublish invokes actionSubmissionTriggerPublish operation.
 //
@@ -259,22 +219,14 @@ func (svc *Service) ActionSubmissionSubmit(ctx context.Context, params api.Actio
 //
 // PATCH /submissions/{SubmissionID}/status/trigger-publish
 func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params api.ActionSubmissionTriggerPublishParams) error {
-	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
-	if err != nil{
-		return err
-	}
 	// check if caller has required role
 	// if !CALLER_ROLES.INCLUDES(ROLE_Admin){
 	// 	return ErrPermissionDenied
 	// }
-	// check source status
-	if !(submission.StatusID == model.StatusValidated){
-		return ErrInvalidSourceStatus
-	}
-	// set status
+	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusPublishing)
-	return svc.DB.Submissions().Update(ctx, params.SubmissionID, smap)
+	return svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusValidated}, smap)
 }
 // ActionSubmissionTriggerValidate invokes actionSubmissionTriggerValidate operation.
 //
@@ -282,22 +234,14 @@ func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params a
 //
 // PATCH /submissions/{SubmissionID}/status/trigger-validate
 func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params api.ActionSubmissionTriggerValidateParams) error {
-	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
-	if err != nil{
-		return err
-	}
 	// check if caller has required role
 	// if !CALLER_ROLES.INCLUDES(ROLE_Reviewer){
 	// 	return ErrPermissionDenied
 	// }
-	// check source status
-	if !(submission.StatusID == model.StatusSubmitted||submission.StatusID == model.StatusAccepted){
-		return ErrInvalidSourceStatus
-	}
-	// set status
+	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusValidating)
-	return svc.DB.Submissions().Update(ctx, params.SubmissionID, smap)
+	return svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusSubmitted,model.StatusAccepted}, smap)
 }
 // ActionSubmissionValidate invokes actionSubmissionValidate operation.
 //
@@ -305,20 +249,12 @@ func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params 
 //
 // PATCH /submissions/{SubmissionID}/status/validate
 func (svc *Service) ActionSubmissionValidate(ctx context.Context, params api.ActionSubmissionValidateParams) error {
-	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
-	if err != nil{
-		return err
-	}
 	// check if caller has required role
 	// if !CALLER_ROLES.INCLUDES(ROLE_VALIDATOR){
 	// 	return ErrPermissionDenied
 	// }
-	// check source status
-	if submission.StatusID != model.StatusValidating{
-		return ErrInvalidSourceStatus
-	}
-	// set status
+	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusValidated)
-	return svc.DB.Submissions().Update(ctx, params.SubmissionID, smap)
+	return svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusValidating}, smap)
 }
