@@ -151,10 +151,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /submissions/{SubmissionID}/status:
+  /submissions/{SubmissionID}/status/submit:
     patch:
-      summary: Update status following role restrictions
-      operationId: patchSubmissionStatus
+      summary: Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted
+      operationId: actionSubmissionSubmit
       tags:
         - Submissions
       parameters:
@@ -164,12 +164,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: Status
-          in: query
-          required: true
-          schema:
-            type: integer
-            format: int32
       responses:
         "200":
           description: Successful response
