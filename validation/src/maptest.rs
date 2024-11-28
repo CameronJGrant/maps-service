@@ -23,6 +23,8 @@ enum Status{
 Submitter:
 	UnderConstruction -> Submitted
 	ChangesRequested -> Submitted
+	Submitted -> UnderConstruction
+	ChangesRequested -> UnderConstruction
 Reviewer:
 	Submitted -> Validating
 	Submitted -> Rejected
