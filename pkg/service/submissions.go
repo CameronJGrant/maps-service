@@ -22,7 +22,7 @@ func (svc *Service) CreateSubmission(ctx context.Context, request api.OptSubmiss
 		AssetVersion:  request.Value.AssetVersion.Value,
 		Completed:     false,
 		TargetAssetID: request.Value.TargetAssetID.Value,
-		StatusID:      model.UnderConstruction,
+		StatusID:      model.StatusUnderConstruction,
 	})
 	if err != nil{
 		return nil, err

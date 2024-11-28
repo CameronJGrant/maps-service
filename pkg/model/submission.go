@@ -5,17 +5,17 @@ import "time"
 type Status int32
 
 const(
-	Published			Status=8
-	Rejected			Status=7
+	StatusPublished			Status=8
+	StatusRejected			Status=7
 
-	Publishing			Status=6
-	Validated			Status=5
-	Validating			Status=4
-	Accepted			Status=3
+	StatusPublishing		Status=6
+	StatusValidated			Status=5
+	StatusValidating		Status=4
+	StatusAccepted			Status=3
 
-	ChangesRequested	Status=2
-	Submitted			Status=1
-	UnderConstruction	Status=0
+	StatusChangesRequested	Status=2
+	StatusSubmitted			Status=1
+	StatusUnderConstruction	Status=0
 )
 
 type Submission struct {
