@@ -105,7 +105,10 @@ func (svc *Service) ListSubmissions(ctx context.Context, request api.ListSubmiss
 //
 // PATCH /submissions/{SubmissionID}/completed
 func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.PatchSubmissionCompletedParams) error {
-	return nil
+	pmap := datastore.Optional()
+	pmap.AddNotNil("completed", params.Completed)
+	err := svc.DB.Submissions().Update(ctx, params.SubmissionID, pmap)
+	return err
 }
 
 // PatchSubmissionModel implements patchSubmissionModel operation.
@@ -114,7 +117,11 @@ func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.Pat
 //
 // PATCH /submissions/{SubmissionID}/model
 func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSubmissionModelParams) error {
-	return nil
+	pmap := datastore.Optional()
+	pmap.AddNotNil("asset_id", params.ModelID)
+	pmap.AddNotNil("asset_version", params.VersionID)
+	err := svc.DB.Submissions().Update(ctx, params.SubmissionID, pmap)
+	return err
 }
 
 // PatchSubmissionStatus implements patchSubmissionStatus operation.
@@ -123,5 +130,8 @@ func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSu
 //
 // PATCH /submissions/{SubmissionID}/status
 func (svc *Service) PatchSubmissionStatus(ctx context.Context, params api.PatchSubmissionStatusParams) error {
-	return nil
+	pmap := datastore.Optional()
+	pmap.AddNotNil("status", params.Status)
+	err := svc.DB.Submissions().Update(ctx, params.SubmissionID, pmap)
+	return err
 }
