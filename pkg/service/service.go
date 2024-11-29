@@ -5,6 +5,7 @@ import (
 	"errors"
 	"git.itzana.me/strafesnet/maps-service/pkg/api"
 	"git.itzana.me/strafesnet/maps-service/pkg/datastore"
+	"github.com/nats-io/nats.go"
 )
 
 var (
@@ -16,6 +17,7 @@ var (
 
 type Service struct {
 	DB datastore.Datastore
+	Nats *nats.Conn
 }
 
 // NewError creates *ErrorStatusCode from error returned by handler.

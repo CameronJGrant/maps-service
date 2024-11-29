@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"git.itzana.me/strafesnet/go-grpc/auth"
+	"github.com/nats-io/nats.go"
 )
 
 func NewServeCommand() *cli.Command {
@@ -62,10 +63,16 @@ func NewServeCommand() *cli.Command {
 				EnvVars: []string{"PORT"},
 			},
 			&cli.StringFlag{
-				Name:     "auth-rpc-host",
-				Usage:    "Host of auth rpc",
-				EnvVars:  []string{"AUTH_RPC_HOST"},
-				Value: "auth-service:8090",
+				Name:    "auth-rpc-host",
+				Usage:   "Host of auth rpc",
+				EnvVars: []string{"AUTH_RPC_HOST"},
+				Value:   "auth-service:8090",
+			},
+			&cli.StringFlag{
+				Name:    "nats-host",
+				Usage:   "Host of nats",
+				EnvVars: []string{"NATS_HOST"},
+				Value:   "nats:4222",
 			},
 		},
 	}
@@ -76,8 +83,13 @@ func serve(ctx *cli.Context) error {
 	if err != nil {
 		log.WithError(err).Fatal("failed to connect database")
 	}
+	nc, err := nats.Connect(ctx.String("nats-host"))
+	if err != nil {
+		log.WithError(err).Fatal("failed to connect nats")
+	}
 	svc := &service.Service{
 		DB: db,
+		Nats: nc,
 	}
 
 	conn, err := grpc.Dial(ctx.String("auth-rpc-host"), grpc.WithTransportCredentials(insecure.NewCredentials()))
