@@ -63,6 +63,20 @@ func (env *Submissions) IfStatusThenUpdate(ctx context.Context, id int64, status
 	return nil
 }
 
+// the update can only occur if the status matches one of the provided values.
+// returns the updated value
+func (env *Submissions) IfStatusThenUpdateAndGet(ctx context.Context, id int64, statuses []model.Status, values datastore.OptionalMap) (model.Submission, error) {
+	var submission model.Submission
+	if err := env.db.First(&submission, id).Where("status_id IN ?",statuses).Updates(values.Map()).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return submission, datastore.ErrNotExist
+		}
+		return submission, err
+	}
+
+	return submission, nil
+}
+
 func (env *Submissions) Delete(ctx context.Context, id int64) error {
 	if err := env.db.Delete(&model.Submission{}, id).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {

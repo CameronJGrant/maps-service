@@ -22,6 +22,7 @@ type Submissions interface {
 	Create(ctx context.Context, smap model.Submission) (model.Submission, error)
 	Update(ctx context.Context, id int64, values OptionalMap) error
 	IfStatusThenUpdate(ctx context.Context, id int64, statuses []model.Status, values OptionalMap) error
+	IfStatusThenUpdateAndGet(ctx context.Context, id int64, statuses []model.Status, values OptionalMap) (model.Submission, error)
 	Delete(ctx context.Context, id int64) error
 	List(ctx context.Context, filters OptionalMap, page model.Page) ([]model.Submission, error)
 }

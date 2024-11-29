@@ -1,11 +1,13 @@
 package service
 
 import (
-	"errors"
 	"context"
+	"encoding/json"
+	"errors"
+
 	"git.itzana.me/strafesnet/maps-service/pkg/api"
-	"git.itzana.me/strafesnet/maps-service/pkg/model"
 	"git.itzana.me/strafesnet/maps-service/pkg/datastore"
+	"git.itzana.me/strafesnet/maps-service/pkg/model"
 )
 
 var (
@@ -298,7 +300,46 @@ func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params a
 	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusPublishing)
-	return svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusValidated}, smap)
+	submission, err := svc.DB.Submissions().IfStatusThenUpdateAndGet(ctx, params.SubmissionID, []model.Status{model.StatusValidated}, smap)
+	if err != nil{
+		return err
+	}
+
+	// sentinel value because we are not using rust
+	if submission.TargetAssetID == 0{
+		// this is a new map
+		publish_new_request := model.PublishNewRequest{
+			SubmissionID: submission.ID,
+			ModelID:      submission.AssetID,
+			ModelVersion: submission.AssetVersion,
+			Creator:      submission.Creator,
+			DisplayName:  submission.DisplayName,
+		}
+
+		j, err := json.Marshal(publish_new_request)
+		if err != nil{
+			return err
+		}
+
+		svc.Nats.Publish("publish_new", []byte(j))
+	}else{
+		// this is a map fix
+		publish_fix_request := model.PublishFixRequest{
+			SubmissionID:  submission.ID,
+			ModelID:       submission.AssetID,
+			ModelVersion:  submission.AssetVersion,
+			TargetAssetID: submission.TargetAssetID,
+		}
+
+		j, err := json.Marshal(publish_fix_request)
+		if err != nil{
+			return err
+		}
+
+		svc.Nats.Publish("publish_fix", []byte(j))
+	}
+
+	return nil
 }
 // ActionSubmissionTriggerValidate invokes actionSubmissionTriggerValidate operation.
 //
@@ -319,7 +360,26 @@ func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params 
 	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusValidating)
-	return svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusSubmitted,model.StatusAccepted}, smap)
+	submission, err := svc.DB.Submissions().IfStatusThenUpdateAndGet(ctx, params.SubmissionID, []model.Status{model.StatusSubmitted,model.StatusAccepted}, smap)
+	if err != nil{
+		return err
+	}
+
+	validate_request := model.ValidateRequest{
+		SubmissionID:     submission.ID,
+		ModelID:          submission.AssetID,
+		ModelVersion:     submission.AssetVersion,
+		ValidatedModelID: 0, //TODO: reuse velidation models
+	}
+
+	j, err := json.Marshal(validate_request)
+	if err != nil{
+		return err
+	}
+
+	svc.Nats.Publish("validate", []byte(j))
+
+	return nil
 }
 // ActionSubmissionValidate invokes actionSubmissionValidate operation.
 //
