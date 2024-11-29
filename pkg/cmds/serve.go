@@ -8,6 +8,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 	"net/http"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func NewServeCommand() *cli.Command {
@@ -67,8 +69,19 @@ func serve(ctx *cli.Context) error {
 	if err != nil {
 		log.WithError(err).Fatal("failed to connect database")
 	}
+	svc := &service.Service{
+		DB: db,
+	}
 
-	srv, err := api.NewServer(&service.Service{DB: db}, api.WithPathPrefix("/v1"))
+	conn, err := grpc.Dial("auth-service:8090", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatal(err)
+	}
+	sec := service.SecurityHandler{
+		Client: conn,
+	}
+
+	srv, err := api.NewServer(svc, sec, api.WithPathPrefix("/v1"))
 	if err != nil {
 		log.WithError(err).Fatal("failed to initialize api server")
 	}

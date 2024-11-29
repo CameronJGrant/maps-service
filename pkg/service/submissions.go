@@ -14,17 +14,24 @@ var (
 	ErrInvalidSourceStatus = errors.New("Invalid source status")
 	// ErrPermissionDenied caller does not have the required role
 	ErrPermissionDenied = errors.New("Permission denied")
+	// ErrUserInfo user info is missing for some reason
+	ErrUserInfo = errors.New("Missing user info")
 )
 
 // POST /submissions
 func (svc *Service) CreateSubmission(ctx context.Context, request api.OptSubmissionCreate) (*api.ID, error) {
+	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	if !ok{
+		return nil, ErrUserInfo
+	}
+
 	submission, err := svc.DB.Submissions().Create(ctx, model.Submission{
 		ID:            0,
 		DisplayName:   request.Value.DisplayName.Value,
 		Creator:       request.Value.Creator.Value,
 		GameID:        request.Value.GameID.Value,
 		Date:          time.Now(),
-		Submitter:     request.Value.Submitter.Value,
+		Submitter:     int64(userInfo.UserID),
 		AssetID:       request.Value.AssetID.Value,
 		AssetVersion:  request.Value.AssetVersion.Value,
 		Completed:     false,
@@ -112,7 +119,16 @@ func (svc *Service) ListSubmissions(ctx context.Context, request api.ListSubmiss
 //
 // PATCH /submissions/{SubmissionID}/completed
 func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.PatchSubmissionCompletedParams) error {
+	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	if !ok{
+		return ErrUserInfo
+	}
+
 	// check if caller has MaptestGame role (request must originate from a maptest roblox game)
+	if !userInfo.Roles.Maptest{
+		return ErrPermissionDenied
+	}
+
 	pmap := datastore.Optional()
 	pmap.Add("completed", true)
 	err := svc.DB.Submissions().Update(ctx, params.SubmissionID, pmap)
@@ -125,18 +141,29 @@ func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.Pat
 //
 // PATCH /submissions/{SubmissionID}/model
 func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSubmissionModelParams) error {
-	// check if caller has Submitter role
-	// if !CALLER_ROLES.INCLUDES(ROLE_SUBMITTER){
-	// 	return ErrPermissionDenied
-	// }
+	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	if !ok{
+		return ErrUserInfo
+	}
+
+	// read submission (this could be done with a transaction WHERE clause)
+	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
+	if err != nil{
+		return err
+	}
+
+	// check if caller is the submitter
+	if !userInfo.IsSubmitter(submission.Submitter){
+		return ErrPermissionDenied
+	}
+
 	// check if Status is ChangesRequested|Submitted|UnderConstruction
 	pmap := datastore.Optional()
 	pmap.AddNotNil("asset_id", params.ModelID)
 	pmap.AddNotNil("asset_version", params.VersionID)
 	//always reset completed when model changes
 	pmap.Add("completed",false)
-	err := svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusChangesRequested,model.StatusSubmitted,model.StatusUnderConstruction}, pmap)
-	return err
+	return svc.DB.Submissions().IfStatusThenUpdate(ctx, params.SubmissionID, []model.Status{model.StatusChangesRequested,model.StatusSubmitted,model.StatusUnderConstruction}, pmap)
 }
 
 // ActionSubmissionPublish invokes actionSubmissionPublish operation.
@@ -145,10 +172,16 @@ func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSu
 //
 // PATCH /submissions/{SubmissionID}/status/publish
 func (svc *Service) ActionSubmissionPublish(ctx context.Context, params api.ActionSubmissionPublishParams) error {
+	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	if !ok{
+		return ErrUserInfo
+	}
+
 	// check if caller has required role
-	// if !CALLER_ROLES.INCLUDES(ROLE_VALIDATOR){
-	// 	return ErrPermissionDenied
-	// }
+	if !userInfo.Roles.Validator{
+		return ErrPermissionDenied
+	}
+
 	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusPublished)
@@ -160,10 +193,16 @@ func (svc *Service) ActionSubmissionPublish(ctx context.Context, params api.Acti
 //
 // PATCH /submissions/{SubmissionID}/status/reject
 func (svc *Service) ActionSubmissionReject(ctx context.Context, params api.ActionSubmissionRejectParams) error {
+	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	if !ok{
+		return ErrUserInfo
+	}
+
 	// check if caller has required role
-	// if !CALLER_ROLES.INCLUDES(ROLE_Reviewer){
-	// 	return ErrPermissionDenied
-	// }
+	if !userInfo.Roles.Reviewer{
+		return ErrPermissionDenied
+	}
+
 	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusRejected)
@@ -175,10 +214,16 @@ func (svc *Service) ActionSubmissionReject(ctx context.Context, params api.Actio
 //
 // PATCH /submissions/{SubmissionID}/status/request-changes
 func (svc *Service) ActionSubmissionRequestChanges(ctx context.Context, params api.ActionSubmissionRequestChangesParams) error {
+	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	if !ok{
+		return ErrUserInfo
+	}
+
 	// check if caller has required role
-	// if !CALLER_ROLES.INCLUDES(ROLE_Reviewer){
-	// 	return ErrPermissionDenied
-	// }
+	if !userInfo.Roles.Reviewer{
+		return ErrPermissionDenied
+	}
+
 	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusChangesRequested)
@@ -190,10 +235,22 @@ func (svc *Service) ActionSubmissionRequestChanges(ctx context.Context, params a
 //
 // PATCH /submissions/{SubmissionID}/status/revoke
 func (svc *Service) ActionSubmissionRevoke(ctx context.Context, params api.ActionSubmissionRevokeParams) error {
-	// check if caller has required role
-	// if !CALLER_ROLES.INCLUDES(ROLE_Submitter){
-	// 	return ErrPermissionDenied
-	// }
+	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	if !ok{
+		return ErrUserInfo
+	}
+
+	// read submission (this could be done with a transaction WHERE clause)
+	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
+	if err != nil{
+		return err
+	}
+
+	// check if caller is the submitter
+	if !userInfo.IsSubmitter(submission.Submitter){
+		return ErrPermissionDenied
+	}
+
 	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusUnderConstruction)
@@ -205,10 +262,22 @@ func (svc *Service) ActionSubmissionRevoke(ctx context.Context, params api.Actio
 //
 // PATCH /submissions/{SubmissionID}/status/submit
 func (svc *Service) ActionSubmissionSubmit(ctx context.Context, params api.ActionSubmissionSubmitParams) error {
-	// check if caller has required role
-	// if !CALLER_ROLES.INCLUDES(ROLE_Submitter){
-	// 	return ErrPermissionDenied
-	// }
+	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	if !ok{
+		return ErrUserInfo
+	}
+
+	// read submission (this could be done with a transaction WHERE clause)
+	submission, err := svc.DB.Submissions().Get(ctx, params.SubmissionID)
+	if err != nil{
+		return err
+	}
+
+	// check if caller is the submitter
+	if !userInfo.IsSubmitter(submission.Submitter){
+		return ErrPermissionDenied
+	}
+
 	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusSubmitted)
@@ -220,10 +289,16 @@ func (svc *Service) ActionSubmissionSubmit(ctx context.Context, params api.Actio
 //
 // PATCH /submissions/{SubmissionID}/status/trigger-publish
 func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params api.ActionSubmissionTriggerPublishParams) error {
+	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	if !ok{
+		return ErrUserInfo
+	}
+
 	// check if caller has required role
-	// if !CALLER_ROLES.INCLUDES(ROLE_Admin){
-	// 	return ErrPermissionDenied
-	// }
+	if !userInfo.Roles.Admin{
+		return ErrPermissionDenied
+	}
+
 	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusPublishing)
@@ -235,10 +310,16 @@ func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params a
 //
 // PATCH /submissions/{SubmissionID}/status/trigger-validate
 func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params api.ActionSubmissionTriggerValidateParams) error {
+	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	if !ok{
+		return ErrUserInfo
+	}
+
 	// check if caller has required role
-	// if !CALLER_ROLES.INCLUDES(ROLE_Reviewer){
-	// 	return ErrPermissionDenied
-	// }
+	if !userInfo.Roles.Reviewer{
+		return ErrPermissionDenied
+	}
+
 	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusValidating)
@@ -250,10 +331,16 @@ func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params 
 //
 // PATCH /submissions/{SubmissionID}/status/validate
 func (svc *Service) ActionSubmissionValidate(ctx context.Context, params api.ActionSubmissionValidateParams) error {
+	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	if !ok{
+		return ErrUserInfo
+	}
+
 	// check if caller has required role
-	// if !CALLER_ROLES.INCLUDES(ROLE_VALIDATOR){
-	// 	return ErrPermissionDenied
-	// }
+	if !userInfo.Roles.Validator{
+		return ErrPermissionDenied
+	}
+
 	// transaction
 	smap := datastore.Optional()
 	smap.Add("status_id",model.StatusValidated)

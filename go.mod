@@ -5,6 +5,7 @@ go 1.22
 toolchain go1.23.3
 
 require (
+	git.itzana.me/strafesnet/go-grpc v0.0.0-20241129081229-9e166b3d11f7
 	git.itzana.me/strafesnet/utils v0.0.0-20220716194944-d8ca164052f9
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.1.0
@@ -14,12 +15,14 @@ require (
 	go.opentelemetry.io/otel v1.32.0
 	go.opentelemetry.io/otel/metric v1.32.0
 	go.opentelemetry.io/otel/trace v1.32.0
+	google.golang.org/grpc v1.48.0
 	gorm.io/driver/postgres v1.5.10
 	gorm.io/gorm v1.25.10
 )
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.5 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgx/v5 v5.5.5 // indirect
@@ -29,6 +32,8 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
 	golang.org/x/crypto v0.23.0 // indirect
+	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
+	google.golang.org/protobuf v1.28.0 // indirect
 )
 
 require (
