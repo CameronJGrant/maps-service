@@ -487,7 +487,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			if len(elem) == 0 {
 				switch method {
 				case "GET":
-					r.name = "ListSubmissions"
+					r.name = ListSubmissionsOperation
 					r.summary = "Get list of submissions"
 					r.operationID = "listSubmissions"
 					r.pathPattern = "/submissions"
@@ -495,7 +495,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					r.count = 0
 					return r, true
 				case "POST":
-					r.name = "CreateSubmission"
+					r.name = CreateSubmissionOperation
 					r.summary = "Create new submission"
 					r.operationID = "createSubmission"
 					r.pathPattern = "/submissions"
@@ -527,7 +527,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						r.name = "GetSubmission"
+						r.name = GetSubmissionOperation
 						r.summary = "Retrieve map with ID"
 						r.operationID = "getSubmission"
 						r.pathPattern = "/submissions/{SubmissionID}"
@@ -563,7 +563,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "PATCH":
-								r.name = "PatchSubmissionCompleted"
+								r.name = PatchSubmissionCompletedOperation
 								r.summary = "Retrieve map with ID"
 								r.operationID = "patchSubmissionCompleted"
 								r.pathPattern = "/submissions/{SubmissionID}/completed"
@@ -588,7 +588,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "PATCH":
-								r.name = "PatchSubmissionModel"
+								r.name = PatchSubmissionModelOperation
 								r.summary = "Update model following role restrictions"
 								r.operationID = "patchSubmissionModel"
 								r.pathPattern = "/submissions/{SubmissionID}/model"
@@ -625,7 +625,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "PATCH":
-									r.name = "ActionSubmissionPublish"
+									r.name = ActionSubmissionPublishOperation
 									r.summary = "Role Validator changes status from Publishing -> Published"
 									r.operationID = "actionSubmissionPublish"
 									r.pathPattern = "/submissions/{SubmissionID}/status/publish"
@@ -662,7 +662,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf node.
 									switch method {
 									case "PATCH":
-										r.name = "ActionSubmissionReject"
+										r.name = ActionSubmissionRejectOperation
 										r.summary = "Role Reviewer changes status from Submitted -> Rejected"
 										r.operationID = "actionSubmissionReject"
 										r.pathPattern = "/submissions/{SubmissionID}/status/reject"
@@ -687,7 +687,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf node.
 									switch method {
 									case "PATCH":
-										r.name = "ActionSubmissionRequestChanges"
+										r.name = ActionSubmissionRequestChangesOperation
 										r.summary = "Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested"
 										r.operationID = "actionSubmissionRequestChanges"
 										r.pathPattern = "/submissions/{SubmissionID}/status/request-changes"
@@ -712,7 +712,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf node.
 									switch method {
 									case "PATCH":
-										r.name = "ActionSubmissionRevoke"
+										r.name = ActionSubmissionRevokeOperation
 										r.summary = "Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction"
 										r.operationID = "actionSubmissionRevoke"
 										r.pathPattern = "/submissions/{SubmissionID}/status/revoke"
@@ -740,7 +740,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "PATCH":
-									r.name = "ActionSubmissionSubmit"
+									r.name = ActionSubmissionSubmitOperation
 									r.summary = "Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted"
 									r.operationID = "actionSubmissionSubmit"
 									r.pathPattern = "/submissions/{SubmissionID}/status/submit"
@@ -777,7 +777,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf node.
 									switch method {
 									case "PATCH":
-										r.name = "ActionSubmissionTriggerPublish"
+										r.name = ActionSubmissionTriggerPublishOperation
 										r.summary = "Role Admin changes status from Validated -> Publishing"
 										r.operationID = "actionSubmissionTriggerPublish"
 										r.pathPattern = "/submissions/{SubmissionID}/status/trigger-publish"
@@ -802,7 +802,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf node.
 									switch method {
 									case "PATCH":
-										r.name = "ActionSubmissionTriggerValidate"
+										r.name = ActionSubmissionTriggerValidateOperation
 										r.summary = "Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating"
 										r.operationID = "actionSubmissionTriggerValidate"
 										r.pathPattern = "/submissions/{SubmissionID}/status/trigger-validate"
@@ -830,7 +830,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "PATCH":
-									r.name = "ActionSubmissionValidate"
+									r.name = ActionSubmissionValidateOperation
 									r.summary = "Role Validator changes status from Validating -> Validated"
 									r.operationID = "actionSubmissionValidate"
 									r.pathPattern = "/submissions/{SubmissionID}/status/validate"

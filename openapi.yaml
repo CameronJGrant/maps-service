@@ -8,6 +8,8 @@ servers:
 tags:
   - name: Submissions
     description: Submission operations
+security:
+  - cookieAuth: []
 paths:
 # status
 # 	submit
@@ -328,6 +330,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: SESSIONID
   schemas:
     Id:
       type: object

@@ -34,6 +34,20 @@ type ActionSubmissionTriggerValidateOK struct{}
 // ActionSubmissionValidateOK is response for ActionSubmissionValidate operation.
 type ActionSubmissionValidateOK struct{}
 
+type CookieAuth struct {
+	APIKey string
+}
+
+// GetAPIKey returns the value of APIKey.
+func (s *CookieAuth) GetAPIKey() string {
+	return s.APIKey
+}
+
+// SetAPIKey sets the value of APIKey.
+func (s *CookieAuth) SetAPIKey(val string) {
+	s.APIKey = val
+}
+
 // Represents error object.
 // Ref: #/components/schemas/Error
 type Error struct {
