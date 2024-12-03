@@ -33,6 +33,7 @@ Reviewer:
 	Accepted -> Validating // re-validate
 Validator:
 	Validating -> Validated
+	Validating -> Accepted // invalidate
 	Publishing -> Published
 Admin:
 	Validated -> Publishing
