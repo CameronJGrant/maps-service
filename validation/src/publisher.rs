@@ -14,19 +14,16 @@ pub struct Publisher{
 	nats:async_nats::Client,
 	subscriber:async_nats::Subscriber,
 	roblox_cookie:rbx_asset::cookie::CookieContext,
-	roblox_cloud:rbx_asset::cloud::CloudContext,
 }
 impl Publisher{
 	pub async fn new(
 		nats:async_nats::Client,
 		roblox_cookie:rbx_asset::cookie::CookieContext,
-		roblox_cloud:rbx_asset::cloud::CloudContext,
 	)->Result<Self,async_nats::SubscribeError>{
 		Ok(Self{
 			subscriber:nats.subscribe("publish").await?,
 			nats,
 			roblox_cookie,
-			roblox_cloud,
 		})
 	}
 	pub async fn run(mut self){
