@@ -1182,6 +1182,8 @@ dependencies = [
  "rbx_binary",
  "rbx_dom_weak",
  "rbx_xml",
+ "serde",
+ "serde_json",
  "sqlx",
  "tokio",
 ]

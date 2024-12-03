@@ -1,3 +1,4 @@
+mod nats_types;
 mod publisher;
 mod validator;
 
