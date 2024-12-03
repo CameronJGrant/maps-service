@@ -1,6 +1,5 @@
-mod types;
-mod maptest;
-mod staging;
+mod validator;
 
-fn main(){
+#[tokio::main]
+async fn main(){
 }
