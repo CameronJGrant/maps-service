@@ -66,6 +66,7 @@ struct Submission{
 	// this user is allowed to change any data in the maptest phase, except for mapfix target map id
 	submitter:u64,
 	// MUTABLE FIELDS (depending on roles and status)
+	validated_model_id:Option<u64>,// asset id to reuse if the map has scripts that need to be replaced when validated
 	model_id:u64,// asset id of the most recently submitted model
 	model_version:u64,// snapshot of the model to prevent tampering
 	is_completed:bool,// has this asset version been completed by any player
