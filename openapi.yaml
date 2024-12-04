@@ -11,11 +11,6 @@ tags:
 security:
   - cookieAuth: []
 paths:
-# status
-# 	submit
-# 	accept
-# 	publish
-# complete
   /submissions:
     get:
       summary: Get list of submissions
