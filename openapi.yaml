@@ -348,7 +348,7 @@ paths:
                 type: array
                 items:
                   oneOf:
-                    - type: null
+                    - type: boolean
                     - type: string
         default:
           description: General Error
