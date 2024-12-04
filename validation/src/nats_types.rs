@@ -10,6 +10,7 @@ pub struct ValidateRequest{
 	pub submission_id:u64,
 	pub model_id:u64,
 	pub model_version:u64,
+	pub validated_model_id:Option<u64>,
 }
 
 // Create a new map
