@@ -8,6 +8,8 @@ servers:
 tags:
   - name: Submissions
     description: Submission operations
+  - name: Scripts
+    description: Script operations
 security:
   - cookieAuth: []
 paths:
@@ -318,6 +320,36 @@ paths:
       responses:
         "200":
           description: Successful response
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /scripts/replacements:
+    get:
+      summary: Get the replacements for the provided list of scripts
+      operationId: getReplacementScripts
+      tags:
+        - Scripts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - type: null
+                    - type: string
         default:
           description: General Error
           content:
