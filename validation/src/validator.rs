@@ -51,7 +51,7 @@ impl Validator{
 		match self.validate(message).await{
 			Ok(valid)=>{
 				unimplemented!();
-				// self.nats.publish("validated","yo it validated".into()).await.unwrap();
+				// self.api.validate(validate_response).await.unwrap();
 			},
 			Err(e)=>{
 				println!("there was an error, oopsie! {e}");
