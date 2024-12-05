@@ -10,6 +10,7 @@ openapi = { path = "api" }
 rbx_asset = { version = "0.2.3", registry = "strafesnet" }
 rbx_binary = { version = "0.7.4", registry = "strafesnet"}
 rbx_dom_weak = { version = "2.9.0", registry = "strafesnet"}
+rbx_reflection_database = { version = "0.2.12", registry = "strafesnet"}
 rbx_xml = { version = "0.13.3", registry = "strafesnet"}
 serde = { version = "1.0.215", features = ["derive"] }
 serde_json = "1.0.133"

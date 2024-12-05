@@ -964,6 +964,7 @@ dependencies = [
  "rbx_asset",
  "rbx_binary",
  "rbx_dom_weak",
+ "rbx_reflection_database",
  "rbx_xml",
  "serde",
  "serde_json",
