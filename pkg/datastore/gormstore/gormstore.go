@@ -12,3 +12,11 @@ type Gormstore struct {
 func (g Gormstore) Submissions() datastore.Submissions {
 	return &Submissions{db: g.db}
 }
+
+func (g Gormstore) Scripts() datastore.Scripts {
+	return &Scripts{db: g.db}
+}
+
+func (g Gormstore) ScriptPolicy() datastore.ScriptPolicy {
+	return &ScriptPolicy{db: g.db}
+}

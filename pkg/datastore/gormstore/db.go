@@ -30,7 +30,11 @@ func New(ctx *cli.Context) (datastore.Datastore, error) {
 	}
 
 	if ctx.Bool("migrate") {
-		if err := db.AutoMigrate(&model.Submission{}); err != nil {
+		if err := db.AutoMigrate(
+			&model.Submission{},
+			&model.Script{},
+			&model.ScriptPolicy{},
+		); err != nil {
 			log.WithError(err).Errorln("database migration failed")
 			return nil, err
 		}

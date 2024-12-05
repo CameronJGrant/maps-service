@@ -12,6 +12,8 @@ var (
 
 type Datastore interface {
 	Submissions() Submissions
+	Scripts() Scripts
+	ScriptPolicy() ScriptPolicy
 }
 
 type Submissions interface {
@@ -22,4 +24,18 @@ type Submissions interface {
 	IfStatusThenUpdate(ctx context.Context, id int64, statuses []model.Status, values OptionalMap) error
 	Delete(ctx context.Context, id int64) error
 	List(ctx context.Context, filters OptionalMap, page model.Page) ([]model.Submission, error)
+}
+
+type Scripts interface {
+	Get(ctx context.Context, id int64) (model.Script, error)
+	Create(ctx context.Context, smap model.Script) (model.Script, error)
+	Update(ctx context.Context, id int64, values OptionalMap) error
+	Delete(ctx context.Context, id int64) error
+}
+
+type ScriptPolicy interface {
+	Get(ctx context.Context, id int64) (model.ScriptPolicy, error)
+	Create(ctx context.Context, smap model.ScriptPolicy) (model.ScriptPolicy, error)
+	Update(ctx context.Context, id int64, values OptionalMap) error
+	Delete(ctx context.Context, id int64) error
 }
