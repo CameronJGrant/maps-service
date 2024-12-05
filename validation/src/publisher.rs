@@ -11,7 +11,6 @@ impl std::fmt::Display for PublishError{
 impl std::error::Error for PublishError{}
 
 pub struct Publisher{
-	nats:async_nats::Client,
 	subscriber:async_nats::Subscriber,
 	roblox_cookie:rbx_asset::cookie::CookieContext,
 }
@@ -22,7 +21,6 @@ impl Publisher{
 	)->Result<Self,async_nats::SubscribeError>{
 		Ok(Self{
 			subscriber:nats.subscribe("publish").await?,
-			nats,
 			roblox_cookie,
 		})
 	}

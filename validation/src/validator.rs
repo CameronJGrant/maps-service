@@ -11,13 +11,23 @@ enum Valid{
 	Modified(ModelVersion),
 }
 
+enum Policy{
+	Allowed,
+	Blocked,
+	Delete,
+	Replace(String),
+}
+
 #[allow(dead_code)]
 #[derive(Debug)]
 enum ValidateError{
+	Blocked,
+	NotAllowed,
 	Get(rbx_asset::cookie::GetError),
 	Json(serde_json::Error),
 	ReadDom(ReadDomError),
-	ApiGetReplacements(api::GetReplacementsError),
+	ApiGetScriptPolicy(api::GetError),
+	ApiGetScript(api::GetError),
 	WriteDom(rbx_binary::EncodeError),
 	Upload(rbx_asset::cookie::UploadError),
 	Create(rbx_asset::cookie::CreateError),
@@ -30,20 +40,21 @@ impl std::fmt::Display for ValidateError{
 impl std::error::Error for ValidateError{}
 
 pub struct Validator{
-	nats:async_nats::Client,
 	subscriber:async_nats::Subscriber,
 	roblox_cookie:rbx_asset::cookie::CookieContext,
+	api:api::Context,
 }
 
 impl Validator{
 	pub async fn new(
 		nats:async_nats::Client,
 		roblox_cookie:rbx_asset::cookie::CookieContext,
+		api:api::Context,
 	)->Result<Self,async_nats::SubscribeError>{
 		Ok(Self{
 			subscriber:nats.subscribe("validate").await?,
-			nats,
 			roblox_cookie,
+			api,
 		})
 	}
 	pub async fn run(mut self){
@@ -80,41 +91,60 @@ impl Validator{
 
 		// collect unique scripts
 		let script_refs=get_script_refs(&dom);
-		let mut script_map=std::collections::HashMap::<String,Option<String>>::new();
+		let mut script_map=std::collections::HashMap::<String,Policy>::new();
 		for &script_ref in &script_refs{
 			if let Some(script)=dom.get_by_ref(script_ref){
 				if let Some(rbx_dom_weak::types::Variant::String(source))=script.properties.get("Source"){
-					script_map.insert(source.clone(),None);
+					script_map.insert(source.clone(),Policy::Blocked);
 				}
 			}
 		}
-		// ["local a=true","local b=true"]
-		let script_list:Vec<&str>=script_map.keys().map(|s|s.as_str()).collect();
-		let j=serde_json::to_string(&script_list).map_err(ValidateError::Json)?;
-
 		// send all scripts to REST endpoint and receive the replacements
-		let replacements=self.api.get_replacements(j).await.map_err(ValidateError::ApiGetReplacements)?;
-
-		// assume the iteration order will not change if no keys are inserted or removed
-		for (map_value,replacement) in script_map.values_mut().zip(replacements){
-			*map_value=replacement;
+		for (source,replacement) in &mut script_map{
+			let mut hasher=std::hash::SipHasher::new();
+			std::hash::Hash::hash(&source,&mut hasher);
+			let hash=std::hash::Hasher::finish(&hasher);
+			let script_policy=self.api.get_script_policy_from_hash(api::ScriptPolicyHashRequest{
+				hash:format!("{:x}",hash),
+			}).await.map_err(ValidateError::ApiGetScriptPolicy)?;
+			*replacement=match script_policy.Policy{
+				api::Policy::Allowed=>Policy::Allowed,
+				api::Policy::Blocked=>Policy::Blocked,
+				api::Policy::Delete=>Policy::Delete,
+				api::Policy::Replace=>{
+					let script=self.api.get_script(api::GetScriptRequest{
+						ScriptID:script_policy.ScriptID,
+					}).await.map_err(ValidateError::ApiGetScript)?;
+					Policy::Replace(script.Source)
+				},
+			};
 		}
 
 		// make the replacements
-		let mut any_replaced=false;
+		let mut modified=false;
 		for &script_ref in &script_refs{
 			if let Some(script)=dom.get_by_ref_mut(script_ref){
 				if let Some(rbx_dom_weak::types::Variant::String(source))=script.properties.get_mut("Source"){
-					if let Some(Some(replacement))=script_map.get(source.as_str()){
-						any_replaced=true;
-						*source=replacement.clone();
+					match script_map.get(source.as_str()){
+						Some(Policy::Blocked)=>return Err(ValidateError::Blocked),
+						None=>return Err(ValidateError::NotAllowed),
+						Some(Policy::Allowed)=>(),
+						Some(Policy::Delete)=>{
+							modified=true;
+							// delete script
+							unimplemented!();
+						},
+						Some(Policy::Replace(replacement))=>{
+							modified=true;
+							*source=replacement.clone();
+						},
 					}
 				}
 			}
 		}
 
 		// reply with validity
-		Ok(if any_replaced{
+		Ok(if modified{
 			// serialize model (slow!)
 			let mut data=Vec::new();
 			rbx_binary::to_writer(&mut data,&dom,&[dom.root_ref()]).map_err(ValidateError::WriteDom)?;
@@ -137,7 +167,7 @@ impl Validator{
 			}else{
 				// create new model
 				let response=self.roblox_cookie.create(rbx_asset::cookie::CreateRequest{
-					name:dom.root().name,
+					name:dom.root().name.clone(),
 					description:"".to_owned(),
 					ispublic:true,
 					allowComments:true,
@@ -158,6 +188,10 @@ impl Validator{
 			Valid::Untouched
 		})
 	}
+}
+
+fn get_model_version_number()->u64{
+	unimplemented!()
 }
 
 #[allow(dead_code)]

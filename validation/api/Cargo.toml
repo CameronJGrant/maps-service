@@ -1,0 +1,17 @@
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2021"
+publish = ["strafesnet"]
+repository = "https://git.itzana.me/StrafesNET/maps-service"
+license = "MIT OR Apache-2.0"
+description = "Browse and manage map submissions in the staging pipeline."
+authors = ["Rhys Lloyd <krakow20@gmail.com>"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+reqwest = { version = "0", features = ["json","rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+url = "2"

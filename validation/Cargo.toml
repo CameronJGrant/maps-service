@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+api = { path = "api" }
 async-nats = "0.38.0"
 futures = "0.3.31"
 rbx_asset = { version = "0.2.3", registry = "strafesnet" }
