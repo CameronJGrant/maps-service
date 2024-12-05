@@ -2,8 +2,16 @@ package service
 
 import (
 	"context"
+	"errors"
 	"git.itzana.me/strafesnet/maps-service/pkg/api"
 	"git.itzana.me/strafesnet/maps-service/pkg/datastore"
+)
+
+var (
+	// ErrPermissionDenied caller does not have the required role
+	ErrPermissionDenied = errors.New("Permission denied")
+	// ErrUserInfo user info is missing for some reason
+	ErrUserInfo = errors.New("Missing user info")
 )
 
 type Service struct {

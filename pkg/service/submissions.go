@@ -12,10 +12,6 @@ import (
 var (
 	// ErrInvalidSourceStatus current submission status cannot change to destination status
 	ErrInvalidSourceStatus = errors.New("Invalid source status")
-	// ErrPermissionDenied caller does not have the required role
-	ErrPermissionDenied = errors.New("Permission denied")
-	// ErrUserInfo user info is missing for some reason
-	ErrUserInfo = errors.New("Missing user info")
 )
 
 // POST /submissions
