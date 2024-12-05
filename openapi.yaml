@@ -326,30 +326,52 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /scripts/replacements:
+  /script-policy/hash/{Hash}:
+# /script-policy/id/{ScriptPolicyID}:
     get:
-      summary: Get the replacements for the provided list of scripts
-      operationId: getReplacementScripts
+      summary: Get the policy for the given hash of script source code
+      operationId: getScriptPolicyFromHash
       tags:
         - Scripts
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: string
+      parameters:
+        - name: Hash
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Successful response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  oneOf:
-                    - type: boolean
-                    - type: string
+                $ref: "#/components/schemas/ScriptPolicy"
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /scripts/{ScriptID}:
+    get:
+      summary: Get the specified script by ID
+      operationId: getScript
+      tags:
+        - Scripts
+      parameters:
+        - name: ScriptID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Script"
         default:
           description: General Error
           content:
@@ -457,6 +479,33 @@ components:
         TargetAssetID:
           type: integer
           format: int64
+    Script:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int64
+        Hash:
+          type: string
+        Source:
+          type: string
+        SubmissionID:
+          type: integer
+          format: int64
+    ScriptPolicy:
+      type: object
+      properties:
+        ID:
+          type: integer
+          format: int64
+        Hash:
+          type: string
+        ScriptID:
+          type: integer
+          format: int64
+        Policy:
+          type: integer
+          format: int32
     Pagination:
       type: object
       required:
