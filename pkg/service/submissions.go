@@ -195,7 +195,7 @@ func (svc *Service) ActionSubmissionReject(ctx context.Context, params api.Actio
 	}
 
 	// check if caller has required role
-	if !userInfo.Roles.Reviewer{
+	if !userInfo.Roles.SubmissionReview{
 		return ErrPermissionDenied
 	}
 
@@ -216,7 +216,7 @@ func (svc *Service) ActionSubmissionRequestChanges(ctx context.Context, params a
 	}
 
 	// check if caller has required role
-	if !userInfo.Roles.Reviewer{
+	if !userInfo.Roles.SubmissionReview{
 		return ErrPermissionDenied
 	}
 
@@ -291,7 +291,7 @@ func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params a
 	}
 
 	// check if caller has required role
-	if !userInfo.Roles.Admin{
+	if !userInfo.Roles.SubmissionPublish{
 		return ErrPermissionDenied
 	}
 
@@ -312,7 +312,7 @@ func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params 
 	}
 
 	// check if caller has required role
-	if !userInfo.Roles.Reviewer{
+	if !userInfo.Roles.SubmissionReview{
 		return ErrPermissionDenied
 	}
 

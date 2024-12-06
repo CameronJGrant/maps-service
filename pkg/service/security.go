@@ -21,8 +21,11 @@ var (
 )
 
 type Roles struct {
-	Admin bool
-	Reviewer bool
+	// human roles
+	SubmissionPublish bool
+	SubmissionReview bool
+	ScriptWrite bool
+	// automated roles
 	Maptest bool
 	Validator bool
 }
@@ -77,10 +80,10 @@ func (svc SecurityHandler) HandleCookieAuth(ctx context.Context, operationName a
 	// fix this when roblox udpates group roles
 	for r := range role.Roles{
 		if RoleAdmin<=r{
-			roles.Admin = true
+			roles.SubmissionPublish = true
 		}
 		if RoleReviewer<=r{
-			roles.Reviewer = true
+			roles.SubmissionReview = true
 		}
 	}
 
