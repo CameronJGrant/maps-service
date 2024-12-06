@@ -85,12 +85,75 @@ func (UnimplementedHandler) ActionSubmissionValidate(ctx context.Context, params
 	return ht.ErrNotImplemented
 }
 
+// CreateScript implements createScript operation.
+//
+// Create a new script.
+//
+// POST /scripts
+func (UnimplementedHandler) CreateScript(ctx context.Context, req OptScriptCreate) (r *ID, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CreateScriptPolicy implements createScriptPolicy operation.
+//
+// Create a new script policy.
+//
+// POST /script-policy
+func (UnimplementedHandler) CreateScriptPolicy(ctx context.Context, req OptScriptPolicyCreate) (r *ID, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // CreateSubmission implements createSubmission operation.
 //
 // Create new submission.
 //
 // POST /submissions
 func (UnimplementedHandler) CreateSubmission(ctx context.Context, req OptSubmissionCreate) (r *ID, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DeleteScript implements deleteScript operation.
+//
+// Delete the specified script by ID.
+//
+// DELETE /scripts/{ScriptID}
+func (UnimplementedHandler) DeleteScript(ctx context.Context, params DeleteScriptParams) error {
+	return ht.ErrNotImplemented
+}
+
+// DeleteScriptPolicy implements deleteScriptPolicy operation.
+//
+// Delete the specified script policy by ID.
+//
+// DELETE /script-policy/id/{ScriptPolicyID}
+func (UnimplementedHandler) DeleteScriptPolicy(ctx context.Context, params DeleteScriptPolicyParams) error {
+	return ht.ErrNotImplemented
+}
+
+// GetScript implements getScript operation.
+//
+// Get the specified script by ID.
+//
+// GET /scripts/{ScriptID}
+func (UnimplementedHandler) GetScript(ctx context.Context, params GetScriptParams) (r *Script, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetScriptPolicy implements getScriptPolicy operation.
+//
+// Get the specified script policy by ID.
+//
+// GET /script-policy/id/{ScriptPolicyID}
+func (UnimplementedHandler) GetScriptPolicy(ctx context.Context, params GetScriptPolicyParams) (r *ScriptPolicy, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetScriptPolicyFromHash implements getScriptPolicyFromHash operation.
+//
+// Get the policy for the given hash of script source code.
+//
+// GET /script-policy/hash/{FromScriptHash}
+func (UnimplementedHandler) GetScriptPolicyFromHash(ctx context.Context, params GetScriptPolicyFromHashParams) (r *ScriptPolicy, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -127,6 +190,24 @@ func (UnimplementedHandler) PatchSubmissionCompleted(ctx context.Context, params
 //
 // PATCH /submissions/{SubmissionID}/model
 func (UnimplementedHandler) PatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) error {
+	return ht.ErrNotImplemented
+}
+
+// UpdateScript implements updateScript operation.
+//
+// Update the specified script by ID.
+//
+// PATCH /scripts/{ScriptID}
+func (UnimplementedHandler) UpdateScript(ctx context.Context, req OptScriptUpdate, params UpdateScriptParams) error {
+	return ht.ErrNotImplemented
+}
+
+// UpdateScriptPolicy implements updateScriptPolicy operation.
+//
+// Update the specified script policy by ID.
+//
+// PATCH /script-policy/id/{ScriptPolicyID}
+func (UnimplementedHandler) UpdateScriptPolicy(ctx context.Context, req OptScriptPolicyUpdate, params UpdateScriptPolicyParams) error {
 	return ht.ErrNotImplemented
 }
 

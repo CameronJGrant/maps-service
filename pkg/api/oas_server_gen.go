@@ -56,12 +56,54 @@ type Handler interface {
 	//
 	// PATCH /submissions/{SubmissionID}/status/validate
 	ActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) error
+	// CreateScript implements createScript operation.
+	//
+	// Create a new script.
+	//
+	// POST /scripts
+	CreateScript(ctx context.Context, req OptScriptCreate) (*ID, error)
+	// CreateScriptPolicy implements createScriptPolicy operation.
+	//
+	// Create a new script policy.
+	//
+	// POST /script-policy
+	CreateScriptPolicy(ctx context.Context, req OptScriptPolicyCreate) (*ID, error)
 	// CreateSubmission implements createSubmission operation.
 	//
 	// Create new submission.
 	//
 	// POST /submissions
 	CreateSubmission(ctx context.Context, req OptSubmissionCreate) (*ID, error)
+	// DeleteScript implements deleteScript operation.
+	//
+	// Delete the specified script by ID.
+	//
+	// DELETE /scripts/{ScriptID}
+	DeleteScript(ctx context.Context, params DeleteScriptParams) error
+	// DeleteScriptPolicy implements deleteScriptPolicy operation.
+	//
+	// Delete the specified script policy by ID.
+	//
+	// DELETE /script-policy/id/{ScriptPolicyID}
+	DeleteScriptPolicy(ctx context.Context, params DeleteScriptPolicyParams) error
+	// GetScript implements getScript operation.
+	//
+	// Get the specified script by ID.
+	//
+	// GET /scripts/{ScriptID}
+	GetScript(ctx context.Context, params GetScriptParams) (*Script, error)
+	// GetScriptPolicy implements getScriptPolicy operation.
+	//
+	// Get the specified script policy by ID.
+	//
+	// GET /script-policy/id/{ScriptPolicyID}
+	GetScriptPolicy(ctx context.Context, params GetScriptPolicyParams) (*ScriptPolicy, error)
+	// GetScriptPolicyFromHash implements getScriptPolicyFromHash operation.
+	//
+	// Get the policy for the given hash of script source code.
+	//
+	// GET /script-policy/hash/{FromScriptHash}
+	GetScriptPolicyFromHash(ctx context.Context, params GetScriptPolicyFromHashParams) (*ScriptPolicy, error)
 	// GetSubmission implements getSubmission operation.
 	//
 	// Retrieve map with ID.
@@ -86,6 +128,18 @@ type Handler interface {
 	//
 	// PATCH /submissions/{SubmissionID}/model
 	PatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) error
+	// UpdateScript implements updateScript operation.
+	//
+	// Update the specified script by ID.
+	//
+	// PATCH /scripts/{ScriptID}
+	UpdateScript(ctx context.Context, req OptScriptUpdate, params UpdateScriptParams) error
+	// UpdateScriptPolicy implements updateScriptPolicy operation.
+	//
+	// Update the specified script policy by ID.
+	//
+	// PATCH /script-policy/id/{ScriptPolicyID}
+	UpdateScriptPolicy(ctx context.Context, req OptScriptPolicyUpdate, params UpdateScriptPolicyParams) error
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

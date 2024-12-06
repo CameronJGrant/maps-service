@@ -124,10 +124,7 @@ func (s *Pagination) DecodeURI(d uri.Decoder) error {
 // EncodeURI encodes SubmissionFilter as URI form.
 func (s *SubmissionFilter) EncodeURI(e uri.Encoder) error {
 	if err := e.EncodeField("ID", func(e uri.Encoder) error {
-		if val, ok := s.ID.Get(); ok {
-			return e.EncodeValue(conv.Int64ToString(val))
-		}
-		return nil
+		return e.EncodeValue(conv.Int64ToString(s.ID))
 	}); err != nil {
 		return errors.Wrap(err, "encode field \"ID\"")
 	}
@@ -179,29 +176,24 @@ func (s *SubmissionFilter) DecodeURI(d uri.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode SubmissionFilter to nil")
 	}
+	var requiredBitSet [1]uint8
 
 	if err := d.DecodeFields(func(k string, d uri.Decoder) error {
 		switch k {
 		case "ID":
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				var sDotIDVal int64
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt64(val)
-					if err != nil {
-						return err
-					}
-
-					sDotIDVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				s.ID.SetTo(sDotIDVal)
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				s.ID = c
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"ID\"")
@@ -308,6 +300,38 @@ func (s *SubmissionFilter) DecodeURI(d uri.Decoder) error {
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode SubmissionFilter")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(uriFieldsNameOfSubmissionFilter) {
+					name = uriFieldsNameOfSubmissionFilter[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
 	}
 
 	return nil

@@ -48,6 +48,12 @@ func (s *CookieAuth) SetAPIKey(val string) {
 	s.APIKey = val
 }
 
+// DeleteScriptOK is response for DeleteScript operation.
+type DeleteScriptOK struct{}
+
+// DeleteScriptPolicyOK is response for DeleteScriptPolicy operation.
+type DeleteScriptPolicyOK struct{}
+
 // Represents error object.
 // Ref: #/components/schemas/Error
 type Error struct {
@@ -103,63 +109,17 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 
 // Ref: #/components/schemas/Id
 type ID struct {
-	ID OptInt64 `json:"ID"`
+	ID int64 `json:"ID"`
 }
 
 // GetID returns the value of ID.
-func (s *ID) GetID() OptInt64 {
+func (s *ID) GetID() int64 {
 	return s.ID
 }
 
 // SetID sets the value of ID.
-func (s *ID) SetID(val OptInt64) {
+func (s *ID) SetID(val int64) {
 	s.ID = val
-}
-
-// NewOptBool returns new OptBool with value set to v.
-func NewOptBool(v bool) OptBool {
-	return OptBool{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptBool is optional bool.
-type OptBool struct {
-	Value bool
-	Set   bool
-}
-
-// IsSet returns true if OptBool was set.
-func (o OptBool) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptBool) Reset() {
-	var v bool
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptBool) SetTo(v bool) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptBool) Get() (v bool, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptBool) Or(d bool) bool {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
 }
 
 // NewOptInt32 returns new OptInt32 with value set to v.
@@ -248,6 +208,190 @@ func (o OptInt64) Get() (v int64, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptInt64) Or(d int64) int64 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptScriptCreate returns new OptScriptCreate with value set to v.
+func NewOptScriptCreate(v ScriptCreate) OptScriptCreate {
+	return OptScriptCreate{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptScriptCreate is optional ScriptCreate.
+type OptScriptCreate struct {
+	Value ScriptCreate
+	Set   bool
+}
+
+// IsSet returns true if OptScriptCreate was set.
+func (o OptScriptCreate) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptScriptCreate) Reset() {
+	var v ScriptCreate
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptScriptCreate) SetTo(v ScriptCreate) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptScriptCreate) Get() (v ScriptCreate, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptScriptCreate) Or(d ScriptCreate) ScriptCreate {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptScriptPolicyCreate returns new OptScriptPolicyCreate with value set to v.
+func NewOptScriptPolicyCreate(v ScriptPolicyCreate) OptScriptPolicyCreate {
+	return OptScriptPolicyCreate{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptScriptPolicyCreate is optional ScriptPolicyCreate.
+type OptScriptPolicyCreate struct {
+	Value ScriptPolicyCreate
+	Set   bool
+}
+
+// IsSet returns true if OptScriptPolicyCreate was set.
+func (o OptScriptPolicyCreate) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptScriptPolicyCreate) Reset() {
+	var v ScriptPolicyCreate
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptScriptPolicyCreate) SetTo(v ScriptPolicyCreate) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptScriptPolicyCreate) Get() (v ScriptPolicyCreate, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptScriptPolicyCreate) Or(d ScriptPolicyCreate) ScriptPolicyCreate {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptScriptPolicyUpdate returns new OptScriptPolicyUpdate with value set to v.
+func NewOptScriptPolicyUpdate(v ScriptPolicyUpdate) OptScriptPolicyUpdate {
+	return OptScriptPolicyUpdate{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptScriptPolicyUpdate is optional ScriptPolicyUpdate.
+type OptScriptPolicyUpdate struct {
+	Value ScriptPolicyUpdate
+	Set   bool
+}
+
+// IsSet returns true if OptScriptPolicyUpdate was set.
+func (o OptScriptPolicyUpdate) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptScriptPolicyUpdate) Reset() {
+	var v ScriptPolicyUpdate
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptScriptPolicyUpdate) SetTo(v ScriptPolicyUpdate) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptScriptPolicyUpdate) Get() (v ScriptPolicyUpdate, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptScriptPolicyUpdate) Or(d ScriptPolicyUpdate) ScriptPolicyUpdate {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptScriptUpdate returns new OptScriptUpdate with value set to v.
+func NewOptScriptUpdate(v ScriptUpdate) OptScriptUpdate {
+	return OptScriptUpdate{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptScriptUpdate is optional ScriptUpdate.
+type OptScriptUpdate struct {
+	Value ScriptUpdate
+	Set   bool
+}
+
+// IsSet returns true if OptScriptUpdate was set.
+func (o OptScriptUpdate) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptScriptUpdate) Reset() {
+	var v ScriptUpdate
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptScriptUpdate) SetTo(v ScriptUpdate) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptScriptUpdate) Get() (v ScriptUpdate, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptScriptUpdate) Or(d ScriptUpdate) ScriptUpdate {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -424,69 +568,313 @@ type PatchSubmissionCompletedOK struct{}
 // PatchSubmissionModelOK is response for PatchSubmissionModel operation.
 type PatchSubmissionModelOK struct{}
 
-// Ref: #/components/schemas/Submission
-type Submission struct {
-	ID             OptInt64  `json:"ID"`
-	DisplayName    OptString `json:"DisplayName"`
-	Creator        OptString `json:"Creator"`
-	GameID         OptInt32  `json:"GameID"`
-	Date           OptInt64  `json:"Date"`
-	Submitter      OptInt64  `json:"Submitter"`
-	AssetID        OptInt64  `json:"AssetID"`
-	AssetVersion   OptInt64  `json:"AssetVersion"`
-	Completed      OptBool   `json:"Completed"`
-	SubmissionType OptInt32  `json:"SubmissionType"`
-	TargetAssetID  OptInt64  `json:"TargetAssetID"`
-	StatusID       OptInt32  `json:"StatusID"`
+// Ref: #/components/schemas/Script
+type Script struct {
+	ID           int64    `json:"ID"`
+	Hash         string   `json:"Hash"`
+	Source       string   `json:"Source"`
+	SubmissionID OptInt64 `json:"SubmissionID"`
 }
 
 // GetID returns the value of ID.
-func (s *Submission) GetID() OptInt64 {
+func (s *Script) GetID() int64 {
+	return s.ID
+}
+
+// GetHash returns the value of Hash.
+func (s *Script) GetHash() string {
+	return s.Hash
+}
+
+// GetSource returns the value of Source.
+func (s *Script) GetSource() string {
+	return s.Source
+}
+
+// GetSubmissionID returns the value of SubmissionID.
+func (s *Script) GetSubmissionID() OptInt64 {
+	return s.SubmissionID
+}
+
+// SetID sets the value of ID.
+func (s *Script) SetID(val int64) {
+	s.ID = val
+}
+
+// SetHash sets the value of Hash.
+func (s *Script) SetHash(val string) {
+	s.Hash = val
+}
+
+// SetSource sets the value of Source.
+func (s *Script) SetSource(val string) {
+	s.Source = val
+}
+
+// SetSubmissionID sets the value of SubmissionID.
+func (s *Script) SetSubmissionID(val OptInt64) {
+	s.SubmissionID = val
+}
+
+// Ref: #/components/schemas/ScriptCreate
+type ScriptCreate struct {
+	Source       string   `json:"Source"`
+	SubmissionID OptInt64 `json:"SubmissionID"`
+}
+
+// GetSource returns the value of Source.
+func (s *ScriptCreate) GetSource() string {
+	return s.Source
+}
+
+// GetSubmissionID returns the value of SubmissionID.
+func (s *ScriptCreate) GetSubmissionID() OptInt64 {
+	return s.SubmissionID
+}
+
+// SetSource sets the value of Source.
+func (s *ScriptCreate) SetSource(val string) {
+	s.Source = val
+}
+
+// SetSubmissionID sets the value of SubmissionID.
+func (s *ScriptCreate) SetSubmissionID(val OptInt64) {
+	s.SubmissionID = val
+}
+
+// Ref: #/components/schemas/ScriptPolicy
+type ScriptPolicy struct {
+	ID             int64  `json:"ID"`
+	FromScriptHash string `json:"FromScriptHash"`
+	ToScriptID     int64  `json:"ToScriptID"`
+	Policy         int32  `json:"Policy"`
+}
+
+// GetID returns the value of ID.
+func (s *ScriptPolicy) GetID() int64 {
+	return s.ID
+}
+
+// GetFromScriptHash returns the value of FromScriptHash.
+func (s *ScriptPolicy) GetFromScriptHash() string {
+	return s.FromScriptHash
+}
+
+// GetToScriptID returns the value of ToScriptID.
+func (s *ScriptPolicy) GetToScriptID() int64 {
+	return s.ToScriptID
+}
+
+// GetPolicy returns the value of Policy.
+func (s *ScriptPolicy) GetPolicy() int32 {
+	return s.Policy
+}
+
+// SetID sets the value of ID.
+func (s *ScriptPolicy) SetID(val int64) {
+	s.ID = val
+}
+
+// SetFromScriptHash sets the value of FromScriptHash.
+func (s *ScriptPolicy) SetFromScriptHash(val string) {
+	s.FromScriptHash = val
+}
+
+// SetToScriptID sets the value of ToScriptID.
+func (s *ScriptPolicy) SetToScriptID(val int64) {
+	s.ToScriptID = val
+}
+
+// SetPolicy sets the value of Policy.
+func (s *ScriptPolicy) SetPolicy(val int32) {
+	s.Policy = val
+}
+
+// Ref: #/components/schemas/ScriptPolicyCreate
+type ScriptPolicyCreate struct {
+	FromScriptID int64 `json:"FromScriptID"`
+	ToScriptID   int64 `json:"ToScriptID"`
+	Policy       int32 `json:"Policy"`
+}
+
+// GetFromScriptID returns the value of FromScriptID.
+func (s *ScriptPolicyCreate) GetFromScriptID() int64 {
+	return s.FromScriptID
+}
+
+// GetToScriptID returns the value of ToScriptID.
+func (s *ScriptPolicyCreate) GetToScriptID() int64 {
+	return s.ToScriptID
+}
+
+// GetPolicy returns the value of Policy.
+func (s *ScriptPolicyCreate) GetPolicy() int32 {
+	return s.Policy
+}
+
+// SetFromScriptID sets the value of FromScriptID.
+func (s *ScriptPolicyCreate) SetFromScriptID(val int64) {
+	s.FromScriptID = val
+}
+
+// SetToScriptID sets the value of ToScriptID.
+func (s *ScriptPolicyCreate) SetToScriptID(val int64) {
+	s.ToScriptID = val
+}
+
+// SetPolicy sets the value of Policy.
+func (s *ScriptPolicyCreate) SetPolicy(val int32) {
+	s.Policy = val
+}
+
+// Ref: #/components/schemas/ScriptPolicyUpdate
+type ScriptPolicyUpdate struct {
+	ID           int64    `json:"ID"`
+	FromScriptID OptInt64 `json:"FromScriptID"`
+	ToScriptID   OptInt64 `json:"ToScriptID"`
+	Policy       OptInt32 `json:"Policy"`
+}
+
+// GetID returns the value of ID.
+func (s *ScriptPolicyUpdate) GetID() int64 {
+	return s.ID
+}
+
+// GetFromScriptID returns the value of FromScriptID.
+func (s *ScriptPolicyUpdate) GetFromScriptID() OptInt64 {
+	return s.FromScriptID
+}
+
+// GetToScriptID returns the value of ToScriptID.
+func (s *ScriptPolicyUpdate) GetToScriptID() OptInt64 {
+	return s.ToScriptID
+}
+
+// GetPolicy returns the value of Policy.
+func (s *ScriptPolicyUpdate) GetPolicy() OptInt32 {
+	return s.Policy
+}
+
+// SetID sets the value of ID.
+func (s *ScriptPolicyUpdate) SetID(val int64) {
+	s.ID = val
+}
+
+// SetFromScriptID sets the value of FromScriptID.
+func (s *ScriptPolicyUpdate) SetFromScriptID(val OptInt64) {
+	s.FromScriptID = val
+}
+
+// SetToScriptID sets the value of ToScriptID.
+func (s *ScriptPolicyUpdate) SetToScriptID(val OptInt64) {
+	s.ToScriptID = val
+}
+
+// SetPolicy sets the value of Policy.
+func (s *ScriptPolicyUpdate) SetPolicy(val OptInt32) {
+	s.Policy = val
+}
+
+// Ref: #/components/schemas/ScriptUpdate
+type ScriptUpdate struct {
+	ID           int64     `json:"ID"`
+	Source       OptString `json:"Source"`
+	SubmissionID OptInt64  `json:"SubmissionID"`
+}
+
+// GetID returns the value of ID.
+func (s *ScriptUpdate) GetID() int64 {
+	return s.ID
+}
+
+// GetSource returns the value of Source.
+func (s *ScriptUpdate) GetSource() OptString {
+	return s.Source
+}
+
+// GetSubmissionID returns the value of SubmissionID.
+func (s *ScriptUpdate) GetSubmissionID() OptInt64 {
+	return s.SubmissionID
+}
+
+// SetID sets the value of ID.
+func (s *ScriptUpdate) SetID(val int64) {
+	s.ID = val
+}
+
+// SetSource sets the value of Source.
+func (s *ScriptUpdate) SetSource(val OptString) {
+	s.Source = val
+}
+
+// SetSubmissionID sets the value of SubmissionID.
+func (s *ScriptUpdate) SetSubmissionID(val OptInt64) {
+	s.SubmissionID = val
+}
+
+// Ref: #/components/schemas/Submission
+type Submission struct {
+	ID             int64    `json:"ID"`
+	DisplayName    string   `json:"DisplayName"`
+	Creator        string   `json:"Creator"`
+	GameID         int32    `json:"GameID"`
+	Date           int64    `json:"Date"`
+	Submitter      int64    `json:"Submitter"`
+	AssetID        int64    `json:"AssetID"`
+	AssetVersion   int64    `json:"AssetVersion"`
+	Completed      bool     `json:"Completed"`
+	SubmissionType int32    `json:"SubmissionType"`
+	TargetAssetID  OptInt64 `json:"TargetAssetID"`
+	StatusID       int32    `json:"StatusID"`
+}
+
+// GetID returns the value of ID.
+func (s *Submission) GetID() int64 {
 	return s.ID
 }
 
 // GetDisplayName returns the value of DisplayName.
-func (s *Submission) GetDisplayName() OptString {
+func (s *Submission) GetDisplayName() string {
 	return s.DisplayName
 }
 
 // GetCreator returns the value of Creator.
-func (s *Submission) GetCreator() OptString {
+func (s *Submission) GetCreator() string {
 	return s.Creator
 }
 
 // GetGameID returns the value of GameID.
-func (s *Submission) GetGameID() OptInt32 {
+func (s *Submission) GetGameID() int32 {
 	return s.GameID
 }
 
 // GetDate returns the value of Date.
-func (s *Submission) GetDate() OptInt64 {
+func (s *Submission) GetDate() int64 {
 	return s.Date
 }
 
 // GetSubmitter returns the value of Submitter.
-func (s *Submission) GetSubmitter() OptInt64 {
+func (s *Submission) GetSubmitter() int64 {
 	return s.Submitter
 }
 
 // GetAssetID returns the value of AssetID.
-func (s *Submission) GetAssetID() OptInt64 {
+func (s *Submission) GetAssetID() int64 {
 	return s.AssetID
 }
 
 // GetAssetVersion returns the value of AssetVersion.
-func (s *Submission) GetAssetVersion() OptInt64 {
+func (s *Submission) GetAssetVersion() int64 {
 	return s.AssetVersion
 }
 
 // GetCompleted returns the value of Completed.
-func (s *Submission) GetCompleted() OptBool {
+func (s *Submission) GetCompleted() bool {
 	return s.Completed
 }
 
 // GetSubmissionType returns the value of SubmissionType.
-func (s *Submission) GetSubmissionType() OptInt32 {
+func (s *Submission) GetSubmissionType() int32 {
 	return s.SubmissionType
 }
 
@@ -496,57 +884,57 @@ func (s *Submission) GetTargetAssetID() OptInt64 {
 }
 
 // GetStatusID returns the value of StatusID.
-func (s *Submission) GetStatusID() OptInt32 {
+func (s *Submission) GetStatusID() int32 {
 	return s.StatusID
 }
 
 // SetID sets the value of ID.
-func (s *Submission) SetID(val OptInt64) {
+func (s *Submission) SetID(val int64) {
 	s.ID = val
 }
 
 // SetDisplayName sets the value of DisplayName.
-func (s *Submission) SetDisplayName(val OptString) {
+func (s *Submission) SetDisplayName(val string) {
 	s.DisplayName = val
 }
 
 // SetCreator sets the value of Creator.
-func (s *Submission) SetCreator(val OptString) {
+func (s *Submission) SetCreator(val string) {
 	s.Creator = val
 }
 
 // SetGameID sets the value of GameID.
-func (s *Submission) SetGameID(val OptInt32) {
+func (s *Submission) SetGameID(val int32) {
 	s.GameID = val
 }
 
 // SetDate sets the value of Date.
-func (s *Submission) SetDate(val OptInt64) {
+func (s *Submission) SetDate(val int64) {
 	s.Date = val
 }
 
 // SetSubmitter sets the value of Submitter.
-func (s *Submission) SetSubmitter(val OptInt64) {
+func (s *Submission) SetSubmitter(val int64) {
 	s.Submitter = val
 }
 
 // SetAssetID sets the value of AssetID.
-func (s *Submission) SetAssetID(val OptInt64) {
+func (s *Submission) SetAssetID(val int64) {
 	s.AssetID = val
 }
 
 // SetAssetVersion sets the value of AssetVersion.
-func (s *Submission) SetAssetVersion(val OptInt64) {
+func (s *Submission) SetAssetVersion(val int64) {
 	s.AssetVersion = val
 }
 
 // SetCompleted sets the value of Completed.
-func (s *Submission) SetCompleted(val OptBool) {
+func (s *Submission) SetCompleted(val bool) {
 	s.Completed = val
 }
 
 // SetSubmissionType sets the value of SubmissionType.
-func (s *Submission) SetSubmissionType(val OptInt32) {
+func (s *Submission) SetSubmissionType(val int32) {
 	s.SubmissionType = val
 }
 
@@ -556,54 +944,54 @@ func (s *Submission) SetTargetAssetID(val OptInt64) {
 }
 
 // SetStatusID sets the value of StatusID.
-func (s *Submission) SetStatusID(val OptInt32) {
+func (s *Submission) SetStatusID(val int32) {
 	s.StatusID = val
 }
 
 // Ref: #/components/schemas/SubmissionCreate
 type SubmissionCreate struct {
-	DisplayName    OptString `json:"DisplayName"`
-	Creator        OptString `json:"Creator"`
-	GameID         OptInt32  `json:"GameID"`
-	Submitter      OptInt64  `json:"Submitter"`
-	AssetID        OptInt64  `json:"AssetID"`
-	AssetVersion   OptInt64  `json:"AssetVersion"`
-	SubmissionType OptInt32  `json:"SubmissionType"`
-	TargetAssetID  OptInt64  `json:"TargetAssetID"`
+	DisplayName    string   `json:"DisplayName"`
+	Creator        string   `json:"Creator"`
+	GameID         int32    `json:"GameID"`
+	Submitter      int64    `json:"Submitter"`
+	AssetID        int64    `json:"AssetID"`
+	AssetVersion   int64    `json:"AssetVersion"`
+	SubmissionType int32    `json:"SubmissionType"`
+	TargetAssetID  OptInt64 `json:"TargetAssetID"`
 }
 
 // GetDisplayName returns the value of DisplayName.
-func (s *SubmissionCreate) GetDisplayName() OptString {
+func (s *SubmissionCreate) GetDisplayName() string {
 	return s.DisplayName
 }
 
 // GetCreator returns the value of Creator.
-func (s *SubmissionCreate) GetCreator() OptString {
+func (s *SubmissionCreate) GetCreator() string {
 	return s.Creator
 }
 
 // GetGameID returns the value of GameID.
-func (s *SubmissionCreate) GetGameID() OptInt32 {
+func (s *SubmissionCreate) GetGameID() int32 {
 	return s.GameID
 }
 
 // GetSubmitter returns the value of Submitter.
-func (s *SubmissionCreate) GetSubmitter() OptInt64 {
+func (s *SubmissionCreate) GetSubmitter() int64 {
 	return s.Submitter
 }
 
 // GetAssetID returns the value of AssetID.
-func (s *SubmissionCreate) GetAssetID() OptInt64 {
+func (s *SubmissionCreate) GetAssetID() int64 {
 	return s.AssetID
 }
 
 // GetAssetVersion returns the value of AssetVersion.
-func (s *SubmissionCreate) GetAssetVersion() OptInt64 {
+func (s *SubmissionCreate) GetAssetVersion() int64 {
 	return s.AssetVersion
 }
 
 // GetSubmissionType returns the value of SubmissionType.
-func (s *SubmissionCreate) GetSubmissionType() OptInt32 {
+func (s *SubmissionCreate) GetSubmissionType() int32 {
 	return s.SubmissionType
 }
 
@@ -613,37 +1001,37 @@ func (s *SubmissionCreate) GetTargetAssetID() OptInt64 {
 }
 
 // SetDisplayName sets the value of DisplayName.
-func (s *SubmissionCreate) SetDisplayName(val OptString) {
+func (s *SubmissionCreate) SetDisplayName(val string) {
 	s.DisplayName = val
 }
 
 // SetCreator sets the value of Creator.
-func (s *SubmissionCreate) SetCreator(val OptString) {
+func (s *SubmissionCreate) SetCreator(val string) {
 	s.Creator = val
 }
 
 // SetGameID sets the value of GameID.
-func (s *SubmissionCreate) SetGameID(val OptInt32) {
+func (s *SubmissionCreate) SetGameID(val int32) {
 	s.GameID = val
 }
 
 // SetSubmitter sets the value of Submitter.
-func (s *SubmissionCreate) SetSubmitter(val OptInt64) {
+func (s *SubmissionCreate) SetSubmitter(val int64) {
 	s.Submitter = val
 }
 
 // SetAssetID sets the value of AssetID.
-func (s *SubmissionCreate) SetAssetID(val OptInt64) {
+func (s *SubmissionCreate) SetAssetID(val int64) {
 	s.AssetID = val
 }
 
 // SetAssetVersion sets the value of AssetVersion.
-func (s *SubmissionCreate) SetAssetVersion(val OptInt64) {
+func (s *SubmissionCreate) SetAssetVersion(val int64) {
 	s.AssetVersion = val
 }
 
 // SetSubmissionType sets the value of SubmissionType.
-func (s *SubmissionCreate) SetSubmissionType(val OptInt32) {
+func (s *SubmissionCreate) SetSubmissionType(val int32) {
 	s.SubmissionType = val
 }
 
@@ -654,7 +1042,7 @@ func (s *SubmissionCreate) SetTargetAssetID(val OptInt64) {
 
 // Ref: #/components/schemas/SubmissionFilter
 type SubmissionFilter struct {
-	ID          OptInt64  `json:"ID"`
+	ID          int64     `json:"ID"`
 	DisplayName OptString `json:"DisplayName"`
 	Creator     OptString `json:"Creator"`
 	GameID      OptInt32  `json:"GameID"`
@@ -662,7 +1050,7 @@ type SubmissionFilter struct {
 }
 
 // GetID returns the value of ID.
-func (s *SubmissionFilter) GetID() OptInt64 {
+func (s *SubmissionFilter) GetID() int64 {
 	return s.ID
 }
 
@@ -687,7 +1075,7 @@ func (s *SubmissionFilter) GetDate() OptInt64 {
 }
 
 // SetID sets the value of ID.
-func (s *SubmissionFilter) SetID(val OptInt64) {
+func (s *SubmissionFilter) SetID(val int64) {
 	s.ID = val
 }
 
@@ -710,3 +1098,9 @@ func (s *SubmissionFilter) SetGameID(val OptInt32) {
 func (s *SubmissionFilter) SetDate(val OptInt64) {
 	s.Date = val
 }
+
+// UpdateScriptOK is response for UpdateScript operation.
+type UpdateScriptOK struct{}
+
+// UpdateScriptPolicyOK is response for UpdateScriptPolicy operation.
+type UpdateScriptPolicyOK struct{}
