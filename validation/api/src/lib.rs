@@ -77,6 +77,11 @@ impl Context{
 		self.client.get(url)
 		.send().await
 	}
+	async fn patch(&self,url:impl reqwest::IntoUrl,body:impl Into<reqwest::Body>)->Result<reqwest::Response,reqwest::Error>{
+		self.client.patch(url)
+    	.body(body)
+		.send().await
+	}
 	pub async fn get_script(&self,config:GetScriptRequest)->Result<ScriptResponse,GetError>{
 		let url_raw=format!("{}/scripts/{}",self.base_url,config.ScriptID.0);
 		let url=reqwest::Url::parse(url_raw.as_str()).map_err(GetError::ParseError)?;
