@@ -674,7 +674,7 @@ components:
       - ID
       - Hash
       - Source
-#     - SubmissionID
+      - SubmissionID
       type: object
       properties:
         ID:

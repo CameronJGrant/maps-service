@@ -340,10 +340,10 @@ type PatchSubmissionModelOK struct{}
 
 // Ref: #/components/schemas/Script
 type Script struct {
-	ID           int64    `json:"ID"`
-	Hash         string   `json:"Hash"`
-	Source       string   `json:"Source"`
-	SubmissionID OptInt64 `json:"SubmissionID"`
+	ID           int64  `json:"ID"`
+	Hash         string `json:"Hash"`
+	Source       string `json:"Source"`
+	SubmissionID int64  `json:"SubmissionID"`
 }
 
 // GetID returns the value of ID.
@@ -362,7 +362,7 @@ func (s *Script) GetSource() string {
 }
 
 // GetSubmissionID returns the value of SubmissionID.
-func (s *Script) GetSubmissionID() OptInt64 {
+func (s *Script) GetSubmissionID() int64 {
 	return s.SubmissionID
 }
 
@@ -382,7 +382,7 @@ func (s *Script) SetSource(val string) {
 }
 
 // SetSubmissionID sets the value of SubmissionID.
-func (s *Script) SetSubmissionID(val OptInt64) {
+func (s *Script) SetSubmissionID(val int64) {
 	s.SubmissionID = val
 }
 
