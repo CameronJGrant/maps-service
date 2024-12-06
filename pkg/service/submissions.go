@@ -23,13 +23,13 @@ func (svc *Service) CreateSubmission(ctx context.Context, request api.OptSubmiss
 
 	submission, err := svc.DB.Submissions().Create(ctx, model.Submission{
 		ID:            0,
-		DisplayName:   request.Value.DisplayName.Value,
-		Creator:       request.Value.Creator.Value,
-		GameID:        request.Value.GameID.Value,
+		DisplayName:   request.Value.DisplayName,
+		Creator:       request.Value.Creator,
+		GameID:        request.Value.GameID,
 		Date:          time.Now(),
 		Submitter:     int64(userInfo.UserID),
-		AssetID:       request.Value.AssetID.Value,
-		AssetVersion:  request.Value.AssetVersion.Value,
+		AssetID:       request.Value.AssetID,
+		AssetVersion:  request.Value.AssetVersion,
 		Completed:     false,
 		TargetAssetID: request.Value.TargetAssetID.Value,
 		StatusID:      model.StatusUnderConstruction,
@@ -38,7 +38,7 @@ func (svc *Service) CreateSubmission(ctx context.Context, request api.OptSubmiss
 		return nil, err
 	}
 	return &api.ID{
-		ID:api.NewOptInt64(submission.ID),
+		ID:submission.ID,
 	}, nil
 }
 
@@ -53,17 +53,17 @@ func (svc *Service) GetSubmission(ctx context.Context, params api.GetSubmissionP
 		return nil, err
 	}
 	return &api.Submission{
-		ID:             api.NewOptInt64(submission.ID),
-		DisplayName:    api.NewOptString(submission.DisplayName),
-		Creator:        api.NewOptString(submission.Creator),
-		GameID:         api.NewOptInt32(submission.GameID),
-		Date:           api.NewOptInt64(submission.Date.Unix()),
-		Submitter:      api.NewOptInt64(submission.Submitter),
-		AssetID:        api.NewOptInt64(submission.AssetID),
-		AssetVersion:   api.NewOptInt64(submission.AssetVersion),
-		Completed:      api.NewOptBool(submission.Completed),
+		ID:             submission.ID,
+		DisplayName:    submission.DisplayName,
+		Creator:        submission.Creator,
+		GameID:         submission.GameID,
+		Date:           submission.Date.Unix(),
+		Submitter:      submission.Submitter,
+		AssetID:        submission.AssetID,
+		AssetVersion:   submission.AssetVersion,
+		Completed:      submission.Completed,
 		TargetAssetID:  api.NewOptInt64(submission.TargetAssetID),
-		StatusID:       api.NewOptInt32(int32(submission.StatusID)),
+		StatusID:       int32(submission.StatusID),
 	}, nil
 }
 
@@ -92,17 +92,17 @@ func (svc *Service) ListSubmissions(ctx context.Context, request api.ListSubmiss
 	var resp []api.Submission
 	for i := 0; i < len(items); i++ {
 		resp = append(resp, api.Submission{
-			ID:             api.NewOptInt64(items[i].ID),
-			DisplayName:    api.NewOptString(items[i].DisplayName),
-			Creator:        api.NewOptString(items[i].Creator),
-			GameID:         api.NewOptInt32(items[i].GameID),
-			Date:           api.NewOptInt64(items[i].Date.Unix()),
-			Submitter:      api.NewOptInt64(items[i].Submitter),
-			AssetID:        api.NewOptInt64(items[i].AssetID),
-			AssetVersion:   api.NewOptInt64(items[i].AssetVersion),
-			Completed:      api.NewOptBool(items[i].Completed),
+			ID:             items[i].ID,
+			DisplayName:    items[i].DisplayName,
+			Creator:        items[i].Creator,
+			GameID:         items[i].GameID,
+			Date:           items[i].Date.Unix(),
+			Submitter:      items[i].Submitter,
+			AssetID:        items[i].AssetID,
+			AssetVersion:   items[i].AssetVersion,
+			Completed:      items[i].Completed,
 			TargetAssetID:  api.NewOptInt64(items[i].TargetAssetID),
-			StatusID:       api.NewOptInt32(int32(items[i].StatusID)),
+			StatusID:       int32(items[i].StatusID),
 		})
 	}
 
