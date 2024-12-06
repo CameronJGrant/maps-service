@@ -1739,7 +1739,7 @@ func (s *Server) handleCreateScriptRequest(args [0]string, argsEscaped bool, w h
 		}
 
 		type (
-			Request  = OptScriptCreate
+			Request  = *ScriptCreate
 			Params   = struct{}
 			Response = *ID
 		)
@@ -1934,7 +1934,7 @@ func (s *Server) handleCreateScriptPolicyRequest(args [0]string, argsEscaped boo
 		}
 
 		type (
-			Request  = OptScriptPolicyCreate
+			Request  = *ScriptPolicyCreate
 			Params   = struct{}
 			Response = *ID
 		)
@@ -2129,7 +2129,7 @@ func (s *Server) handleCreateSubmissionRequest(args [0]string, argsEscaped bool,
 		}
 
 		type (
-			Request  = OptSubmissionCreate
+			Request  = *SubmissionCreate
 			Params   = struct{}
 			Response = *ID
 		)
@@ -4106,7 +4106,7 @@ func (s *Server) handleUpdateScriptRequest(args [1]string, argsEscaped bool, w h
 		}
 
 		type (
-			Request  = OptScriptUpdate
+			Request  = *ScriptUpdate
 			Params   = UpdateScriptParams
 			Response = *UpdateScriptOK
 		)
@@ -4316,7 +4316,7 @@ func (s *Server) handleUpdateScriptPolicyRequest(args [1]string, argsEscaped boo
 		}
 
 		type (
-			Request  = OptScriptPolicyUpdate
+			Request  = *ScriptPolicyUpdate
 			Params   = UpdateScriptPolicyParams
 			Response = *UpdateScriptPolicyOK
 		)

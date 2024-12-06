@@ -13,7 +13,7 @@ var (
 // Create a new script.
 //
 // POST /scripts
-func (svc *Service) CreateScript(ctx context.Context, req api.OptScriptCreate) (*api.ID, error){
+func (svc *Service) CreateScript(ctx context.Context, req *api.ScriptCreate) (*api.ID, error){
 	return nil,nil
 }
 // DeleteScript implements deleteScript operation.
@@ -37,6 +37,6 @@ func (svc *Service) GetScript(ctx context.Context, params api.GetScriptParams) (
 // Update the specified script by ID.
 //
 // PATCH /scripts/{ScriptID}
-func (svc *Service) UpdateScript(ctx context.Context, req api.OptScriptUpdate, params api.UpdateScriptParams) error{
+func (svc *Service) UpdateScript(ctx context.Context, req *api.ScriptUpdate, params api.UpdateScriptParams) error{
 	return nil
 }

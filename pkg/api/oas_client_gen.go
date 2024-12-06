@@ -77,19 +77,19 @@ type Invoker interface {
 	// Create a new script.
 	//
 	// POST /scripts
-	CreateScript(ctx context.Context, request OptScriptCreate) (*ID, error)
+	CreateScript(ctx context.Context, request *ScriptCreate) (*ID, error)
 	// CreateScriptPolicy invokes createScriptPolicy operation.
 	//
 	// Create a new script policy.
 	//
 	// POST /script-policy
-	CreateScriptPolicy(ctx context.Context, request OptScriptPolicyCreate) (*ID, error)
+	CreateScriptPolicy(ctx context.Context, request *ScriptPolicyCreate) (*ID, error)
 	// CreateSubmission invokes createSubmission operation.
 	//
 	// Create new submission.
 	//
 	// POST /submissions
-	CreateSubmission(ctx context.Context, request OptSubmissionCreate) (*ID, error)
+	CreateSubmission(ctx context.Context, request *SubmissionCreate) (*ID, error)
 	// DeleteScript invokes deleteScript operation.
 	//
 	// Delete the specified script by ID.
@@ -149,13 +149,13 @@ type Invoker interface {
 	// Update the specified script by ID.
 	//
 	// PATCH /scripts/{ScriptID}
-	UpdateScript(ctx context.Context, request OptScriptUpdate, params UpdateScriptParams) error
+	UpdateScript(ctx context.Context, request *ScriptUpdate, params UpdateScriptParams) error
 	// UpdateScriptPolicy invokes updateScriptPolicy operation.
 	//
 	// Update the specified script policy by ID.
 	//
 	// PATCH /script-policy/id/{ScriptPolicyID}
-	UpdateScriptPolicy(ctx context.Context, request OptScriptPolicyUpdate, params UpdateScriptPolicyParams) error
+	UpdateScriptPolicy(ctx context.Context, request *ScriptPolicyUpdate, params UpdateScriptPolicyParams) error
 }
 
 // Client implements OAS client.
@@ -1209,12 +1209,12 @@ func (c *Client) sendActionSubmissionValidate(ctx context.Context, params Action
 // Create a new script.
 //
 // POST /scripts
-func (c *Client) CreateScript(ctx context.Context, request OptScriptCreate) (*ID, error) {
+func (c *Client) CreateScript(ctx context.Context, request *ScriptCreate) (*ID, error) {
 	res, err := c.sendCreateScript(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendCreateScript(ctx context.Context, request OptScriptCreate) (res *ID, err error) {
+func (c *Client) sendCreateScript(ctx context.Context, request *ScriptCreate) (res *ID, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createScript"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -1317,12 +1317,12 @@ func (c *Client) sendCreateScript(ctx context.Context, request OptScriptCreate) 
 // Create a new script policy.
 //
 // POST /script-policy
-func (c *Client) CreateScriptPolicy(ctx context.Context, request OptScriptPolicyCreate) (*ID, error) {
+func (c *Client) CreateScriptPolicy(ctx context.Context, request *ScriptPolicyCreate) (*ID, error) {
 	res, err := c.sendCreateScriptPolicy(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendCreateScriptPolicy(ctx context.Context, request OptScriptPolicyCreate) (res *ID, err error) {
+func (c *Client) sendCreateScriptPolicy(ctx context.Context, request *ScriptPolicyCreate) (res *ID, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createScriptPolicy"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -1425,12 +1425,12 @@ func (c *Client) sendCreateScriptPolicy(ctx context.Context, request OptScriptPo
 // Create new submission.
 //
 // POST /submissions
-func (c *Client) CreateSubmission(ctx context.Context, request OptSubmissionCreate) (*ID, error) {
+func (c *Client) CreateSubmission(ctx context.Context, request *SubmissionCreate) (*ID, error) {
 	res, err := c.sendCreateSubmission(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendCreateSubmission(ctx context.Context, request OptSubmissionCreate) (res *ID, err error) {
+func (c *Client) sendCreateSubmission(ctx context.Context, request *SubmissionCreate) (res *ID, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createSubmission"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -2691,12 +2691,12 @@ func (c *Client) sendPatchSubmissionModel(ctx context.Context, params PatchSubmi
 // Update the specified script by ID.
 //
 // PATCH /scripts/{ScriptID}
-func (c *Client) UpdateScript(ctx context.Context, request OptScriptUpdate, params UpdateScriptParams) error {
+func (c *Client) UpdateScript(ctx context.Context, request *ScriptUpdate, params UpdateScriptParams) error {
 	_, err := c.sendUpdateScript(ctx, request, params)
 	return err
 }
 
-func (c *Client) sendUpdateScript(ctx context.Context, request OptScriptUpdate, params UpdateScriptParams) (res *UpdateScriptOK, err error) {
+func (c *Client) sendUpdateScript(ctx context.Context, request *ScriptUpdate, params UpdateScriptParams) (res *UpdateScriptOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateScript"),
 		semconv.HTTPRequestMethodKey.String("PATCH"),
@@ -2817,12 +2817,12 @@ func (c *Client) sendUpdateScript(ctx context.Context, request OptScriptUpdate, 
 // Update the specified script policy by ID.
 //
 // PATCH /script-policy/id/{ScriptPolicyID}
-func (c *Client) UpdateScriptPolicy(ctx context.Context, request OptScriptPolicyUpdate, params UpdateScriptPolicyParams) error {
+func (c *Client) UpdateScriptPolicy(ctx context.Context, request *ScriptPolicyUpdate, params UpdateScriptPolicyParams) error {
 	_, err := c.sendUpdateScriptPolicy(ctx, request, params)
 	return err
 }
 
-func (c *Client) sendUpdateScriptPolicy(ctx context.Context, request OptScriptPolicyUpdate, params UpdateScriptPolicyParams) (res *UpdateScriptPolicyOK, err error) {
+func (c *Client) sendUpdateScriptPolicy(ctx context.Context, request *ScriptPolicyUpdate, params UpdateScriptPolicyParams) (res *UpdateScriptPolicyOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateScriptPolicy"),
 		semconv.HTTPRequestMethodKey.String("PATCH"),

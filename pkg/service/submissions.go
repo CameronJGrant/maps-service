@@ -15,7 +15,7 @@ var (
 )
 
 // POST /submissions
-func (svc *Service) CreateSubmission(ctx context.Context, request api.OptSubmissionCreate) (*api.ID, error) {
+func (svc *Service) CreateSubmission(ctx context.Context, request *api.SubmissionCreate) (*api.ID, error) {
 	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
 	if !ok{
 		return nil, ErrUserInfo
@@ -23,15 +23,15 @@ func (svc *Service) CreateSubmission(ctx context.Context, request api.OptSubmiss
 
 	submission, err := svc.DB.Submissions().Create(ctx, model.Submission{
 		ID:            0,
-		DisplayName:   request.Value.DisplayName,
-		Creator:       request.Value.Creator,
-		GameID:        request.Value.GameID,
+		DisplayName:   request.DisplayName,
+		Creator:       request.Creator,
+		GameID:        request.GameID,
 		Date:          time.Now(),
 		Submitter:     int64(userInfo.UserID),
-		AssetID:       request.Value.AssetID,
-		AssetVersion:  request.Value.AssetVersion,
+		AssetID:       request.AssetID,
+		AssetVersion:  request.AssetVersion,
 		Completed:     false,
-		TargetAssetID: request.Value.TargetAssetID.Value,
+		TargetAssetID: request.TargetAssetID.Value,
 		StatusID:      model.StatusUnderConstruction,
 	})
 	if err != nil{

@@ -61,19 +61,19 @@ type Handler interface {
 	// Create a new script.
 	//
 	// POST /scripts
-	CreateScript(ctx context.Context, req OptScriptCreate) (*ID, error)
+	CreateScript(ctx context.Context, req *ScriptCreate) (*ID, error)
 	// CreateScriptPolicy implements createScriptPolicy operation.
 	//
 	// Create a new script policy.
 	//
 	// POST /script-policy
-	CreateScriptPolicy(ctx context.Context, req OptScriptPolicyCreate) (*ID, error)
+	CreateScriptPolicy(ctx context.Context, req *ScriptPolicyCreate) (*ID, error)
 	// CreateSubmission implements createSubmission operation.
 	//
 	// Create new submission.
 	//
 	// POST /submissions
-	CreateSubmission(ctx context.Context, req OptSubmissionCreate) (*ID, error)
+	CreateSubmission(ctx context.Context, req *SubmissionCreate) (*ID, error)
 	// DeleteScript implements deleteScript operation.
 	//
 	// Delete the specified script by ID.
@@ -133,13 +133,13 @@ type Handler interface {
 	// Update the specified script by ID.
 	//
 	// PATCH /scripts/{ScriptID}
-	UpdateScript(ctx context.Context, req OptScriptUpdate, params UpdateScriptParams) error
+	UpdateScript(ctx context.Context, req *ScriptUpdate, params UpdateScriptParams) error
 	// UpdateScriptPolicy implements updateScriptPolicy operation.
 	//
 	// Update the specified script policy by ID.
 	//
 	// PATCH /script-policy/id/{ScriptPolicyID}
-	UpdateScriptPolicy(ctx context.Context, req OptScriptPolicyUpdate, params UpdateScriptPolicyParams) error
+	UpdateScriptPolicy(ctx context.Context, req *ScriptPolicyUpdate, params UpdateScriptPolicyParams) error
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

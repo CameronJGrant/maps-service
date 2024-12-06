@@ -13,7 +13,7 @@ var (
 // Create a new script policy.
 //
 // POST /script-policy
-func (svc *Service) CreateScriptPolicy(ctx context.Context, req api.OptScriptPolicyCreate) (*api.ID, error){
+func (svc *Service) CreateScriptPolicy(ctx context.Context, req *api.ScriptPolicyCreate) (*api.ID, error){
 	return nil,nil
 }
 // DeleteScriptPolicy implements deleteScriptPolicy operation.
@@ -45,6 +45,6 @@ func (svc *Service) GetScriptPolicyFromHash(ctx context.Context, params api.GetS
 // Update the specified script policy by ID.
 //
 // PATCH /script-policy/id/{ScriptPolicyID}
-func (svc *Service) UpdateScriptPolicy(ctx context.Context, req api.OptScriptPolicyUpdate, params api.UpdateScriptPolicyParams) error{
+func (svc *Service) UpdateScriptPolicy(ctx context.Context, req *api.ScriptPolicyUpdate, params api.UpdateScriptPolicyParams) error{
 	return nil
 }

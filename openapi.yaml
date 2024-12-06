@@ -53,6 +53,7 @@ paths:
       tags:
         - Submissions
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -335,6 +336,7 @@ paths:
       tags:
         - ScriptPolicy
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -416,6 +418,7 @@ paths:
             type: integer
             format: int64
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -457,6 +460,7 @@ paths:
       tags:
         - Scripts
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -513,6 +517,7 @@ paths:
             type: integer
             format: int64
       requestBody:
+        required: true
         content:
           application/json:
             schema:

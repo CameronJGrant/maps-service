@@ -90,7 +90,7 @@ func (UnimplementedHandler) ActionSubmissionValidate(ctx context.Context, params
 // Create a new script.
 //
 // POST /scripts
-func (UnimplementedHandler) CreateScript(ctx context.Context, req OptScriptCreate) (r *ID, _ error) {
+func (UnimplementedHandler) CreateScript(ctx context.Context, req *ScriptCreate) (r *ID, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -99,7 +99,7 @@ func (UnimplementedHandler) CreateScript(ctx context.Context, req OptScriptCreat
 // Create a new script policy.
 //
 // POST /script-policy
-func (UnimplementedHandler) CreateScriptPolicy(ctx context.Context, req OptScriptPolicyCreate) (r *ID, _ error) {
+func (UnimplementedHandler) CreateScriptPolicy(ctx context.Context, req *ScriptPolicyCreate) (r *ID, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -108,7 +108,7 @@ func (UnimplementedHandler) CreateScriptPolicy(ctx context.Context, req OptScrip
 // Create new submission.
 //
 // POST /submissions
-func (UnimplementedHandler) CreateSubmission(ctx context.Context, req OptSubmissionCreate) (r *ID, _ error) {
+func (UnimplementedHandler) CreateSubmission(ctx context.Context, req *SubmissionCreate) (r *ID, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -198,7 +198,7 @@ func (UnimplementedHandler) PatchSubmissionModel(ctx context.Context, params Pat
 // Update the specified script by ID.
 //
 // PATCH /scripts/{ScriptID}
-func (UnimplementedHandler) UpdateScript(ctx context.Context, req OptScriptUpdate, params UpdateScriptParams) error {
+func (UnimplementedHandler) UpdateScript(ctx context.Context, req *ScriptUpdate, params UpdateScriptParams) error {
 	return ht.ErrNotImplemented
 }
 
@@ -207,7 +207,7 @@ func (UnimplementedHandler) UpdateScript(ctx context.Context, req OptScriptUpdat
 // Update the specified script policy by ID.
 //
 // PATCH /script-policy/id/{ScriptPolicyID}
-func (UnimplementedHandler) UpdateScriptPolicy(ctx context.Context, req OptScriptPolicyUpdate, params UpdateScriptPolicyParams) error {
+func (UnimplementedHandler) UpdateScriptPolicy(ctx context.Context, req *ScriptPolicyUpdate, params UpdateScriptPolicyParams) error {
 	return ht.ErrNotImplemented
 }
 

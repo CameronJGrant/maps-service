@@ -16,7 +16,7 @@ import (
 )
 
 func (s *Server) decodeCreateScriptRequest(r *http.Request) (
-	req OptScriptCreate,
+	req *ScriptCreate,
 	close func() error,
 	rerr error,
 ) {
@@ -35,9 +35,6 @@ func (s *Server) decodeCreateScriptRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -45,7 +42,7 @@ func (s *Server) decodeCreateScriptRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -53,14 +50,13 @@ func (s *Server) decodeCreateScriptRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptScriptCreate
+		var request ScriptCreate
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -76,14 +72,14 @@ func (s *Server) decodeCreateScriptRequest(r *http.Request) (
 			}
 			return req, close, err
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeCreateScriptPolicyRequest(r *http.Request) (
-	req OptScriptPolicyCreate,
+	req *ScriptPolicyCreate,
 	close func() error,
 	rerr error,
 ) {
@@ -102,9 +98,6 @@ func (s *Server) decodeCreateScriptPolicyRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -112,7 +105,7 @@ func (s *Server) decodeCreateScriptPolicyRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -120,14 +113,13 @@ func (s *Server) decodeCreateScriptPolicyRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptScriptPolicyCreate
+		var request ScriptPolicyCreate
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -143,14 +135,14 @@ func (s *Server) decodeCreateScriptPolicyRequest(r *http.Request) (
 			}
 			return req, close, err
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeCreateSubmissionRequest(r *http.Request) (
-	req OptSubmissionCreate,
+	req *SubmissionCreate,
 	close func() error,
 	rerr error,
 ) {
@@ -169,9 +161,6 @@ func (s *Server) decodeCreateSubmissionRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -179,7 +168,7 @@ func (s *Server) decodeCreateSubmissionRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -187,14 +176,13 @@ func (s *Server) decodeCreateSubmissionRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptSubmissionCreate
+		var request SubmissionCreate
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -210,14 +198,14 @@ func (s *Server) decodeCreateSubmissionRequest(r *http.Request) (
 			}
 			return req, close, err
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeUpdateScriptRequest(r *http.Request) (
-	req OptScriptUpdate,
+	req *ScriptUpdate,
 	close func() error,
 	rerr error,
 ) {
@@ -236,9 +224,6 @@ func (s *Server) decodeUpdateScriptRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -246,7 +231,7 @@ func (s *Server) decodeUpdateScriptRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -254,14 +239,13 @@ func (s *Server) decodeUpdateScriptRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptScriptUpdate
+		var request ScriptUpdate
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -277,14 +261,14 @@ func (s *Server) decodeUpdateScriptRequest(r *http.Request) (
 			}
 			return req, close, err
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeUpdateScriptPolicyRequest(r *http.Request) (
-	req OptScriptPolicyUpdate,
+	req *ScriptPolicyUpdate,
 	close func() error,
 	rerr error,
 ) {
@@ -303,9 +287,6 @@ func (s *Server) decodeUpdateScriptPolicyRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -313,7 +294,7 @@ func (s *Server) decodeUpdateScriptPolicyRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -321,14 +302,13 @@ func (s *Server) decodeUpdateScriptPolicyRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptScriptPolicyUpdate
+		var request ScriptPolicyUpdate
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -344,7 +324,7 @@ func (s *Server) decodeUpdateScriptPolicyRequest(r *http.Request) (
 			}
 			return req, close, err
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
