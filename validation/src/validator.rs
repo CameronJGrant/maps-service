@@ -3,14 +3,12 @@ use crate::nats_types::ValidateRequest;
 
 const SCRIPT_CONCURRENCY:usize=16;
 
-struct ModelVersion{
-	model_id:u64,
-	model_version:u64,
-}
-
 enum Valid{
 	Untouched,
-	Modified(ModelVersion),
+	Modified{
+		model_id:u64,
+		model_version:u64,
+	},
 }
 
 enum Policy{
@@ -30,6 +28,7 @@ enum ValidateError{
 	ReadDom(ReadDomError),
 	ApiGetScriptPolicy(api::Error),
 	ApiGetScript(api::Error),
+	ApiUpdateSubmissionModel(api::Error),
 	WriteDom(rbx_binary::EncodeError),
 	Upload(rbx_asset::cookie::UploadError),
 	Create(rbx_asset::cookie::CreateError),
@@ -66,16 +65,11 @@ impl Validator{
 	}
 	async fn validate_supress_error(&self,message:async_nats::Message){
 		match self.validate(message).await{
-			Ok(valid)=>{
-				unimplemented!();
-				// self.api.validate(validate_response).await.unwrap();
-			},
-			Err(e)=>{
-				println!("there was an error, oopsie! {e}");
-			}
+			Ok(())=>println!("Validated, hooray!"),
+			Err(e)=>println!("There was an error, oopsie! {e}"),
 		}
 	}
-	async fn validate(&self,message:async_nats::Message)->Result<Valid,ValidateError>{
+	async fn validate(&self,message:async_nats::Message)->Result<(),ValidateError>{
 		println!("validate {:?}",message);
 		// decode json
 		let validate_info:ValidateRequest=serde_json::from_slice(&message.payload).map_err(ValidateError::Json)?;
@@ -102,7 +96,7 @@ impl Validator{
 			}
 		}
 
-		// send all scripts to REST endpoint and receive the replacements
+		// send all script hashes to REST endpoint and retrieve the replacements
 		futures::stream::iter(script_map.iter_mut().map(Ok))
 		.try_for_each_concurrent(Some(SCRIPT_CONCURRENCY),|(source,replacement)|async{
 			// get the hash
@@ -155,8 +149,8 @@ impl Validator{
 			}
 		}
 
-		// reply with validity
-		Ok(if modified{
+		// use a data structure to represent the validity
+		let valid=if modified{
 			// serialize model (slow!)
 			let mut data=Vec::new();
 			rbx_binary::to_writer(&mut data,&dom,&[dom.root_ref()]).map_err(ValidateError::WriteDom)?;
@@ -192,13 +186,29 @@ impl Validator{
 			};
 
 			// tell the submission validate request to change the model
-			Valid::Modified(ModelVersion{
+			Valid::Modified{
 				model_id,
 				model_version,
-			})
+			}
 		}else{
 			Valid::Untouched
-		})
+		};
+
+		// update the submission model if it was modified
+		match valid{
+			Valid::Untouched=>(),
+			Valid::Modified{model_id,model_version}=>{
+				// update the submission to use the validated model
+				self.api.update_submission_model(api::UpdateSubmissionModelRequest{
+					ID:validate_info.submission_id,
+					ModelID:model_id,
+					ModelVersion:model_version,
+				}).await.map_err(ValidateError::ApiUpdateSubmissionModel)?;
+			},
+		}
+
+		// update the submission model to display as validated
+		Ok(())
 	}
 }
 
