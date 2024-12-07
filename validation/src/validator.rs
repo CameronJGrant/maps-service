@@ -131,7 +131,7 @@ impl Validator{
 						Some(Policy::Delete)=>{
 							modified=true;
 							// delete script
-							unimplemented!();
+							dom.destroy(script_ref);
 						},
 						Some(Policy::Replace(replacement))=>{
 							modified=true;
