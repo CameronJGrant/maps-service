@@ -17,6 +17,8 @@ impl std::fmt::Display for StartupError{
 }
 impl std::error::Error for StartupError{}
 
+pub const GROUP_STRAFESNET:u64=6980477;
+
 #[tokio::main]
 async fn main()->Result<(),StartupError>{
 	// talk to roblox
@@ -30,7 +32,7 @@ async fn main()->Result<(),StartupError>{
 
 	// connect to nats
 	let (publish_new,publish_fix,validator)=tokio::try_join!(
-		publish_new::Publisher::new(nasty.clone(),cookie_context.clone()),
+		publish_new::Publisher::new(nasty.clone(),cookie_context.clone(),api.clone()),
 		publish_fix::Publisher::new(nasty.clone(),cookie_context.clone()),
 		// clone nats here because it's dropped within the function scope,
 		// meanining the last reference is dropped...

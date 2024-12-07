@@ -14,6 +14,7 @@ pub struct ValidateRequest{
 }
 
 // Create a new map
+#[derive(serde::Deserialize)]
 pub struct PublishNewRequest{
 	pub submission_id:i64,
 	pub model_id:u64,
@@ -23,6 +24,7 @@ pub struct PublishNewRequest{
 	//games:HashSet<GameID>,
 }
 
+#[derive(serde::Deserialize)]
 pub struct PublishFixRequest{
 	pub submission_id:i64,
 	pub model_id:u64,

@@ -64,6 +64,20 @@ pub struct Context{
 
 pub type ReqwestError=reqwest::Error;
 
+// there are lots of action endpoints and they all follow the same pattern
+macro_rules! action{
+	($fname:ident,$action:ident)=>{
+		pub async fn $fname(&self,config:SubmissionID)->Result<(),Error>{
+			let url_raw=format!(concat!("{}/submissions/{}/status/",stringify!($action)),self.base_url,config.0);
+			let url=reqwest::Url::parse(url_raw.as_str()).map_err(Error::ParseError)?;
+
+			self.patch(url).await.map_err(Error::Reqwest)?
+			.error_for_status().map_err(Error::Reqwest)?;
+
+			Ok(())
+		}
+	};
+}
 impl Context{
 	pub fn new(
 		base_url:String,
@@ -120,13 +134,6 @@ impl Context{
 
 		Ok(())
 	}
-	pub async fn action_submission_validate(&self,config:SubmissionID)->Result<(),Error>{
-		let url_raw=format!("{}/submissions/{}/status/validate",self.base_url,config.0);
-		let url=reqwest::Url::parse(url_raw.as_str()).map_err(Error::ParseError)?;
-
-		self.patch(url).await.map_err(Error::Reqwest)?
-		.error_for_status().map_err(Error::Reqwest)?;
-
-		Ok(())
-	}
+	action!(action_submission_validate,validate);
+	action!(action_submission_publish,publish);
 }
