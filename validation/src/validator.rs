@@ -122,7 +122,7 @@ impl Validator{
 				api::Policy::Delete=>Policy::Delete,
 				api::Policy::Replace=>{
 					let script=self.api.get_script(api::GetScriptRequest{
-						ScriptID:script_policy.ScriptID,
+						ScriptID:script_policy.ToScriptID,
 					}).await.map_err(ValidateError::ApiGetScript)?;
 					Policy::Replace(script.Source)
 				},

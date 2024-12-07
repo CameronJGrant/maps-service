@@ -43,8 +43,8 @@ pub struct ScriptPolicyHashRequest{
 #[derive(serde::Deserialize)]
 pub struct ScriptPolicyResponse{
 	pub ID:i64,
-	pub Hash:String,
-	pub ScriptID:ScriptID,
+	pub FromScriptHash:String,
+	pub ToScriptID:ScriptID,
 	pub Policy:Policy
 }
 
