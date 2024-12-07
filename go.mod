@@ -7,6 +7,7 @@ toolchain go1.23.3
 require (
 	git.itzana.me/strafesnet/go-grpc v0.0.0-20241129081229-9e166b3d11f7
 	git.itzana.me/strafesnet/utils v0.0.0-20220716194944-d8ca164052f9
+	github.com/dchest/siphash v1.2.3
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.1.0
 	github.com/ogen-go/ogen v1.2.1

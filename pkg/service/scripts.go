@@ -7,6 +7,7 @@ import (
 	"git.itzana.me/strafesnet/maps-service/pkg/api"
 	"git.itzana.me/strafesnet/maps-service/pkg/datastore"
 	"git.itzana.me/strafesnet/maps-service/pkg/model"
+	"github.com/dchest/siphash"
 )
 
 var (
@@ -29,7 +30,7 @@ func (svc *Service) CreateScript(ctx context.Context, req *api.ScriptCreate) (*a
 
 	script, err := svc.DB.Scripts().Create(ctx, model.Script{
 		ID:           0,
-		Hash:         0, // TODO
+		Hash:         siphash.Hash(0,0,[]byte(req.Source)),
 		Source:       req.Source,
 		SubmissionID: req.SubmissionID.Or(0),
 	})
@@ -101,8 +102,7 @@ func (svc *Service) UpdateScript(ctx context.Context, req *api.ScriptUpdate, par
 	pmap := datastore.Optional()
 	if source,ok:=req.Source.Get();ok{
 		pmap.Add("source",source)
-		panic("unimplemented")
-		pmap.Add("from_script_hash",0)
+		pmap.Add("hash",siphash.Hash(0,0,[]byte(source)))
 	}
 	if SubmissionID,ok:=req.SubmissionID.Get();ok{
 		pmap.Add("submission_id",SubmissionID)
