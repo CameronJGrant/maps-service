@@ -54,6 +54,8 @@ pub struct UpdateSubmissionModelRequest{
 	pub ModelVersion:u64,
 }
 
+pub struct SubmissionID(pub i64);
+
 #[derive(Clone)]
 pub struct Context{
 	base_url:String,
@@ -112,6 +114,15 @@ impl Context{
 				.append_pair("ModelID",config.ModelID.to_string().as_str())
 				.append_pair("ModelVersion",config.ModelVersion.to_string().as_str());
 		}
+
+		self.patch(url).await.map_err(Error::Reqwest)?
+		.error_for_status().map_err(Error::Reqwest)?;
+
+		Ok(())
+	}
+	pub async fn action_submission_validate(&self,config:SubmissionID)->Result<(),Error>{
+		let url_raw=format!("{}/submissions/{}/status/validate",self.base_url,config.0);
+		let url=reqwest::Url::parse(url_raw.as_str()).map_err(Error::ParseError)?;
 
 		self.patch(url).await.map_err(Error::Reqwest)?
 		.error_for_status().map_err(Error::Reqwest)?;
