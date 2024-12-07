@@ -7,7 +7,7 @@
 #[derive(serde::Deserialize)]
 pub struct ValidateRequest{
 	// submission_id is passed back in the response message
-	pub submission_id:u64,
+	pub submission_id:i64,
 	pub model_id:u64,
 	pub model_version:u64,
 	pub validated_model_id:Option<u64>,
@@ -15,7 +15,7 @@ pub struct ValidateRequest{
 
 // Create a new map
 pub struct PublishNewRequest{
-	pub submission_id:u64,
+	pub submission_id:i64,
 	pub model_id:u64,
 	pub model_version:u64,
 	pub creator:String,
@@ -24,7 +24,7 @@ pub struct PublishNewRequest{
 }
 
 pub struct PublishFixRequest{
-	pub submission_id:u64,
+	pub submission_id:i64,
 	pub model_id:u64,
 	pub model_version:u64,
 	pub target_asset_id:u64,
