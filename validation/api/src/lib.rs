@@ -1,15 +1,14 @@
 #[derive(Debug)]
-pub enum GetError{
+pub enum Error{
 	ParseError(url::ParseError),
 	Reqwest(reqwest::Error),
-	JSON(serde_json::Error),
 }
-impl std::fmt::Display for GetError{
+impl std::fmt::Display for Error{
 	fn fmt(&self,f:&mut std::fmt::Formatter<'_>)->std::fmt::Result{
 		write!(f,"{self:?}")
 	}
 }
-impl std::error::Error for GetError{}
+impl std::error::Error for Error{}
 
 #[derive(serde::Deserialize)]
 pub struct ScriptID(i64);
@@ -88,25 +87,25 @@ impl Context{
 		self.client.patch(url)
 		.send().await
 	}
-	pub async fn get_script(&self,config:GetScriptRequest)->Result<ScriptResponse,GetError>{
+	pub async fn get_script(&self,config:GetScriptRequest)->Result<ScriptResponse,Error>{
 		let url_raw=format!("{}/scripts/{}",self.base_url,config.ScriptID.0);
-		let url=reqwest::Url::parse(url_raw.as_str()).map_err(GetError::ParseError)?;
+		let url=reqwest::Url::parse(url_raw.as_str()).map_err(Error::ParseError)?;
 
-		self.get(url).await.map_err(GetError::Reqwest)?
-		.error_for_status().map_err(GetError::Reqwest)?
-		.json().await.map_err(GetError::Reqwest)
+		self.get(url).await.map_err(Error::Reqwest)?
+		.error_for_status().map_err(Error::Reqwest)?
+		.json().await.map_err(Error::Reqwest)
 	}
-	pub async fn get_script_policy_from_hash(&self,config:ScriptPolicyHashRequest)->Result<ScriptPolicyResponse,GetError>{
+	pub async fn get_script_policy_from_hash(&self,config:ScriptPolicyHashRequest)->Result<ScriptPolicyResponse,Error>{
 		let url_raw=format!("{}/script-policy/hash/{}",self.base_url,config.hash);
-		let url=reqwest::Url::parse(url_raw.as_str()).map_err(GetError::ParseError)?;
+		let url=reqwest::Url::parse(url_raw.as_str()).map_err(Error::ParseError)?;
 
-		self.get(url).await.map_err(GetError::Reqwest)?
-		.error_for_status().map_err(GetError::Reqwest)?
-		.json().await.map_err(GetError::Reqwest)
+		self.get(url).await.map_err(Error::Reqwest)?
+		.error_for_status().map_err(Error::Reqwest)?
+		.json().await.map_err(Error::Reqwest)
 	}
-	pub async fn update_submission_model(&self,config:UpdateSubmissionModelRequest)->Result<(),GetError>{
+	pub async fn update_submission_model(&self,config:UpdateSubmissionModelRequest)->Result<(),Error>{
 		let url_raw=format!("{}/submissions/{}/model",self.base_url,config.ID);
-		let mut url=reqwest::Url::parse(url_raw.as_str()).map_err(GetError::ParseError)?;
+		let mut url=reqwest::Url::parse(url_raw.as_str()).map_err(Error::ParseError)?;
 
 		{
 			url.query_pairs_mut()
@@ -114,8 +113,8 @@ impl Context{
 				.append_pair("ModelVersion",config.ModelVersion.to_string().as_str());
 		}
 
-		self.patch(url).await.map_err(GetError::Reqwest)?
-		.error_for_status().map_err(GetError::Reqwest)?;
+		self.patch(url).await.map_err(Error::Reqwest)?
+		.error_for_status().map_err(Error::Reqwest)?;
 
 		Ok(())
 	}
