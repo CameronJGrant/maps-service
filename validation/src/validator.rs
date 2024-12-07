@@ -186,7 +186,7 @@ impl Validator{
 			}).await.map_err(ValidateError::ApiUpdateSubmissionModel)?;
 		};
 
-		// update the submission model to display as validated
+		// update the submission model status to validated
 		self.api.action_submission_validate(
 			api::SubmissionID(validate_info.submission_id)
 		).await.map_err(ValidateError::ApiActionSubmissionValidate)?;
