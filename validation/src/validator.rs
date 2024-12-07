@@ -101,8 +101,8 @@ impl Validator{
 		}
 		// send all scripts to REST endpoint and receive the replacements
 		for (source,replacement) in &mut script_map{
-			let mut hasher=std::hash::SipHasher::new();
-			std::hash::Hash::hash(&source,&mut hasher);
+			let mut hasher=siphasher::sip::SipHasher::new();
+			std::hash::Hasher::write(&mut hasher,source.as_bytes());
 			let hash=std::hash::Hasher::finish(&hasher);
 			let script_policy=self.api.get_script_policy_from_hash(api::ScriptPolicyHashRequest{
 				hash:format!("{:x}",hash),
