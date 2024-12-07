@@ -10,9 +10,6 @@ import (
 	"github.com/dchest/siphash"
 )
 
-var (
-)
-
 // CreateScript implements createScript operation.
 //
 // Create a new script.

@@ -5,9 +5,6 @@ import (
 	"git.itzana.me/strafesnet/maps-service/pkg/api"
 )
 
-var (
-)
-
 // CreateScriptPolicy implements createScriptPolicy operation.
 //
 // Create a new script policy.
