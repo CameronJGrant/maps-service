@@ -35,6 +35,7 @@ type Scripts interface {
 
 type ScriptPolicy interface {
 	Get(ctx context.Context, id int64) (model.ScriptPolicy, error)
+	GetFromHash(ctx context.Context, hash uint64) (model.ScriptPolicy, error)
 	Create(ctx context.Context, smap model.ScriptPolicy) (model.ScriptPolicy, error)
 	Update(ctx context.Context, id int64, values OptionalMap) error
 	Delete(ctx context.Context, id int64) error

@@ -23,6 +23,16 @@ func (env *ScriptPolicy) Get(ctx context.Context, id int64) (model.ScriptPolicy,
 	return mdl, nil
 }
 
+func (env *ScriptPolicy) GetFromHash(ctx context.Context, hash uint64) (model.ScriptPolicy, error) {
+	var mdl model.ScriptPolicy
+	if err := env.db.Model(&model.ScriptPolicy{}).Where("hash = ?", hash).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return mdl, datastore.ErrNotExist
+		}
+	}
+	return mdl, nil
+}
+
 func (env *ScriptPolicy) Create(ctx context.Context, smap model.ScriptPolicy) (model.ScriptPolicy, error) {
 	if err := env.db.Create(&smap).Error; err != nil {
 		return smap, err
