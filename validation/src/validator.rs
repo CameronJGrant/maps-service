@@ -3,14 +3,6 @@ use crate::nats_types::ValidateRequest;
 
 const SCRIPT_CONCURRENCY:usize=16;
 
-enum Valid{
-	Untouched,
-	Modified{
-		model_id:u64,
-		model_version:u64,
-	},
-}
-
 enum Policy{
 	Allowed,
 	Blocked,
@@ -150,8 +142,8 @@ impl Validator{
 			}
 		}
 
-		// use a data structure to represent the validity
-		let valid=if modified{
+		// if the model was validated, the submission must be changed to use the modified model
+		if modified{
 			// serialize model (slow!)
 			let mut data=Vec::new();
 			rbx_binary::to_writer(&mut data,&dom,&[dom.root_ref()]).map_err(ValidateError::WriteDom)?;
@@ -186,27 +178,13 @@ impl Validator{
 				(response.AssetId,model_version)
 			};
 
-			// tell the submission validate request to change the model
-			Valid::Modified{
-				model_id,
-				model_version,
-			}
-		}else{
-			Valid::Untouched
+			// update the submission to use the validated model
+			self.api.update_submission_model(api::UpdateSubmissionModelRequest{
+				ID:validate_info.submission_id,
+				ModelID:model_id,
+				ModelVersion:model_version,
+			}).await.map_err(ValidateError::ApiUpdateSubmissionModel)?;
 		};
-
-		// update the submission model if it was modified
-		match valid{
-			Valid::Untouched=>(),
-			Valid::Modified{model_id,model_version}=>{
-				// update the submission to use the validated model
-				self.api.update_submission_model(api::UpdateSubmissionModelRequest{
-					ID:validate_info.submission_id,
-					ModelID:model_id,
-					ModelVersion:model_version,
-				}).await.map_err(ValidateError::ApiUpdateSubmissionModel)?;
-			},
-		}
 
 		// update the submission model to display as validated
 		self.api.action_submission_validate(
