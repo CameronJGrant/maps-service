@@ -20,7 +20,7 @@ impl Publisher{
 		roblox_cookie:rbx_asset::cookie::CookieContext,
 	)->Result<Self,async_nats::SubscribeError>{
 		Ok(Self{
-			subscriber:nats.subscribe("publish").await?,
+			subscriber:nats.subscribe("publish_fix").await?,
 			roblox_cookie,
 		})
 	}

@@ -1,6 +1,7 @@
 mod nats_types;
-mod publisher;
 mod validator;
+mod publish_new;
+mod publish_fix;
 
 #[allow(dead_code)]
 #[derive(Debug)]
@@ -28,15 +29,17 @@ async fn main()->Result<(),StartupError>{
 	let nasty=async_nats::connect("nats").await.map_err(StartupError::Connect)?;
 
 	// connect to nats
-	let (publisher,validator)=tokio::try_join!(
-		publisher::Publisher::new(nasty.clone(),cookie_context.clone()),
+	let (publish_new,publish_fix,validator)=tokio::try_join!(
+		publish_new::Publisher::new(nasty.clone(),cookie_context.clone()),
+		publish_fix::Publisher::new(nasty.clone(),cookie_context.clone()),
 		// clone nats here because it's dropped within the function scope,
 		// meanining the last reference is dropped...
 		validator::Validator::new(nasty.clone(),cookie_context,api)
 	).map_err(StartupError::Subscribe)?;
 
-	// publisher thread
-	tokio::spawn(publisher.run());
+	// publisher threads
+	tokio::spawn(publish_new.run());
+	tokio::spawn(publish_fix.run());
 
 	// run validator on the main thread indefinitely
 	validator.run().await;
