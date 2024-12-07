@@ -29,6 +29,7 @@ enum ValidateError{
 	ApiGetScriptPolicy(api::Error),
 	ApiGetScript(api::Error),
 	ApiUpdateSubmissionModel(api::Error),
+	ApiActionSubmissionValidate(api::Error),
 	WriteDom(rbx_binary::EncodeError),
 	Upload(rbx_asset::cookie::UploadError),
 	Create(rbx_asset::cookie::CreateError),
@@ -208,6 +209,10 @@ impl Validator{
 		}
 
 		// update the submission model to display as validated
+		self.api.action_submission_validate(
+			api::SubmissionID(validate_info.submission_id)
+		).await.map_err(ValidateError::ApiActionSubmissionValidate)?;
+
 		Ok(())
 	}
 }
