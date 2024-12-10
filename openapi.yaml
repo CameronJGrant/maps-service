@@ -78,12 +78,7 @@ paths:
       tags:
         - Submissions
       parameters:
-        - name: SubmissionID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/SubmissionID'
       responses:
         "200":
           description: Successful response
@@ -104,12 +99,7 @@ paths:
       tags:
         - Submissions
       parameters:
-        - name: SubmissionID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/SubmissionID'
         - name: ModelID
           in: query
           required: true
@@ -138,12 +128,7 @@ paths:
       tags:
         - Submissions
       parameters:
-        - name: SubmissionID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/SubmissionID'
       responses:
         "200":
           description: Successful response
@@ -160,12 +145,7 @@ paths:
       tags:
         - Submissions
       parameters:
-        - name: SubmissionID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/SubmissionID'
       responses:
         "200":
           description: Successful response
@@ -182,12 +162,7 @@ paths:
       tags:
         - Submissions
       parameters:
-        - name: SubmissionID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/SubmissionID'
       responses:
         "200":
           description: Successful response
@@ -204,12 +179,7 @@ paths:
       tags:
         - Submissions
       parameters:
-        - name: SubmissionID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/SubmissionID'
       responses:
         "200":
           description: Successful response
@@ -226,12 +196,7 @@ paths:
       tags:
         - Submissions
       parameters:
-        - name: SubmissionID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/SubmissionID'
       responses:
         "200":
           description: Successful response
@@ -248,12 +213,7 @@ paths:
       tags:
         - Submissions
       parameters:
-        - name: SubmissionID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/SubmissionID'
       responses:
         "200":
           description: Successful response
@@ -270,12 +230,7 @@ paths:
       tags:
         - Submissions
       parameters:
-        - name: SubmissionID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/SubmissionID'
       responses:
         "200":
           description: Successful response
@@ -292,12 +247,7 @@ paths:
       tags:
         - Submissions
       parameters:
-        - name: SubmissionID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/SubmissionID'
       responses:
         "200":
           description: Successful response
@@ -314,12 +264,7 @@ paths:
       tags:
         - Submissions
       parameters:
-        - name: SubmissionID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/SubmissionID'
       responses:
         "200":
           description: Successful response
@@ -388,12 +333,7 @@ paths:
       tags:
         - ScriptPolicy
       parameters:
-        - name: ScriptPolicyID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/ScriptPolicyID'
       responses:
         "200":
           description: Successful response
@@ -413,12 +353,7 @@ paths:
       tags:
         - ScriptPolicy
       parameters:
-        - name: ScriptPolicyID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/ScriptPolicyID'
       requestBody:
         required: true
         content:
@@ -440,12 +375,7 @@ paths:
       tags:
         - ScriptPolicy
       parameters:
-        - name: ScriptPolicyID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/ScriptPolicyID'
       responses:
         "200":
           description: Successful response
@@ -487,12 +417,7 @@ paths:
       tags:
         - Scripts
       parameters:
-        - name: ScriptID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/ScriptID'
       responses:
         "200":
           description: Successful response
@@ -512,12 +437,7 @@ paths:
       tags:
         - Scripts
       parameters:
-        - name: ScriptID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/ScriptID'
       requestBody:
         required: true
         content:
@@ -539,12 +459,7 @@ paths:
       tags:
         - Scripts
       parameters:
-        - name: ScriptID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/ScriptID'
       responses:
         "200":
           description: Successful response
@@ -560,6 +475,31 @@ components:
       type: apiKey
       in: cookie
       name: session_id
+  parameters:
+    SubmissionID:
+      name: SubmissionID
+      in: path
+      required: true
+      description: The unique identifier for a submission.
+      schema:
+        type: integer
+        format: int64
+    ScriptID:
+      name: ScriptID
+      in: path
+      required: true
+      description: The unique identifier for a script.
+      schema:
+        type: integer
+        format: int64
+    ScriptPolicyID:
+      name: ScriptPolicyID
+      in: path
+      required: true
+      description: The unique identifier for a script policy.
+      schema:
+        type: integer
+        format: int64
   schemas:
     Id:
       required:
