@@ -1,6 +1,15 @@
-# STRAFES.NET API
+# STRAFES.NET Map Submission System
 
-## How to Begin Development
+## Components
+- Submissions API (golang) `pkg/` `cmd/`
+- Website `/web/`
+- Script Validation (rust) `validation/`
+
+## How to Begin Development on Each Component
+
+### Submissions API
+
+Prerequisite: golang installed
 
 1. Run `go generate` to ensure the generated API is up-to-date. This project uses [ogen](https://github.com/ogen-go/ogen).
     ```bash
@@ -12,6 +21,21 @@
     ```
 
     By default, the project opens at `localhost:8080`.
+
+### Website
+
+Prerequisite: bun installed
+
+1. `cd web`
+2. `bun install`
+3. `bun run dev`
+
+### Script Validation
+
+Prerequisite: rust installed
+
+1. `cd validation`
+2. `cargo run --release`
 
 #### License
 
