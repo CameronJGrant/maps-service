@@ -12,49 +12,49 @@ type Handler interface {
 	//
 	// Role Validator changes status from Publishing -> Published.
 	//
-	// PATCH /submissions/{SubmissionID}/status/publish
+	// POST /submissions/{SubmissionID}/status/publish
 	ActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) error
 	// ActionSubmissionReject implements actionSubmissionReject operation.
 	//
 	// Role Reviewer changes status from Submitted -> Rejected.
 	//
-	// PATCH /submissions/{SubmissionID}/status/reject
+	// POST /submissions/{SubmissionID}/status/reject
 	ActionSubmissionReject(ctx context.Context, params ActionSubmissionRejectParams) error
 	// ActionSubmissionRequestChanges implements actionSubmissionRequestChanges operation.
 	//
 	// Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested.
 	//
-	// PATCH /submissions/{SubmissionID}/status/request-changes
+	// POST /submissions/{SubmissionID}/status/request-changes
 	ActionSubmissionRequestChanges(ctx context.Context, params ActionSubmissionRequestChangesParams) error
 	// ActionSubmissionRevoke implements actionSubmissionRevoke operation.
 	//
 	// Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction.
 	//
-	// PATCH /submissions/{SubmissionID}/status/revoke
+	// POST /submissions/{SubmissionID}/status/revoke
 	ActionSubmissionRevoke(ctx context.Context, params ActionSubmissionRevokeParams) error
 	// ActionSubmissionSubmit implements actionSubmissionSubmit operation.
 	//
 	// Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted.
 	//
-	// PATCH /submissions/{SubmissionID}/status/submit
+	// POST /submissions/{SubmissionID}/status/submit
 	ActionSubmissionSubmit(ctx context.Context, params ActionSubmissionSubmitParams) error
 	// ActionSubmissionTriggerPublish implements actionSubmissionTriggerPublish operation.
 	//
 	// Role Admin changes status from Validated -> Publishing.
 	//
-	// PATCH /submissions/{SubmissionID}/status/trigger-publish
+	// POST /submissions/{SubmissionID}/status/trigger-publish
 	ActionSubmissionTriggerPublish(ctx context.Context, params ActionSubmissionTriggerPublishParams) error
 	// ActionSubmissionTriggerValidate implements actionSubmissionTriggerValidate operation.
 	//
 	// Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating.
 	//
-	// PATCH /submissions/{SubmissionID}/status/trigger-validate
+	// POST /submissions/{SubmissionID}/status/trigger-validate
 	ActionSubmissionTriggerValidate(ctx context.Context, params ActionSubmissionTriggerValidateParams) error
 	// ActionSubmissionValidate implements actionSubmissionValidate operation.
 	//
 	// Role Validator changes status from Validating -> Validated.
 	//
-	// PATCH /submissions/{SubmissionID}/status/validate
+	// POST /submissions/{SubmissionID}/status/validate
 	ActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) error
 	// CreateScript implements createScript operation.
 	//
@@ -116,30 +116,30 @@ type Handler interface {
 	//
 	// GET /submissions
 	ListSubmissions(ctx context.Context, params ListSubmissionsParams) ([]Submission, error)
-	// PatchSubmissionCompleted implements patchSubmissionCompleted operation.
+	// SetSubmissionCompleted implements setSubmissionCompleted operation.
 	//
 	// Retrieve map with ID.
 	//
-	// PATCH /submissions/{SubmissionID}/completed
-	PatchSubmissionCompleted(ctx context.Context, params PatchSubmissionCompletedParams) error
-	// PatchSubmissionModel implements patchSubmissionModel operation.
-	//
-	// Update model following role restrictions.
-	//
-	// PATCH /submissions/{SubmissionID}/model
-	PatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) error
+	// POST /submissions/{SubmissionID}/completed
+	SetSubmissionCompleted(ctx context.Context, params SetSubmissionCompletedParams) error
 	// UpdateScript implements updateScript operation.
 	//
 	// Update the specified script by ID.
 	//
-	// PATCH /scripts/{ScriptID}
+	// POST /scripts/{ScriptID}
 	UpdateScript(ctx context.Context, req *ScriptUpdate, params UpdateScriptParams) error
 	// UpdateScriptPolicy implements updateScriptPolicy operation.
 	//
 	// Update the specified script policy by ID.
 	//
-	// PATCH /script-policy/id/{ScriptPolicyID}
+	// POST /script-policy/id/{ScriptPolicyID}
 	UpdateScriptPolicy(ctx context.Context, req *ScriptPolicyUpdate, params UpdateScriptPolicyParams) error
+	// UpdateSubmissionModel implements updateSubmissionModel operation.
+	//
+	// Update model following role restrictions.
+	//
+	// POST /submissions/{SubmissionID}/model
+	UpdateSubmissionModel(ctx context.Context, params UpdateSubmissionModelParams) error
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

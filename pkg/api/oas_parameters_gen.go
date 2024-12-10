@@ -17,6 +17,7 @@ import (
 
 // ActionSubmissionPublishParams is parameters of actionSubmissionPublish operation.
 type ActionSubmissionPublishParams struct {
+	// The unique identifier for a submission.
 	SubmissionID int64
 }
 
@@ -82,6 +83,7 @@ func decodeActionSubmissionPublishParams(args [1]string, argsEscaped bool, r *ht
 
 // ActionSubmissionRejectParams is parameters of actionSubmissionReject operation.
 type ActionSubmissionRejectParams struct {
+	// The unique identifier for a submission.
 	SubmissionID int64
 }
 
@@ -147,6 +149,7 @@ func decodeActionSubmissionRejectParams(args [1]string, argsEscaped bool, r *htt
 
 // ActionSubmissionRequestChangesParams is parameters of actionSubmissionRequestChanges operation.
 type ActionSubmissionRequestChangesParams struct {
+	// The unique identifier for a submission.
 	SubmissionID int64
 }
 
@@ -212,6 +215,7 @@ func decodeActionSubmissionRequestChangesParams(args [1]string, argsEscaped bool
 
 // ActionSubmissionRevokeParams is parameters of actionSubmissionRevoke operation.
 type ActionSubmissionRevokeParams struct {
+	// The unique identifier for a submission.
 	SubmissionID int64
 }
 
@@ -277,6 +281,7 @@ func decodeActionSubmissionRevokeParams(args [1]string, argsEscaped bool, r *htt
 
 // ActionSubmissionSubmitParams is parameters of actionSubmissionSubmit operation.
 type ActionSubmissionSubmitParams struct {
+	// The unique identifier for a submission.
 	SubmissionID int64
 }
 
@@ -342,6 +347,7 @@ func decodeActionSubmissionSubmitParams(args [1]string, argsEscaped bool, r *htt
 
 // ActionSubmissionTriggerPublishParams is parameters of actionSubmissionTriggerPublish operation.
 type ActionSubmissionTriggerPublishParams struct {
+	// The unique identifier for a submission.
 	SubmissionID int64
 }
 
@@ -407,6 +413,7 @@ func decodeActionSubmissionTriggerPublishParams(args [1]string, argsEscaped bool
 
 // ActionSubmissionTriggerValidateParams is parameters of actionSubmissionTriggerValidate operation.
 type ActionSubmissionTriggerValidateParams struct {
+	// The unique identifier for a submission.
 	SubmissionID int64
 }
 
@@ -472,6 +479,7 @@ func decodeActionSubmissionTriggerValidateParams(args [1]string, argsEscaped boo
 
 // ActionSubmissionValidateParams is parameters of actionSubmissionValidate operation.
 type ActionSubmissionValidateParams struct {
+	// The unique identifier for a submission.
 	SubmissionID int64
 }
 
@@ -537,6 +545,7 @@ func decodeActionSubmissionValidateParams(args [1]string, argsEscaped bool, r *h
 
 // DeleteScriptParams is parameters of deleteScript operation.
 type DeleteScriptParams struct {
+	// The unique identifier for a script.
 	ScriptID int64
 }
 
@@ -602,6 +611,7 @@ func decodeDeleteScriptParams(args [1]string, argsEscaped bool, r *http.Request)
 
 // DeleteScriptPolicyParams is parameters of deleteScriptPolicy operation.
 type DeleteScriptPolicyParams struct {
+	// The unique identifier for a script policy.
 	ScriptPolicyID int64
 }
 
@@ -667,6 +677,7 @@ func decodeDeleteScriptPolicyParams(args [1]string, argsEscaped bool, r *http.Re
 
 // GetScriptParams is parameters of getScript operation.
 type GetScriptParams struct {
+	// The unique identifier for a script.
 	ScriptID int64
 }
 
@@ -732,6 +743,7 @@ func decodeGetScriptParams(args [1]string, argsEscaped bool, r *http.Request) (p
 
 // GetScriptPolicyParams is parameters of getScriptPolicy operation.
 type GetScriptPolicyParams struct {
+	// The unique identifier for a script policy.
 	ScriptPolicyID int64
 }
 
@@ -846,6 +858,22 @@ func decodeGetScriptPolicyFromHashParams(args [1]string, argsEscaped bool, r *ht
 			}(); err != nil {
 				return err
 			}
+			if err := func() error {
+				if err := (validate.String{
+					MinLength:    16,
+					MinLengthSet: true,
+					MaxLength:    16,
+					MaxLengthSet: true,
+					Email:        false,
+					Hostname:     false,
+					Regex:        nil,
+				}).Validate(string(params.FromScriptHash)); err != nil {
+					return errors.Wrap(err, "string")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
 		} else {
 			return validate.ErrFieldRequired
 		}
@@ -862,6 +890,7 @@ func decodeGetScriptPolicyFromHashParams(args [1]string, argsEscaped bool, r *ht
 
 // GetSubmissionParams is parameters of getSubmission operation.
 type GetSubmissionParams struct {
+	// The unique identifier for a submission.
 	SubmissionID int64
 }
 
@@ -1009,6 +1038,21 @@ func decodeListSubmissionsParams(args [0]string, argsEscaped bool, r *http.Reque
 			}); err != nil {
 				return err
 			}
+			if err := func() error {
+				if value, ok := params.Filter.Get(); ok {
+					if err := func() error {
+						if err := value.Validate(); err != nil {
+							return err
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
 		}
 		return nil
 	}(); err != nil {
@@ -1021,12 +1065,13 @@ func decodeListSubmissionsParams(args [0]string, argsEscaped bool, r *http.Reque
 	return params, nil
 }
 
-// PatchSubmissionCompletedParams is parameters of patchSubmissionCompleted operation.
-type PatchSubmissionCompletedParams struct {
+// SetSubmissionCompletedParams is parameters of setSubmissionCompleted operation.
+type SetSubmissionCompletedParams struct {
+	// The unique identifier for a submission.
 	SubmissionID int64
 }
 
-func unpackPatchSubmissionCompletedParams(packed middleware.Parameters) (params PatchSubmissionCompletedParams) {
+func unpackSetSubmissionCompletedParams(packed middleware.Parameters) (params SetSubmissionCompletedParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "SubmissionID",
@@ -1037,7 +1082,7 @@ func unpackPatchSubmissionCompletedParams(packed middleware.Parameters) (params 
 	return params
 }
 
-func decodePatchSubmissionCompletedParams(args [1]string, argsEscaped bool, r *http.Request) (params PatchSubmissionCompletedParams, _ error) {
+func decodeSetSubmissionCompletedParams(args [1]string, argsEscaped bool, r *http.Request) (params SetSubmissionCompletedParams, _ error) {
 	// Decode path: SubmissionID.
 	if err := func() error {
 		param := args[0]
@@ -1086,14 +1131,147 @@ func decodePatchSubmissionCompletedParams(args [1]string, argsEscaped bool, r *h
 	return params, nil
 }
 
-// PatchSubmissionModelParams is parameters of patchSubmissionModel operation.
-type PatchSubmissionModelParams struct {
+// UpdateScriptParams is parameters of updateScript operation.
+type UpdateScriptParams struct {
+	// The unique identifier for a script.
+	ScriptID int64
+}
+
+func unpackUpdateScriptParams(packed middleware.Parameters) (params UpdateScriptParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "ScriptID",
+			In:   "path",
+		}
+		params.ScriptID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeUpdateScriptParams(args [1]string, argsEscaped bool, r *http.Request) (params UpdateScriptParams, _ error) {
+	// Decode path: ScriptID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "ScriptID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.ScriptID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "ScriptID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// UpdateScriptPolicyParams is parameters of updateScriptPolicy operation.
+type UpdateScriptPolicyParams struct {
+	// The unique identifier for a script policy.
+	ScriptPolicyID int64
+}
+
+func unpackUpdateScriptPolicyParams(packed middleware.Parameters) (params UpdateScriptPolicyParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "ScriptPolicyID",
+			In:   "path",
+		}
+		params.ScriptPolicyID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeUpdateScriptPolicyParams(args [1]string, argsEscaped bool, r *http.Request) (params UpdateScriptPolicyParams, _ error) {
+	// Decode path: ScriptPolicyID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "ScriptPolicyID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.ScriptPolicyID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "ScriptPolicyID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// UpdateSubmissionModelParams is parameters of updateSubmissionModel operation.
+type UpdateSubmissionModelParams struct {
+	// The unique identifier for a submission.
 	SubmissionID int64
 	ModelID      int64
 	VersionID    int64
 }
 
-func unpackPatchSubmissionModelParams(packed middleware.Parameters) (params PatchSubmissionModelParams) {
+func unpackUpdateSubmissionModelParams(packed middleware.Parameters) (params UpdateSubmissionModelParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "SubmissionID",
@@ -1118,7 +1296,7 @@ func unpackPatchSubmissionModelParams(packed middleware.Parameters) (params Patc
 	return params
 }
 
-func decodePatchSubmissionModelParams(args [1]string, argsEscaped bool, r *http.Request) (params PatchSubmissionModelParams, _ error) {
+func decodeUpdateSubmissionModelParams(args [1]string, argsEscaped bool, r *http.Request) (params UpdateSubmissionModelParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: SubmissionID.
 	if err := func() error {
@@ -1234,136 +1412,6 @@ func decodePatchSubmissionModelParams(args [1]string, argsEscaped bool, r *http.
 		return params, &ogenerrors.DecodeParamError{
 			Name: "VersionID",
 			In:   "query",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// UpdateScriptParams is parameters of updateScript operation.
-type UpdateScriptParams struct {
-	ScriptID int64
-}
-
-func unpackUpdateScriptParams(packed middleware.Parameters) (params UpdateScriptParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "ScriptID",
-			In:   "path",
-		}
-		params.ScriptID = packed[key].(int64)
-	}
-	return params
-}
-
-func decodeUpdateScriptParams(args [1]string, argsEscaped bool, r *http.Request) (params UpdateScriptParams, _ error) {
-	// Decode path: ScriptID.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "ScriptID",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToInt64(val)
-				if err != nil {
-					return err
-				}
-
-				params.ScriptID = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "ScriptID",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// UpdateScriptPolicyParams is parameters of updateScriptPolicy operation.
-type UpdateScriptPolicyParams struct {
-	ScriptPolicyID int64
-}
-
-func unpackUpdateScriptPolicyParams(packed middleware.Parameters) (params UpdateScriptPolicyParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "ScriptPolicyID",
-			In:   "path",
-		}
-		params.ScriptPolicyID = packed[key].(int64)
-	}
-	return params
-}
-
-func decodeUpdateScriptPolicyParams(args [1]string, argsEscaped bool, r *http.Request) (params UpdateScriptPolicyParams, _ error) {
-	// Decode path: ScriptPolicyID.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "ScriptPolicyID",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToInt64(val)
-				if err != nil {
-					return err
-				}
-
-				params.ScriptPolicyID = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "ScriptPolicyID",
-			In:   "path",
 			Err:  err,
 		}
 	}

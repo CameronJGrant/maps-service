@@ -28,49 +28,49 @@ type Invoker interface {
 	//
 	// Role Validator changes status from Publishing -> Published.
 	//
-	// PATCH /submissions/{SubmissionID}/status/publish
+	// POST /submissions/{SubmissionID}/status/publish
 	ActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) error
 	// ActionSubmissionReject invokes actionSubmissionReject operation.
 	//
 	// Role Reviewer changes status from Submitted -> Rejected.
 	//
-	// PATCH /submissions/{SubmissionID}/status/reject
+	// POST /submissions/{SubmissionID}/status/reject
 	ActionSubmissionReject(ctx context.Context, params ActionSubmissionRejectParams) error
 	// ActionSubmissionRequestChanges invokes actionSubmissionRequestChanges operation.
 	//
 	// Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested.
 	//
-	// PATCH /submissions/{SubmissionID}/status/request-changes
+	// POST /submissions/{SubmissionID}/status/request-changes
 	ActionSubmissionRequestChanges(ctx context.Context, params ActionSubmissionRequestChangesParams) error
 	// ActionSubmissionRevoke invokes actionSubmissionRevoke operation.
 	//
 	// Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction.
 	//
-	// PATCH /submissions/{SubmissionID}/status/revoke
+	// POST /submissions/{SubmissionID}/status/revoke
 	ActionSubmissionRevoke(ctx context.Context, params ActionSubmissionRevokeParams) error
 	// ActionSubmissionSubmit invokes actionSubmissionSubmit operation.
 	//
 	// Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted.
 	//
-	// PATCH /submissions/{SubmissionID}/status/submit
+	// POST /submissions/{SubmissionID}/status/submit
 	ActionSubmissionSubmit(ctx context.Context, params ActionSubmissionSubmitParams) error
 	// ActionSubmissionTriggerPublish invokes actionSubmissionTriggerPublish operation.
 	//
 	// Role Admin changes status from Validated -> Publishing.
 	//
-	// PATCH /submissions/{SubmissionID}/status/trigger-publish
+	// POST /submissions/{SubmissionID}/status/trigger-publish
 	ActionSubmissionTriggerPublish(ctx context.Context, params ActionSubmissionTriggerPublishParams) error
 	// ActionSubmissionTriggerValidate invokes actionSubmissionTriggerValidate operation.
 	//
 	// Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating.
 	//
-	// PATCH /submissions/{SubmissionID}/status/trigger-validate
+	// POST /submissions/{SubmissionID}/status/trigger-validate
 	ActionSubmissionTriggerValidate(ctx context.Context, params ActionSubmissionTriggerValidateParams) error
 	// ActionSubmissionValidate invokes actionSubmissionValidate operation.
 	//
 	// Role Validator changes status from Validating -> Validated.
 	//
-	// PATCH /submissions/{SubmissionID}/status/validate
+	// POST /submissions/{SubmissionID}/status/validate
 	ActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) error
 	// CreateScript invokes createScript operation.
 	//
@@ -132,30 +132,30 @@ type Invoker interface {
 	//
 	// GET /submissions
 	ListSubmissions(ctx context.Context, params ListSubmissionsParams) ([]Submission, error)
-	// PatchSubmissionCompleted invokes patchSubmissionCompleted operation.
+	// SetSubmissionCompleted invokes setSubmissionCompleted operation.
 	//
 	// Retrieve map with ID.
 	//
-	// PATCH /submissions/{SubmissionID}/completed
-	PatchSubmissionCompleted(ctx context.Context, params PatchSubmissionCompletedParams) error
-	// PatchSubmissionModel invokes patchSubmissionModel operation.
-	//
-	// Update model following role restrictions.
-	//
-	// PATCH /submissions/{SubmissionID}/model
-	PatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) error
+	// POST /submissions/{SubmissionID}/completed
+	SetSubmissionCompleted(ctx context.Context, params SetSubmissionCompletedParams) error
 	// UpdateScript invokes updateScript operation.
 	//
 	// Update the specified script by ID.
 	//
-	// PATCH /scripts/{ScriptID}
+	// POST /scripts/{ScriptID}
 	UpdateScript(ctx context.Context, request *ScriptUpdate, params UpdateScriptParams) error
 	// UpdateScriptPolicy invokes updateScriptPolicy operation.
 	//
 	// Update the specified script policy by ID.
 	//
-	// PATCH /script-policy/id/{ScriptPolicyID}
+	// POST /script-policy/id/{ScriptPolicyID}
 	UpdateScriptPolicy(ctx context.Context, request *ScriptPolicyUpdate, params UpdateScriptPolicyParams) error
+	// UpdateSubmissionModel invokes updateSubmissionModel operation.
+	//
+	// Update model following role restrictions.
+	//
+	// POST /submissions/{SubmissionID}/model
+	UpdateSubmissionModel(ctx context.Context, params UpdateSubmissionModelParams) error
 }
 
 // Client implements OAS client.
@@ -216,7 +216,7 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 //
 // Role Validator changes status from Publishing -> Published.
 //
-// PATCH /submissions/{SubmissionID}/status/publish
+// POST /submissions/{SubmissionID}/status/publish
 func (c *Client) ActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) error {
 	_, err := c.sendActionSubmissionPublish(ctx, params)
 	return err
@@ -225,7 +225,7 @@ func (c *Client) ActionSubmissionPublish(ctx context.Context, params ActionSubmi
 func (c *Client) sendActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) (res *ActionSubmissionPublishOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionPublish"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/publish"),
 	}
 
@@ -282,7 +282,7 @@ func (c *Client) sendActionSubmissionPublish(ctx context.Context, params ActionS
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -340,7 +340,7 @@ func (c *Client) sendActionSubmissionPublish(ctx context.Context, params ActionS
 //
 // Role Reviewer changes status from Submitted -> Rejected.
 //
-// PATCH /submissions/{SubmissionID}/status/reject
+// POST /submissions/{SubmissionID}/status/reject
 func (c *Client) ActionSubmissionReject(ctx context.Context, params ActionSubmissionRejectParams) error {
 	_, err := c.sendActionSubmissionReject(ctx, params)
 	return err
@@ -349,7 +349,7 @@ func (c *Client) ActionSubmissionReject(ctx context.Context, params ActionSubmis
 func (c *Client) sendActionSubmissionReject(ctx context.Context, params ActionSubmissionRejectParams) (res *ActionSubmissionRejectOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionReject"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/reject"),
 	}
 
@@ -406,7 +406,7 @@ func (c *Client) sendActionSubmissionReject(ctx context.Context, params ActionSu
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -464,7 +464,7 @@ func (c *Client) sendActionSubmissionReject(ctx context.Context, params ActionSu
 //
 // Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested.
 //
-// PATCH /submissions/{SubmissionID}/status/request-changes
+// POST /submissions/{SubmissionID}/status/request-changes
 func (c *Client) ActionSubmissionRequestChanges(ctx context.Context, params ActionSubmissionRequestChangesParams) error {
 	_, err := c.sendActionSubmissionRequestChanges(ctx, params)
 	return err
@@ -473,7 +473,7 @@ func (c *Client) ActionSubmissionRequestChanges(ctx context.Context, params Acti
 func (c *Client) sendActionSubmissionRequestChanges(ctx context.Context, params ActionSubmissionRequestChangesParams) (res *ActionSubmissionRequestChangesOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionRequestChanges"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/request-changes"),
 	}
 
@@ -530,7 +530,7 @@ func (c *Client) sendActionSubmissionRequestChanges(ctx context.Context, params 
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -588,7 +588,7 @@ func (c *Client) sendActionSubmissionRequestChanges(ctx context.Context, params 
 //
 // Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction.
 //
-// PATCH /submissions/{SubmissionID}/status/revoke
+// POST /submissions/{SubmissionID}/status/revoke
 func (c *Client) ActionSubmissionRevoke(ctx context.Context, params ActionSubmissionRevokeParams) error {
 	_, err := c.sendActionSubmissionRevoke(ctx, params)
 	return err
@@ -597,7 +597,7 @@ func (c *Client) ActionSubmissionRevoke(ctx context.Context, params ActionSubmis
 func (c *Client) sendActionSubmissionRevoke(ctx context.Context, params ActionSubmissionRevokeParams) (res *ActionSubmissionRevokeOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionRevoke"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/revoke"),
 	}
 
@@ -654,7 +654,7 @@ func (c *Client) sendActionSubmissionRevoke(ctx context.Context, params ActionSu
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -712,7 +712,7 @@ func (c *Client) sendActionSubmissionRevoke(ctx context.Context, params ActionSu
 //
 // Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted.
 //
-// PATCH /submissions/{SubmissionID}/status/submit
+// POST /submissions/{SubmissionID}/status/submit
 func (c *Client) ActionSubmissionSubmit(ctx context.Context, params ActionSubmissionSubmitParams) error {
 	_, err := c.sendActionSubmissionSubmit(ctx, params)
 	return err
@@ -721,7 +721,7 @@ func (c *Client) ActionSubmissionSubmit(ctx context.Context, params ActionSubmis
 func (c *Client) sendActionSubmissionSubmit(ctx context.Context, params ActionSubmissionSubmitParams) (res *ActionSubmissionSubmitOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionSubmit"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/submit"),
 	}
 
@@ -778,7 +778,7 @@ func (c *Client) sendActionSubmissionSubmit(ctx context.Context, params ActionSu
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -836,7 +836,7 @@ func (c *Client) sendActionSubmissionSubmit(ctx context.Context, params ActionSu
 //
 // Role Admin changes status from Validated -> Publishing.
 //
-// PATCH /submissions/{SubmissionID}/status/trigger-publish
+// POST /submissions/{SubmissionID}/status/trigger-publish
 func (c *Client) ActionSubmissionTriggerPublish(ctx context.Context, params ActionSubmissionTriggerPublishParams) error {
 	_, err := c.sendActionSubmissionTriggerPublish(ctx, params)
 	return err
@@ -845,7 +845,7 @@ func (c *Client) ActionSubmissionTriggerPublish(ctx context.Context, params Acti
 func (c *Client) sendActionSubmissionTriggerPublish(ctx context.Context, params ActionSubmissionTriggerPublishParams) (res *ActionSubmissionTriggerPublishOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionTriggerPublish"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/trigger-publish"),
 	}
 
@@ -902,7 +902,7 @@ func (c *Client) sendActionSubmissionTriggerPublish(ctx context.Context, params 
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -960,7 +960,7 @@ func (c *Client) sendActionSubmissionTriggerPublish(ctx context.Context, params 
 //
 // Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating.
 //
-// PATCH /submissions/{SubmissionID}/status/trigger-validate
+// POST /submissions/{SubmissionID}/status/trigger-validate
 func (c *Client) ActionSubmissionTriggerValidate(ctx context.Context, params ActionSubmissionTriggerValidateParams) error {
 	_, err := c.sendActionSubmissionTriggerValidate(ctx, params)
 	return err
@@ -969,7 +969,7 @@ func (c *Client) ActionSubmissionTriggerValidate(ctx context.Context, params Act
 func (c *Client) sendActionSubmissionTriggerValidate(ctx context.Context, params ActionSubmissionTriggerValidateParams) (res *ActionSubmissionTriggerValidateOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionTriggerValidate"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/trigger-validate"),
 	}
 
@@ -1026,7 +1026,7 @@ func (c *Client) sendActionSubmissionTriggerValidate(ctx context.Context, params
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -1084,7 +1084,7 @@ func (c *Client) sendActionSubmissionTriggerValidate(ctx context.Context, params
 //
 // Role Validator changes status from Validating -> Validated.
 //
-// PATCH /submissions/{SubmissionID}/status/validate
+// POST /submissions/{SubmissionID}/status/validate
 func (c *Client) ActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) error {
 	_, err := c.sendActionSubmissionValidate(ctx, params)
 	return err
@@ -1093,7 +1093,7 @@ func (c *Client) ActionSubmissionValidate(ctx context.Context, params ActionSubm
 func (c *Client) sendActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) (res *ActionSubmissionValidateOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionValidate"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/validate"),
 	}
 
@@ -1150,7 +1150,7 @@ func (c *Client) sendActionSubmissionValidate(ctx context.Context, params Action
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2406,20 +2406,20 @@ func (c *Client) sendListSubmissions(ctx context.Context, params ListSubmissions
 	return result, nil
 }
 
-// PatchSubmissionCompleted invokes patchSubmissionCompleted operation.
+// SetSubmissionCompleted invokes setSubmissionCompleted operation.
 //
 // Retrieve map with ID.
 //
-// PATCH /submissions/{SubmissionID}/completed
-func (c *Client) PatchSubmissionCompleted(ctx context.Context, params PatchSubmissionCompletedParams) error {
-	_, err := c.sendPatchSubmissionCompleted(ctx, params)
+// POST /submissions/{SubmissionID}/completed
+func (c *Client) SetSubmissionCompleted(ctx context.Context, params SetSubmissionCompletedParams) error {
+	_, err := c.sendSetSubmissionCompleted(ctx, params)
 	return err
 }
 
-func (c *Client) sendPatchSubmissionCompleted(ctx context.Context, params PatchSubmissionCompletedParams) (res *PatchSubmissionCompletedOK, err error) {
+func (c *Client) sendSetSubmissionCompleted(ctx context.Context, params SetSubmissionCompletedParams) (res *SetSubmissionCompletedOK, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("patchSubmissionCompleted"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		otelogen.OperationID("setSubmissionCompleted"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/completed"),
 	}
 
@@ -2435,7 +2435,7 @@ func (c *Client) sendPatchSubmissionCompleted(ctx context.Context, params PatchS
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, PatchSubmissionCompletedOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, SetSubmissionCompletedOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2476,7 +2476,7 @@ func (c *Client) sendPatchSubmissionCompleted(ctx context.Context, params PatchS
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2486,7 +2486,7 @@ func (c *Client) sendPatchSubmissionCompleted(ctx context.Context, params PatchS
 		var satisfied bitset
 		{
 			stage = "Security:CookieAuth"
-			switch err := c.securityCookieAuth(ctx, PatchSubmissionCompletedOperation, r); {
+			switch err := c.securityCookieAuth(ctx, SetSubmissionCompletedOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -2522,7 +2522,7 @@ func (c *Client) sendPatchSubmissionCompleted(ctx context.Context, params PatchS
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodePatchSubmissionCompletedResponse(resp)
+	result, err := decodeSetSubmissionCompletedResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -2530,20 +2530,272 @@ func (c *Client) sendPatchSubmissionCompleted(ctx context.Context, params PatchS
 	return result, nil
 }
 
-// PatchSubmissionModel invokes patchSubmissionModel operation.
+// UpdateScript invokes updateScript operation.
 //
-// Update model following role restrictions.
+// Update the specified script by ID.
 //
-// PATCH /submissions/{SubmissionID}/model
-func (c *Client) PatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) error {
-	_, err := c.sendPatchSubmissionModel(ctx, params)
+// POST /scripts/{ScriptID}
+func (c *Client) UpdateScript(ctx context.Context, request *ScriptUpdate, params UpdateScriptParams) error {
+	_, err := c.sendUpdateScript(ctx, request, params)
 	return err
 }
 
-func (c *Client) sendPatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) (res *PatchSubmissionModelOK, err error) {
+func (c *Client) sendUpdateScript(ctx context.Context, request *ScriptUpdate, params UpdateScriptParams) (res *UpdateScriptOK, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("patchSubmissionModel"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		otelogen.OperationID("updateScript"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/scripts/{ScriptID}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, UpdateScriptOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/scripts/"
+	{
+		// Encode "ScriptID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "ScriptID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.Int64ToString(params.ScriptID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeUpdateScriptRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:CookieAuth"
+			switch err := c.securityCookieAuth(ctx, UpdateScriptOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"CookieAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeUpdateScriptResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// UpdateScriptPolicy invokes updateScriptPolicy operation.
+//
+// Update the specified script policy by ID.
+//
+// POST /script-policy/id/{ScriptPolicyID}
+func (c *Client) UpdateScriptPolicy(ctx context.Context, request *ScriptPolicyUpdate, params UpdateScriptPolicyParams) error {
+	_, err := c.sendUpdateScriptPolicy(ctx, request, params)
+	return err
+}
+
+func (c *Client) sendUpdateScriptPolicy(ctx context.Context, request *ScriptPolicyUpdate, params UpdateScriptPolicyParams) (res *UpdateScriptPolicyOK, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("updateScriptPolicy"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/script-policy/id/{ScriptPolicyID}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, UpdateScriptPolicyOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/script-policy/id/"
+	{
+		// Encode "ScriptPolicyID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "ScriptPolicyID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.Int64ToString(params.ScriptPolicyID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeUpdateScriptPolicyRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:CookieAuth"
+			switch err := c.securityCookieAuth(ctx, UpdateScriptPolicyOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"CookieAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeUpdateScriptPolicyResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// UpdateSubmissionModel invokes updateSubmissionModel operation.
+//
+// Update model following role restrictions.
+//
+// POST /submissions/{SubmissionID}/model
+func (c *Client) UpdateSubmissionModel(ctx context.Context, params UpdateSubmissionModelParams) error {
+	_, err := c.sendUpdateSubmissionModel(ctx, params)
+	return err
+}
+
+func (c *Client) sendUpdateSubmissionModel(ctx context.Context, params UpdateSubmissionModelParams) (res *UpdateSubmissionModelOK, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("updateSubmissionModel"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/model"),
 	}
 
@@ -2559,7 +2811,7 @@ func (c *Client) sendPatchSubmissionModel(ctx context.Context, params PatchSubmi
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, PatchSubmissionModelOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, UpdateSubmissionModelOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2632,7 +2884,7 @@ func (c *Client) sendPatchSubmissionModel(ctx context.Context, params PatchSubmi
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2642,7 +2894,7 @@ func (c *Client) sendPatchSubmissionModel(ctx context.Context, params PatchSubmi
 		var satisfied bitset
 		{
 			stage = "Security:CookieAuth"
-			switch err := c.securityCookieAuth(ctx, PatchSubmissionModelOperation, r); {
+			switch err := c.securityCookieAuth(ctx, UpdateSubmissionModelOperation, r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -2678,259 +2930,7 @@ func (c *Client) sendPatchSubmissionModel(ctx context.Context, params PatchSubmi
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodePatchSubmissionModelResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// UpdateScript invokes updateScript operation.
-//
-// Update the specified script by ID.
-//
-// PATCH /scripts/{ScriptID}
-func (c *Client) UpdateScript(ctx context.Context, request *ScriptUpdate, params UpdateScriptParams) error {
-	_, err := c.sendUpdateScript(ctx, request, params)
-	return err
-}
-
-func (c *Client) sendUpdateScript(ctx context.Context, request *ScriptUpdate, params UpdateScriptParams) (res *UpdateScriptOK, err error) {
-	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("updateScript"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
-		semconv.HTTPRouteKey.String("/scripts/{ScriptID}"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, UpdateScriptOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [2]string
-	pathParts[0] = "/scripts/"
-	{
-		// Encode "ScriptID" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "ScriptID",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.Int64ToString(params.ScriptID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeUpdateScriptRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:CookieAuth"
-			switch err := c.securityCookieAuth(ctx, UpdateScriptOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"CookieAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeUpdateScriptResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// UpdateScriptPolicy invokes updateScriptPolicy operation.
-//
-// Update the specified script policy by ID.
-//
-// PATCH /script-policy/id/{ScriptPolicyID}
-func (c *Client) UpdateScriptPolicy(ctx context.Context, request *ScriptPolicyUpdate, params UpdateScriptPolicyParams) error {
-	_, err := c.sendUpdateScriptPolicy(ctx, request, params)
-	return err
-}
-
-func (c *Client) sendUpdateScriptPolicy(ctx context.Context, request *ScriptPolicyUpdate, params UpdateScriptPolicyParams) (res *UpdateScriptPolicyOK, err error) {
-	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("updateScriptPolicy"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
-		semconv.HTTPRouteKey.String("/script-policy/id/{ScriptPolicyID}"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, UpdateScriptPolicyOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [2]string
-	pathParts[0] = "/script-policy/id/"
-	{
-		// Encode "ScriptPolicyID" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "ScriptPolicyID",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.Int64ToString(params.ScriptPolicyID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeUpdateScriptPolicyRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:CookieAuth"
-			switch err := c.securityCookieAuth(ctx, UpdateScriptPolicyOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"CookieAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeUpdateScriptPolicyResponse(resp)
+	result, err := decodeUpdateSubmissionModelResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

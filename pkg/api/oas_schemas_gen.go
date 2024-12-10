@@ -332,12 +332,6 @@ func (s *Pagination) SetLimit(val int32) {
 	s.Limit = val
 }
 
-// PatchSubmissionCompletedOK is response for PatchSubmissionCompleted operation.
-type PatchSubmissionCompletedOK struct{}
-
-// PatchSubmissionModelOK is response for PatchSubmissionModel operation.
-type PatchSubmissionModelOK struct{}
-
 // Ref: #/components/schemas/Script
 type Script struct {
 	ID           int64  `json:"ID"`
@@ -581,6 +575,9 @@ func (s *ScriptUpdate) SetSource(val OptString) {
 func (s *ScriptUpdate) SetSubmissionID(val OptInt64) {
 	s.SubmissionID = val
 }
+
+// SetSubmissionCompletedOK is response for SetSubmissionCompleted operation.
+type SetSubmissionCompletedOK struct{}
 
 // Ref: #/components/schemas/Submission
 type Submission struct {
@@ -852,3 +849,6 @@ type UpdateScriptOK struct{}
 
 // UpdateScriptPolicyOK is response for UpdateScriptPolicy operation.
 type UpdateScriptPolicyOK struct{}
+
+// UpdateSubmissionModelOK is response for UpdateSubmissionModel operation.
+type UpdateSubmissionModelOK struct{}

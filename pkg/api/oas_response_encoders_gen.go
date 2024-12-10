@@ -199,14 +199,7 @@ func encodeListSubmissionsResponse(response []Submission, w http.ResponseWriter,
 	return nil
 }
 
-func encodePatchSubmissionCompletedResponse(response *PatchSubmissionCompletedOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
-
-	return nil
-}
-
-func encodePatchSubmissionModelResponse(response *PatchSubmissionModelOK, w http.ResponseWriter, span trace.Span) error {
+func encodeSetSubmissionCompletedResponse(response *SetSubmissionCompletedOK, w http.ResponseWriter, span trace.Span) error {
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
 
@@ -221,6 +214,13 @@ func encodeUpdateScriptResponse(response *UpdateScriptOK, w http.ResponseWriter,
 }
 
 func encodeUpdateScriptPolicyResponse(response *UpdateScriptPolicyOK, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	return nil
+}
+
+func encodeUpdateSubmissionModelResponse(response *UpdateSubmissionModelOK, w http.ResponseWriter, span trace.Span) error {
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
 

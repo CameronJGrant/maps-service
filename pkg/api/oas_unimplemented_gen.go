@@ -17,7 +17,7 @@ var _ Handler = UnimplementedHandler{}
 //
 // Role Validator changes status from Publishing -> Published.
 //
-// PATCH /submissions/{SubmissionID}/status/publish
+// POST /submissions/{SubmissionID}/status/publish
 func (UnimplementedHandler) ActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) error {
 	return ht.ErrNotImplemented
 }
@@ -26,7 +26,7 @@ func (UnimplementedHandler) ActionSubmissionPublish(ctx context.Context, params 
 //
 // Role Reviewer changes status from Submitted -> Rejected.
 //
-// PATCH /submissions/{SubmissionID}/status/reject
+// POST /submissions/{SubmissionID}/status/reject
 func (UnimplementedHandler) ActionSubmissionReject(ctx context.Context, params ActionSubmissionRejectParams) error {
 	return ht.ErrNotImplemented
 }
@@ -35,7 +35,7 @@ func (UnimplementedHandler) ActionSubmissionReject(ctx context.Context, params A
 //
 // Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested.
 //
-// PATCH /submissions/{SubmissionID}/status/request-changes
+// POST /submissions/{SubmissionID}/status/request-changes
 func (UnimplementedHandler) ActionSubmissionRequestChanges(ctx context.Context, params ActionSubmissionRequestChangesParams) error {
 	return ht.ErrNotImplemented
 }
@@ -44,7 +44,7 @@ func (UnimplementedHandler) ActionSubmissionRequestChanges(ctx context.Context, 
 //
 // Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction.
 //
-// PATCH /submissions/{SubmissionID}/status/revoke
+// POST /submissions/{SubmissionID}/status/revoke
 func (UnimplementedHandler) ActionSubmissionRevoke(ctx context.Context, params ActionSubmissionRevokeParams) error {
 	return ht.ErrNotImplemented
 }
@@ -53,7 +53,7 @@ func (UnimplementedHandler) ActionSubmissionRevoke(ctx context.Context, params A
 //
 // Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted.
 //
-// PATCH /submissions/{SubmissionID}/status/submit
+// POST /submissions/{SubmissionID}/status/submit
 func (UnimplementedHandler) ActionSubmissionSubmit(ctx context.Context, params ActionSubmissionSubmitParams) error {
 	return ht.ErrNotImplemented
 }
@@ -62,7 +62,7 @@ func (UnimplementedHandler) ActionSubmissionSubmit(ctx context.Context, params A
 //
 // Role Admin changes status from Validated -> Publishing.
 //
-// PATCH /submissions/{SubmissionID}/status/trigger-publish
+// POST /submissions/{SubmissionID}/status/trigger-publish
 func (UnimplementedHandler) ActionSubmissionTriggerPublish(ctx context.Context, params ActionSubmissionTriggerPublishParams) error {
 	return ht.ErrNotImplemented
 }
@@ -71,7 +71,7 @@ func (UnimplementedHandler) ActionSubmissionTriggerPublish(ctx context.Context, 
 //
 // Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating.
 //
-// PATCH /submissions/{SubmissionID}/status/trigger-validate
+// POST /submissions/{SubmissionID}/status/trigger-validate
 func (UnimplementedHandler) ActionSubmissionTriggerValidate(ctx context.Context, params ActionSubmissionTriggerValidateParams) error {
 	return ht.ErrNotImplemented
 }
@@ -80,7 +80,7 @@ func (UnimplementedHandler) ActionSubmissionTriggerValidate(ctx context.Context,
 //
 // Role Validator changes status from Validating -> Validated.
 //
-// PATCH /submissions/{SubmissionID}/status/validate
+// POST /submissions/{SubmissionID}/status/validate
 func (UnimplementedHandler) ActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) error {
 	return ht.ErrNotImplemented
 }
@@ -175,21 +175,12 @@ func (UnimplementedHandler) ListSubmissions(ctx context.Context, params ListSubm
 	return r, ht.ErrNotImplemented
 }
 
-// PatchSubmissionCompleted implements patchSubmissionCompleted operation.
+// SetSubmissionCompleted implements setSubmissionCompleted operation.
 //
 // Retrieve map with ID.
 //
-// PATCH /submissions/{SubmissionID}/completed
-func (UnimplementedHandler) PatchSubmissionCompleted(ctx context.Context, params PatchSubmissionCompletedParams) error {
-	return ht.ErrNotImplemented
-}
-
-// PatchSubmissionModel implements patchSubmissionModel operation.
-//
-// Update model following role restrictions.
-//
-// PATCH /submissions/{SubmissionID}/model
-func (UnimplementedHandler) PatchSubmissionModel(ctx context.Context, params PatchSubmissionModelParams) error {
+// POST /submissions/{SubmissionID}/completed
+func (UnimplementedHandler) SetSubmissionCompleted(ctx context.Context, params SetSubmissionCompletedParams) error {
 	return ht.ErrNotImplemented
 }
 
@@ -197,7 +188,7 @@ func (UnimplementedHandler) PatchSubmissionModel(ctx context.Context, params Pat
 //
 // Update the specified script by ID.
 //
-// PATCH /scripts/{ScriptID}
+// POST /scripts/{ScriptID}
 func (UnimplementedHandler) UpdateScript(ctx context.Context, req *ScriptUpdate, params UpdateScriptParams) error {
 	return ht.ErrNotImplemented
 }
@@ -206,8 +197,17 @@ func (UnimplementedHandler) UpdateScript(ctx context.Context, req *ScriptUpdate,
 //
 // Update the specified script policy by ID.
 //
-// PATCH /script-policy/id/{ScriptPolicyID}
+// POST /script-policy/id/{ScriptPolicyID}
 func (UnimplementedHandler) UpdateScriptPolicy(ctx context.Context, req *ScriptPolicyUpdate, params UpdateScriptPolicyParams) error {
+	return ht.ErrNotImplemented
+}
+
+// UpdateSubmissionModel implements updateSubmissionModel operation.
+//
+// Update model following role restrictions.
+//
+// POST /submissions/{SubmissionID}/model
+func (UnimplementedHandler) UpdateSubmissionModel(ctx context.Context, params UpdateSubmissionModelParams) error {
 	return ht.ErrNotImplemented
 }
 

@@ -156,12 +156,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									s.handleGetScriptPolicyRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
-								case "PATCH":
+								case "POST":
 									s.handleUpdateScriptPolicyRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
-									s.notAllowed(w, r, "DELETE,GET,PATCH")
+									s.notAllowed(w, r, "DELETE,GET,POST")
 								}
 
 								return
@@ -217,12 +217,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								s.handleGetScriptRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
-							case "PATCH":
+							case "POST":
 								s.handleUpdateScriptRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "DELETE,GET,PATCH")
+								s.notAllowed(w, r, "DELETE,GET,POST")
 							}
 
 							return
@@ -309,12 +309,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							if len(elem) == 0 {
 								// Leaf node.
 								switch r.Method {
-								case "PATCH":
-									s.handlePatchSubmissionCompletedRequest([1]string{
+								case "POST":
+									s.handleSetSubmissionCompletedRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
-									s.notAllowed(w, r, "PATCH")
+									s.notAllowed(w, r, "POST")
 								}
 
 								return
@@ -332,12 +332,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							if len(elem) == 0 {
 								// Leaf node.
 								switch r.Method {
-								case "PATCH":
-									s.handlePatchSubmissionModelRequest([1]string{
+								case "POST":
+									s.handleUpdateSubmissionModelRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
-									s.notAllowed(w, r, "PATCH")
+									s.notAllowed(w, r, "POST")
 								}
 
 								return
@@ -367,12 +367,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								if len(elem) == 0 {
 									// Leaf node.
 									switch r.Method {
-									case "PATCH":
+									case "POST":
 										s.handleActionSubmissionPublishRequest([1]string{
 											args[0],
 										}, elemIsEscaped, w, r)
 									default:
-										s.notAllowed(w, r, "PATCH")
+										s.notAllowed(w, r, "POST")
 									}
 
 									return
@@ -402,12 +402,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									if len(elem) == 0 {
 										// Leaf node.
 										switch r.Method {
-										case "PATCH":
+										case "POST":
 											s.handleActionSubmissionRejectRequest([1]string{
 												args[0],
 											}, elemIsEscaped, w, r)
 										default:
-											s.notAllowed(w, r, "PATCH")
+											s.notAllowed(w, r, "POST")
 										}
 
 										return
@@ -425,12 +425,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									if len(elem) == 0 {
 										// Leaf node.
 										switch r.Method {
-										case "PATCH":
+										case "POST":
 											s.handleActionSubmissionRequestChangesRequest([1]string{
 												args[0],
 											}, elemIsEscaped, w, r)
 										default:
-											s.notAllowed(w, r, "PATCH")
+											s.notAllowed(w, r, "POST")
 										}
 
 										return
@@ -448,12 +448,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									if len(elem) == 0 {
 										// Leaf node.
 										switch r.Method {
-										case "PATCH":
+										case "POST":
 											s.handleActionSubmissionRevokeRequest([1]string{
 												args[0],
 											}, elemIsEscaped, w, r)
 										default:
-											s.notAllowed(w, r, "PATCH")
+											s.notAllowed(w, r, "POST")
 										}
 
 										return
@@ -474,12 +474,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								if len(elem) == 0 {
 									// Leaf node.
 									switch r.Method {
-									case "PATCH":
+									case "POST":
 										s.handleActionSubmissionSubmitRequest([1]string{
 											args[0],
 										}, elemIsEscaped, w, r)
 									default:
-										s.notAllowed(w, r, "PATCH")
+										s.notAllowed(w, r, "POST")
 									}
 
 									return
@@ -509,12 +509,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									if len(elem) == 0 {
 										// Leaf node.
 										switch r.Method {
-										case "PATCH":
+										case "POST":
 											s.handleActionSubmissionTriggerPublishRequest([1]string{
 												args[0],
 											}, elemIsEscaped, w, r)
 										default:
-											s.notAllowed(w, r, "PATCH")
+											s.notAllowed(w, r, "POST")
 										}
 
 										return
@@ -532,12 +532,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									if len(elem) == 0 {
 										// Leaf node.
 										switch r.Method {
-										case "PATCH":
+										case "POST":
 											s.handleActionSubmissionTriggerValidateRequest([1]string{
 												args[0],
 											}, elemIsEscaped, w, r)
 										default:
-											s.notAllowed(w, r, "PATCH")
+											s.notAllowed(w, r, "POST")
 										}
 
 										return
@@ -558,12 +558,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								if len(elem) == 0 {
 									// Leaf node.
 									switch r.Method {
-									case "PATCH":
+									case "POST":
 										s.handleActionSubmissionValidateRequest([1]string{
 											args[0],
 										}, elemIsEscaped, w, r)
 									default:
-										s.notAllowed(w, r, "PATCH")
+										s.notAllowed(w, r, "POST")
 									}
 
 									return
@@ -786,7 +786,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.args = args
 									r.count = 1
 									return r, true
-								case "PATCH":
+								case "POST":
 									r.name = UpdateScriptPolicyOperation
 									r.summary = "Update the specified script policy by ID"
 									r.operationID = "updateScriptPolicy"
@@ -861,7 +861,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.args = args
 								r.count = 1
 								return r, true
-							case "PATCH":
+							case "POST":
 								r.name = UpdateScriptOperation
 								r.summary = "Update the specified script by ID"
 								r.operationID = "updateScript"
@@ -967,10 +967,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								// Leaf node.
 								switch method {
-								case "PATCH":
-									r.name = PatchSubmissionCompletedOperation
+								case "POST":
+									r.name = SetSubmissionCompletedOperation
 									r.summary = "Retrieve map with ID"
-									r.operationID = "patchSubmissionCompleted"
+									r.operationID = "setSubmissionCompleted"
 									r.pathPattern = "/submissions/{SubmissionID}/completed"
 									r.args = args
 									r.count = 1
@@ -992,10 +992,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								// Leaf node.
 								switch method {
-								case "PATCH":
-									r.name = PatchSubmissionModelOperation
+								case "POST":
+									r.name = UpdateSubmissionModelOperation
 									r.summary = "Update model following role restrictions"
-									r.operationID = "patchSubmissionModel"
+									r.operationID = "updateSubmissionModel"
 									r.pathPattern = "/submissions/{SubmissionID}/model"
 									r.args = args
 									r.count = 1
@@ -1029,7 +1029,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								if len(elem) == 0 {
 									// Leaf node.
 									switch method {
-									case "PATCH":
+									case "POST":
 										r.name = ActionSubmissionPublishOperation
 										r.summary = "Role Validator changes status from Publishing -> Published"
 										r.operationID = "actionSubmissionPublish"
@@ -1066,7 +1066,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									if len(elem) == 0 {
 										// Leaf node.
 										switch method {
-										case "PATCH":
+										case "POST":
 											r.name = ActionSubmissionRejectOperation
 											r.summary = "Role Reviewer changes status from Submitted -> Rejected"
 											r.operationID = "actionSubmissionReject"
@@ -1091,7 +1091,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									if len(elem) == 0 {
 										// Leaf node.
 										switch method {
-										case "PATCH":
+										case "POST":
 											r.name = ActionSubmissionRequestChangesOperation
 											r.summary = "Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested"
 											r.operationID = "actionSubmissionRequestChanges"
@@ -1116,7 +1116,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									if len(elem) == 0 {
 										// Leaf node.
 										switch method {
-										case "PATCH":
+										case "POST":
 											r.name = ActionSubmissionRevokeOperation
 											r.summary = "Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction"
 											r.operationID = "actionSubmissionRevoke"
@@ -1144,7 +1144,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								if len(elem) == 0 {
 									// Leaf node.
 									switch method {
-									case "PATCH":
+									case "POST":
 										r.name = ActionSubmissionSubmitOperation
 										r.summary = "Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted"
 										r.operationID = "actionSubmissionSubmit"
@@ -1181,7 +1181,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									if len(elem) == 0 {
 										// Leaf node.
 										switch method {
-										case "PATCH":
+										case "POST":
 											r.name = ActionSubmissionTriggerPublishOperation
 											r.summary = "Role Admin changes status from Validated -> Publishing"
 											r.operationID = "actionSubmissionTriggerPublish"
@@ -1206,7 +1206,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									if len(elem) == 0 {
 										// Leaf node.
 										switch method {
-										case "PATCH":
+										case "POST":
 											r.name = ActionSubmissionTriggerValidateOperation
 											r.summary = "Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating"
 											r.operationID = "actionSubmissionTriggerValidate"
@@ -1234,7 +1234,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								if len(elem) == 0 {
 									// Leaf node.
 									switch method {
-									case "PATCH":
+									case "POST":
 										r.name = ActionSubmissionValidateOperation
 										r.summary = "Role Validator changes status from Validating -> Validated"
 										r.operationID = "actionSubmissionValidate"

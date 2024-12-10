@@ -34,13 +34,13 @@ func (c *codeRecorder) WriteHeader(status int) {
 //
 // Role Validator changes status from Publishing -> Published.
 //
-// PATCH /submissions/{SubmissionID}/status/publish
+// POST /submissions/{SubmissionID}/status/publish
 func (s *Server) handleActionSubmissionPublishRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionPublish"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/publish"),
 	}
 
@@ -229,13 +229,13 @@ func (s *Server) handleActionSubmissionPublishRequest(args [1]string, argsEscape
 //
 // Role Reviewer changes status from Submitted -> Rejected.
 //
-// PATCH /submissions/{SubmissionID}/status/reject
+// POST /submissions/{SubmissionID}/status/reject
 func (s *Server) handleActionSubmissionRejectRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionReject"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/reject"),
 	}
 
@@ -424,13 +424,13 @@ func (s *Server) handleActionSubmissionRejectRequest(args [1]string, argsEscaped
 //
 // Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested.
 //
-// PATCH /submissions/{SubmissionID}/status/request-changes
+// POST /submissions/{SubmissionID}/status/request-changes
 func (s *Server) handleActionSubmissionRequestChangesRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionRequestChanges"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/request-changes"),
 	}
 
@@ -619,13 +619,13 @@ func (s *Server) handleActionSubmissionRequestChangesRequest(args [1]string, arg
 //
 // Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction.
 //
-// PATCH /submissions/{SubmissionID}/status/revoke
+// POST /submissions/{SubmissionID}/status/revoke
 func (s *Server) handleActionSubmissionRevokeRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionRevoke"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/revoke"),
 	}
 
@@ -814,13 +814,13 @@ func (s *Server) handleActionSubmissionRevokeRequest(args [1]string, argsEscaped
 //
 // Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted.
 //
-// PATCH /submissions/{SubmissionID}/status/submit
+// POST /submissions/{SubmissionID}/status/submit
 func (s *Server) handleActionSubmissionSubmitRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionSubmit"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/submit"),
 	}
 
@@ -1009,13 +1009,13 @@ func (s *Server) handleActionSubmissionSubmitRequest(args [1]string, argsEscaped
 //
 // Role Admin changes status from Validated -> Publishing.
 //
-// PATCH /submissions/{SubmissionID}/status/trigger-publish
+// POST /submissions/{SubmissionID}/status/trigger-publish
 func (s *Server) handleActionSubmissionTriggerPublishRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionTriggerPublish"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/trigger-publish"),
 	}
 
@@ -1204,13 +1204,13 @@ func (s *Server) handleActionSubmissionTriggerPublishRequest(args [1]string, arg
 //
 // Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating.
 //
-// PATCH /submissions/{SubmissionID}/status/trigger-validate
+// POST /submissions/{SubmissionID}/status/trigger-validate
 func (s *Server) handleActionSubmissionTriggerValidateRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionTriggerValidate"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/trigger-validate"),
 	}
 
@@ -1399,13 +1399,13 @@ func (s *Server) handleActionSubmissionTriggerValidateRequest(args [1]string, ar
 //
 // Role Validator changes status from Validating -> Validated.
 //
-// PATCH /submissions/{SubmissionID}/status/validate
+// POST /submissions/{SubmissionID}/status/validate
 func (s *Server) handleActionSubmissionValidateRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionValidate"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/validate"),
 	}
 
@@ -3544,22 +3544,22 @@ func (s *Server) handleListSubmissionsRequest(args [0]string, argsEscaped bool, 
 	}
 }
 
-// handlePatchSubmissionCompletedRequest handles patchSubmissionCompleted operation.
+// handleSetSubmissionCompletedRequest handles setSubmissionCompleted operation.
 //
 // Retrieve map with ID.
 //
-// PATCH /submissions/{SubmissionID}/completed
-func (s *Server) handlePatchSubmissionCompletedRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /submissions/{SubmissionID}/completed
+func (s *Server) handleSetSubmissionCompletedRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("patchSubmissionCompleted"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		otelogen.OperationID("setSubmissionCompleted"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/completed"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), PatchSubmissionCompletedOperation,
+	ctx, span := s.cfg.Tracer.Start(r.Context(), SetSubmissionCompletedOperation,
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -3614,15 +3614,15 @@ func (s *Server) handlePatchSubmissionCompletedRequest(args [1]string, argsEscap
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: PatchSubmissionCompletedOperation,
-			ID:   "patchSubmissionCompleted",
+			Name: SetSubmissionCompletedOperation,
+			ID:   "setSubmissionCompleted",
 		}
 	)
 	{
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, PatchSubmissionCompletedOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, SetSubmissionCompletedOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -3664,7 +3664,7 @@ func (s *Server) handlePatchSubmissionCompletedRequest(args [1]string, argsEscap
 			return
 		}
 	}
-	params, err := decodePatchSubmissionCompletedParams(args, argsEscaped, r)
+	params, err := decodeSetSubmissionCompletedParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -3675,13 +3675,13 @@ func (s *Server) handlePatchSubmissionCompletedRequest(args [1]string, argsEscap
 		return
 	}
 
-	var response *PatchSubmissionCompletedOK
+	var response *SetSubmissionCompletedOK
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    PatchSubmissionCompletedOperation,
+			OperationName:    SetSubmissionCompletedOperation,
 			OperationSummary: "Retrieve map with ID",
-			OperationID:      "patchSubmissionCompleted",
+			OperationID:      "setSubmissionCompleted",
 			Body:             nil,
 			Params: middleware.Parameters{
 				{
@@ -3694,8 +3694,8 @@ func (s *Server) handlePatchSubmissionCompletedRequest(args [1]string, argsEscap
 
 		type (
 			Request  = struct{}
-			Params   = PatchSubmissionCompletedParams
-			Response = *PatchSubmissionCompletedOK
+			Params   = SetSubmissionCompletedParams
+			Response = *SetSubmissionCompletedOK
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -3704,14 +3704,14 @@ func (s *Server) handlePatchSubmissionCompletedRequest(args [1]string, argsEscap
 		](
 			m,
 			mreq,
-			unpackPatchSubmissionCompletedParams,
+			unpackSetSubmissionCompletedParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.PatchSubmissionCompleted(ctx, params)
+				err = s.h.SetSubmissionCompleted(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.PatchSubmissionCompleted(ctx, params)
+		err = s.h.SetSubmissionCompleted(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -3730,210 +3730,7 @@ func (s *Server) handlePatchSubmissionCompletedRequest(args [1]string, argsEscap
 		return
 	}
 
-	if err := encodePatchSubmissionCompletedResponse(response, w, span); err != nil {
-		defer recordError("EncodeResponse", err)
-		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-		}
-		return
-	}
-}
-
-// handlePatchSubmissionModelRequest handles patchSubmissionModel operation.
-//
-// Update model following role restrictions.
-//
-// PATCH /submissions/{SubmissionID}/model
-func (s *Server) handlePatchSubmissionModelRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
-	statusWriter := &codeRecorder{ResponseWriter: w}
-	w = statusWriter
-	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("patchSubmissionModel"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
-		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/model"),
-	}
-
-	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), PatchSubmissionModelOperation,
-		trace.WithAttributes(otelAttrs...),
-		serverSpanKind,
-	)
-	defer span.End()
-
-	// Add Labeler to context.
-	labeler := &Labeler{attrs: otelAttrs}
-	ctx = contextWithLabeler(ctx, labeler)
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		elapsedDuration := time.Since(startTime)
-
-		attrSet := labeler.AttributeSet()
-		attrs := attrSet.ToSlice()
-		code := statusWriter.status
-		if code != 0 {
-			codeAttr := semconv.HTTPResponseStatusCode(code)
-			attrs = append(attrs, codeAttr)
-			span.SetAttributes(codeAttr)
-		}
-		attrOpt := metric.WithAttributes(attrs...)
-
-		// Increment request counter.
-		s.requests.Add(ctx, 1, attrOpt)
-
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		s.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), attrOpt)
-	}()
-
-	var (
-		recordError = func(stage string, err error) {
-			span.RecordError(err)
-
-			// https://opentelemetry.io/docs/specs/semconv/http/http-spans/#status
-			// Span Status MUST be left unset if HTTP status code was in the 1xx, 2xx or 3xx ranges,
-			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
-			// max redirects exceeded), in which case status MUST be set to Error.
-			code := statusWriter.status
-			if code >= 100 && code < 500 {
-				span.SetStatus(codes.Error, stage)
-			}
-
-			attrSet := labeler.AttributeSet()
-			attrs := attrSet.ToSlice()
-			if code != 0 {
-				attrs = append(attrs, semconv.HTTPResponseStatusCode(code))
-			}
-
-			s.errors.Add(ctx, 1, metric.WithAttributes(attrs...))
-		}
-		err          error
-		opErrContext = ogenerrors.OperationContext{
-			Name: PatchSubmissionModelOperation,
-			ID:   "patchSubmissionModel",
-		}
-	)
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			sctx, ok, err := s.securityCookieAuth(ctx, PatchSubmissionModelOperation, r)
-			if err != nil {
-				err = &ogenerrors.SecurityError{
-					OperationContext: opErrContext,
-					Security:         "CookieAuth",
-					Err:              err,
-				}
-				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
-					defer recordError("Security:CookieAuth", err)
-				}
-				return
-			}
-			if ok {
-				satisfied[0] |= 1 << 0
-				ctx = sctx
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			err = &ogenerrors.SecurityError{
-				OperationContext: opErrContext,
-				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
-			}
-			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
-				defer recordError("Security", err)
-			}
-			return
-		}
-	}
-	params, err := decodePatchSubmissionModelParams(args, argsEscaped, r)
-	if err != nil {
-		err = &ogenerrors.DecodeParamsError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeParams", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-
-	var response *PatchSubmissionModelOK
-	if m := s.cfg.Middleware; m != nil {
-		mreq := middleware.Request{
-			Context:          ctx,
-			OperationName:    PatchSubmissionModelOperation,
-			OperationSummary: "Update model following role restrictions",
-			OperationID:      "patchSubmissionModel",
-			Body:             nil,
-			Params: middleware.Parameters{
-				{
-					Name: "SubmissionID",
-					In:   "path",
-				}: params.SubmissionID,
-				{
-					Name: "ModelID",
-					In:   "query",
-				}: params.ModelID,
-				{
-					Name: "VersionID",
-					In:   "query",
-				}: params.VersionID,
-			},
-			Raw: r,
-		}
-
-		type (
-			Request  = struct{}
-			Params   = PatchSubmissionModelParams
-			Response = *PatchSubmissionModelOK
-		)
-		response, err = middleware.HookMiddleware[
-			Request,
-			Params,
-			Response,
-		](
-			m,
-			mreq,
-			unpackPatchSubmissionModelParams,
-			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.PatchSubmissionModel(ctx, params)
-				return response, err
-			},
-		)
-	} else {
-		err = s.h.PatchSubmissionModel(ctx, params)
-	}
-	if err != nil {
-		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
-			if err := encodeErrorResponse(errRes, w, span); err != nil {
-				defer recordError("Internal", err)
-			}
-			return
-		}
-		if errors.Is(err, ht.ErrNotImplemented) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-			return
-		}
-		if err := encodeErrorResponse(s.h.NewError(ctx, err), w, span); err != nil {
-			defer recordError("Internal", err)
-		}
-		return
-	}
-
-	if err := encodePatchSubmissionModelResponse(response, w, span); err != nil {
+	if err := encodeSetSubmissionCompletedResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -3946,13 +3743,13 @@ func (s *Server) handlePatchSubmissionModelRequest(args [1]string, argsEscaped b
 //
 // Update the specified script by ID.
 //
-// PATCH /scripts/{ScriptID}
+// POST /scripts/{ScriptID}
 func (s *Server) handleUpdateScriptRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateScript"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/scripts/{ScriptID}"),
 	}
 
@@ -4156,13 +3953,13 @@ func (s *Server) handleUpdateScriptRequest(args [1]string, argsEscaped bool, w h
 //
 // Update the specified script policy by ID.
 //
-// PATCH /script-policy/id/{ScriptPolicyID}
+// POST /script-policy/id/{ScriptPolicyID}
 func (s *Server) handleUpdateScriptPolicyRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateScriptPolicy"),
-		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/script-policy/id/{ScriptPolicyID}"),
 	}
 
@@ -4354,6 +4151,209 @@ func (s *Server) handleUpdateScriptPolicyRequest(args [1]string, argsEscaped boo
 	}
 
 	if err := encodeUpdateScriptPolicyResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleUpdateSubmissionModelRequest handles updateSubmissionModel operation.
+//
+// Update model following role restrictions.
+//
+// POST /submissions/{SubmissionID}/model
+func (s *Server) handleUpdateSubmissionModelRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("updateSubmissionModel"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/model"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), UpdateSubmissionModelOperation,
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+
+		attrSet := labeler.AttributeSet()
+		attrs := attrSet.ToSlice()
+		code := statusWriter.status
+		if code != 0 {
+			codeAttr := semconv.HTTPResponseStatusCode(code)
+			attrs = append(attrs, codeAttr)
+			span.SetAttributes(codeAttr)
+		}
+		attrOpt := metric.WithAttributes(attrs...)
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+
+			// https://opentelemetry.io/docs/specs/semconv/http/http-spans/#status
+			// Span Status MUST be left unset if HTTP status code was in the 1xx, 2xx or 3xx ranges,
+			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
+			// max redirects exceeded), in which case status MUST be set to Error.
+			code := statusWriter.status
+			if code >= 100 && code < 500 {
+				span.SetStatus(codes.Error, stage)
+			}
+
+			attrSet := labeler.AttributeSet()
+			attrs := attrSet.ToSlice()
+			if code != 0 {
+				attrs = append(attrs, semconv.HTTPResponseStatusCode(code))
+			}
+
+			s.errors.Add(ctx, 1, metric.WithAttributes(attrs...))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: UpdateSubmissionModelOperation,
+			ID:   "updateSubmissionModel",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityCookieAuth(ctx, UpdateSubmissionModelOperation, r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "CookieAuth",
+					Err:              err,
+				}
+				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
+					defer recordError("Security:CookieAuth", err)
+				}
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
+				defer recordError("Security", err)
+			}
+			return
+		}
+	}
+	params, err := decodeUpdateSubmissionModelParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var response *UpdateSubmissionModelOK
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    UpdateSubmissionModelOperation,
+			OperationSummary: "Update model following role restrictions",
+			OperationID:      "updateSubmissionModel",
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "SubmissionID",
+					In:   "path",
+				}: params.SubmissionID,
+				{
+					Name: "ModelID",
+					In:   "query",
+				}: params.ModelID,
+				{
+					Name: "VersionID",
+					In:   "query",
+				}: params.VersionID,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = UpdateSubmissionModelParams
+			Response = *UpdateSubmissionModelOK
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackUpdateSubmissionModelParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				err = s.h.UpdateSubmissionModel(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		err = s.h.UpdateSubmissionModel(ctx, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w, span); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w, span); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeUpdateSubmissionModelResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

@@ -24,8 +24,8 @@ const (
 	GetScriptPolicyFromHashOperation         OperationName = "GetScriptPolicyFromHash"
 	GetSubmissionOperation                   OperationName = "GetSubmission"
 	ListSubmissionsOperation                 OperationName = "ListSubmissions"
-	PatchSubmissionCompletedOperation        OperationName = "PatchSubmissionCompleted"
-	PatchSubmissionModelOperation            OperationName = "PatchSubmissionModel"
+	SetSubmissionCompletedOperation          OperationName = "SetSubmissionCompleted"
 	UpdateScriptOperation                    OperationName = "UpdateScript"
 	UpdateScriptPolicyOperation              OperationName = "UpdateScriptPolicy"
+	UpdateSubmissionModelOperation           OperationName = "UpdateSubmissionModel"
 )
