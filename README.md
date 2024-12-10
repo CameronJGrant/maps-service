@@ -13,11 +13,6 @@
 
     By default, the project opens at `localhost:8080`.
 
-## How to generate rust api from this directory
-```bash
-openapi-generator-cli generate -g rust -i openapi.yaml -o validation/api`
-```
-
 #### License
 
 <sup>
