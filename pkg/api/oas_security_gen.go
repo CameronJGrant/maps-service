@@ -35,7 +35,7 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 
 func (s *Server) securityCookieAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
 	var t CookieAuth
-	const parameterName = "SESSIONID"
+	const parameterName = "session_id"
 	var value string
 	switch cookie, err := req.Cookie(parameterName); {
 	case err == nil: // if NO error
@@ -67,7 +67,7 @@ func (s *Client) securityCookieAuth(ctx context.Context, operationName Operation
 		return errors.Wrap(err, "security source \"CookieAuth\"")
 	}
 	req.AddCookie(&http.Cookie{
-		Name:  "SESSIONID",
+		Name:  "session_id",
 		Value: t.APIKey,
 	})
 	return nil

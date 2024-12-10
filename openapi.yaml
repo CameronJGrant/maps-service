@@ -557,7 +557,7 @@ components:
     cookieAuth:
       type: apiKey
       in: cookie
-      name: SESSIONID
+      name: session_id
   schemas:
     Id:
       required:
