@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: StrafesNET Submissions - OpenAPI 3.1
-  description: Browse and manage map submissions in the staging pipeline.
+  description: Browse and manage map submissions.
   version: 0.1.0
 servers:
   - url: https://submissions.strafes.net/v1
