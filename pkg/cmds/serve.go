@@ -60,6 +60,12 @@ func NewServeCommand() *cli.Command {
 				Value:   8080,
 				EnvVars: []string{"PORT"},
 			},
+			&cli.StringFlag{
+				Name:     "auth-rpc-host",
+				Usage:    "Host of auth rpc",
+				EnvVars:  []string{"AUTH_RPC_HOST"},
+				Value: "auth-service:8090",
+			},
 		},
 	}
 }
@@ -73,7 +79,7 @@ func serve(ctx *cli.Context) error {
 		DB: db,
 	}
 
-	conn, err := grpc.Dial("auth-service:8090", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(ctx.String("auth-rpc-host"), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal(err)
 	}
