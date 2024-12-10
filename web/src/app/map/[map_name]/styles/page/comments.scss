@@ -1,0 +1,47 @@
+$comments-size: 60px;
+
+.comments {
+    display: grid;
+    gap: 25px;
+    margin-top: 20px;
+
+    .commenter {
+        display: flex;
+        height: $comments-size;
+
+        //BhopMaptest comment
+        &[data-highlighted="true"] {
+            background-color: #ffffd7;
+        }
+
+        > img {
+            border-radius: 50%;
+        }
+
+        .name {
+            font: {
+                weight: 500;
+                size: 1.3em;
+            };
+        }
+
+        .date {
+            font-size: .8em;
+            margin: 0 0 0 5px;
+            color: #646464
+        }
+
+        .details {
+            display: grid;
+            margin-left: 10px;
+
+            header {
+                display: flex;
+                align-items: center;
+            }
+            p:not(.date) {
+                margin: 0;
+            }
+        }
+    }
+}

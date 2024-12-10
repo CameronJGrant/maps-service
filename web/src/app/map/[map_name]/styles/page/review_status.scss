@@ -1,0 +1,73 @@
+$Published:         "0";
+$Rejected:          "1";
+$Publishing:        "2";
+$Validated:         "3";
+$Validating:        "4";
+$Accepted:          "5";
+$ChangesRequested:  "6";
+$Submitted:         "7";
+$UnderConstruction: "8";
+
+.review-status {
+    border-radius: 5px;
+
+    p {
+        margin: 3px 25px 3px 25px;
+        font-weight: bold;
+    }
+
+    &[data-review-status="#{$Published}"] {
+        background-color: orange;
+        p {
+            color: white;
+        }
+    }
+    &[data-review-status="#{$Rejected}"] {
+        background-color: orange;
+        p {
+            color: white;
+        }
+    }
+    &[data-review-status="#{$Publishing}"] {
+        background-color: orange;
+        p {
+            color: white;
+        }
+    }
+    &[data-review-status="#{$Validated}"] {
+        background-color: orange;
+        p {
+            color: white;
+        }
+    }
+    &[data-review-status="#{$Validating}"] {
+        background-color: orange;
+        p {
+            color: white;
+        }
+    }
+    &[data-review-status="#{$Accepted}"] {
+        background-color: rgb(2, 162, 2);
+        p {
+            color: white;
+        }
+    }
+    &[data-review-status="#{$ChangesRequested}"] {
+        background-color: orange;
+        p {
+            color: white;
+        }
+    }
+    &[data-review-status="#{$Submitted}"] {
+        background-color: orange;
+        p {
+            color: white;
+        }
+    }
+    &[data-review-status="#{$UnderConstruction}"] {
+        background-color: orange;
+        p {
+            color: white;
+        }
+    }
+}
