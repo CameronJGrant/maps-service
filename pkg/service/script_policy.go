@@ -16,7 +16,7 @@ import (
 //
 // POST /script-policy
 func (svc *Service) CreateScriptPolicy(ctx context.Context, req *api.ScriptPolicyCreate) (*api.ID, error){
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return nil, ErrUserInfo
 	}
@@ -52,7 +52,7 @@ func (svc *Service) CreateScriptPolicy(ctx context.Context, req *api.ScriptPolic
 //
 // DELETE /script-policy/id/{ScriptPolicyID}
 func (svc *Service) DeleteScriptPolicy(ctx context.Context, params api.DeleteScriptPolicyParams) error{
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
@@ -69,7 +69,7 @@ func (svc *Service) DeleteScriptPolicy(ctx context.Context, params api.DeleteScr
 //
 // GET /script-policy/id/{ScriptPolicyID}
 func (svc *Service) GetScriptPolicy(ctx context.Context, params api.GetScriptPolicyParams) (*api.ScriptPolicy, error){
-	_, ok := ctx.Value("UserInfo").(*UserInfo)
+	_, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return nil, ErrUserInfo
 	}
@@ -94,7 +94,7 @@ func (svc *Service) GetScriptPolicy(ctx context.Context, params api.GetScriptPol
 //
 // GET /script-policy/hash/{FromScriptHash}
 func (svc *Service) GetScriptPolicyFromHash(ctx context.Context, params api.GetScriptPolicyFromHashParams) (*api.ScriptPolicy, error){
-	_, ok := ctx.Value("UserInfo").(*UserInfo)
+	_, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return nil, ErrUserInfo
 	}
@@ -125,7 +125,7 @@ func (svc *Service) GetScriptPolicyFromHash(ctx context.Context, params api.GetS
 //
 // PATCH /script-policy/id/{ScriptPolicyID}
 func (svc *Service) UpdateScriptPolicy(ctx context.Context, req *api.ScriptPolicyUpdate, params api.UpdateScriptPolicyParams) error{
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}

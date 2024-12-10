@@ -16,7 +16,7 @@ var (
 
 // POST /submissions
 func (svc *Service) CreateSubmission(ctx context.Context, request *api.SubmissionCreate) (*api.ID, error) {
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return nil, ErrUserInfo
 	}
@@ -115,7 +115,7 @@ func (svc *Service) ListSubmissions(ctx context.Context, request api.ListSubmiss
 //
 // PATCH /submissions/{SubmissionID}/completed
 func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.PatchSubmissionCompletedParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
@@ -137,7 +137,7 @@ func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.Pat
 //
 // PATCH /submissions/{SubmissionID}/model
 func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSubmissionModelParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
@@ -168,7 +168,7 @@ func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSu
 //
 // PATCH /submissions/{SubmissionID}/status/publish
 func (svc *Service) ActionSubmissionPublish(ctx context.Context, params api.ActionSubmissionPublishParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
@@ -189,7 +189,7 @@ func (svc *Service) ActionSubmissionPublish(ctx context.Context, params api.Acti
 //
 // PATCH /submissions/{SubmissionID}/status/reject
 func (svc *Service) ActionSubmissionReject(ctx context.Context, params api.ActionSubmissionRejectParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
@@ -210,7 +210,7 @@ func (svc *Service) ActionSubmissionReject(ctx context.Context, params api.Actio
 //
 // PATCH /submissions/{SubmissionID}/status/request-changes
 func (svc *Service) ActionSubmissionRequestChanges(ctx context.Context, params api.ActionSubmissionRequestChangesParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
@@ -231,7 +231,7 @@ func (svc *Service) ActionSubmissionRequestChanges(ctx context.Context, params a
 //
 // PATCH /submissions/{SubmissionID}/status/revoke
 func (svc *Service) ActionSubmissionRevoke(ctx context.Context, params api.ActionSubmissionRevokeParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
@@ -258,7 +258,7 @@ func (svc *Service) ActionSubmissionRevoke(ctx context.Context, params api.Actio
 //
 // PATCH /submissions/{SubmissionID}/status/submit
 func (svc *Service) ActionSubmissionSubmit(ctx context.Context, params api.ActionSubmissionSubmitParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
@@ -285,7 +285,7 @@ func (svc *Service) ActionSubmissionSubmit(ctx context.Context, params api.Actio
 //
 // PATCH /submissions/{SubmissionID}/status/trigger-publish
 func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params api.ActionSubmissionTriggerPublishParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
@@ -306,7 +306,7 @@ func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params a
 //
 // PATCH /submissions/{SubmissionID}/status/trigger-validate
 func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params api.ActionSubmissionTriggerValidateParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
@@ -327,7 +327,7 @@ func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params 
 //
 // PATCH /submissions/{SubmissionID}/status/validate
 func (svc *Service) ActionSubmissionValidate(ctx context.Context, params api.ActionSubmissionValidateParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}

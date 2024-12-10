@@ -16,7 +16,7 @@ import (
 //
 // POST /scripts
 func (svc *Service) CreateScript(ctx context.Context, req *api.ScriptCreate) (*api.ID, error){
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return nil, ErrUserInfo
 	}
@@ -45,7 +45,7 @@ func (svc *Service) CreateScript(ctx context.Context, req *api.ScriptCreate) (*a
 //
 // DELETE /scripts/{ScriptID}
 func (svc *Service) DeleteScript(ctx context.Context, params api.DeleteScriptParams) error{
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
@@ -62,7 +62,7 @@ func (svc *Service) DeleteScript(ctx context.Context, params api.DeleteScriptPar
 //
 // GET /scripts/{ScriptID}
 func (svc *Service) GetScript(ctx context.Context, params api.GetScriptParams) (*api.Script, error){
-	_, ok := ctx.Value("UserInfo").(*UserInfo)
+	_, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return nil, ErrUserInfo
 	}
@@ -87,7 +87,7 @@ func (svc *Service) GetScript(ctx context.Context, params api.GetScriptParams) (
 //
 // PATCH /scripts/{ScriptID}
 func (svc *Service) UpdateScript(ctx context.Context, req *api.ScriptUpdate, params api.UpdateScriptParams) error{
-	userInfo, ok := ctx.Value("UserInfo").(*UserInfo)
+	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
 	}
