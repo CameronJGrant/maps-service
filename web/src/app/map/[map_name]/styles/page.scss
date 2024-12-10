@@ -3,6 +3,7 @@
 @forward "./page/rating_window.scss";
 @forward "./page/leave_comment_window.scss";
 @forward "./page/review_status.scss";
+@forward "./page/map.scss";
 
 @use "../../../globals.scss";
 
@@ -15,36 +16,4 @@
 
 .by-creator {
     margin-top: 10px;
-}
-
-.review-info {
-    width: 650px;
-    height: 100%;
-
-    > div {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-    }
-
-    p, h1 {
-        color: #1e1e1e;
-    }
-
-    h1 {
-        font: {
-            weight: 500;
-            size: 1.8rem
-        };
-        margin: 0;
-    }
-
-    a {
-        color: #008fd6;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
 }

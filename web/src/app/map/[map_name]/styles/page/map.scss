@@ -1,0 +1,15 @@
+@use "../../../../globals.scss";
+
+.map-image-area {
+	@include globals.border-with-radius;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 350px;
+	height: 350px;
+
+	> p {
+		text-align: center;
+		margin: 0;
+	}
+}

@@ -5,6 +5,11 @@ $comments-size: 60px;
     gap: 25px;
     margin-top: 20px;
 
+    .no-comments {
+    	text-align: center;
+     	margin: 0;
+    }
+
     .commenter {
         display: flex;
         height: $comments-size;
@@ -13,7 +18,6 @@ $comments-size: 60px;
         &[data-highlighted="true"] {
             background-color: #ffffd7;
         }
-
         > img {
             border-radius: 50%;
         }
@@ -24,13 +28,11 @@ $comments-size: 60px;
                 size: 1.3em;
             };
         }
-
         .date {
             font-size: .8em;
             margin: 0 0 0 5px;
             color: #646464
         }
-
         .details {
             display: grid;
             margin-left: 10px;
