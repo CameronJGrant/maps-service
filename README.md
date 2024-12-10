@@ -17,3 +17,17 @@
 ```bash
 openapi-generator-cli generate -g rust -i openapi.yaml -o validation/api`
 ```
+
+#### License
+
+<sup>
+Licensed under <a href="LICENSE">MIT license</a>.
+</sup>
+
+<br>
+
+<sub>
+Unless you explicitly state otherwise, any contribution intentionally submitted
+for inclusion in this project by you, shall be licensed as above, without any
+additional terms or conditions.
+</sub>
