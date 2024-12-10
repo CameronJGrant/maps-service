@@ -366,6 +366,8 @@ paths:
           required: true
           schema:
             type: string
+            minLength: 16
+            maxLength: 16
       responses:
         "200":
           description: Successful response
@@ -588,8 +590,10 @@ components:
           format: int64
         DisplayName:
           type: string
+          maxLength: 128
         Creator:
           type: string
+          maxLength: 128
         GameID:
           type: integer
           format: int32
@@ -626,8 +630,10 @@ components:
           format: int64
         DisplayName:
           type: string
+          maxLength: 128
         Creator:
           type: string
+          maxLength: 128
         GameID:
           type: integer
           format: int32
@@ -646,8 +652,10 @@ components:
       properties:
         DisplayName:
           type: string
+          maxLength: 128
         Creator:
           type: string
+          maxLength: 128
         GameID:
           type: integer
           format: int32
@@ -673,8 +681,11 @@ components:
           format: int64
         Hash:
           type: string
+          minLength: 16
+          maxLength: 16
         Source:
           type: string
+          maxLength: 1048576
         SubmissionID:
           type: integer
           format: int64
@@ -686,6 +697,7 @@ components:
       properties:
         Source:
           type: string
+          maxLength: 1048576
         SubmissionID:
           type: integer
           format: int64
@@ -699,6 +711,7 @@ components:
           format: int64
         Source:
           type: string
+          maxLength: 1048576
         SubmissionID:
           type: integer
           format: int64
@@ -715,6 +728,8 @@ components:
           format: int64
         FromScriptHash:
           type: string
+          minLength: 16
+          maxLength: 16
         ToScriptID:
           type: integer
           format: int64
