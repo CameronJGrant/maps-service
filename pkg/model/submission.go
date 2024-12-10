@@ -27,7 +27,7 @@ type Submission struct {
 	Submitter      int64 // UserID
 	AssetID        int64
 	AssetVersion   int64
-	Completed      bool
+	Completed      bool // Has this version of the map been completed at least once on maptest
 	TargetAssetID  int64 // where to upload map fix.  if the TargetAssetID is 0, it's a new map.
 	StatusID       Status
 }
