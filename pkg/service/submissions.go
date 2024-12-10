@@ -113,8 +113,8 @@ func (svc *Service) ListSubmissions(ctx context.Context, request api.ListSubmiss
 //
 // Retrieve map with ID.
 //
-// PATCH /submissions/{SubmissionID}/completed
-func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.PatchSubmissionCompletedParams) error {
+// POST /submissions/{SubmissionID}/completed
+func (svc *Service) SetSubmissionCompleted(ctx context.Context, params api.SetSubmissionCompletedParams) error {
 	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
@@ -135,8 +135,8 @@ func (svc *Service) PatchSubmissionCompleted(ctx context.Context, params api.Pat
 //
 // Update model following role restrictions.
 //
-// PATCH /submissions/{SubmissionID}/model
-func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSubmissionModelParams) error {
+// POST /submissions/{SubmissionID}/model
+func (svc *Service) UpdateSubmissionModel(ctx context.Context, params api.UpdateSubmissionModelParams) error {
 	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
 		return ErrUserInfo
@@ -166,7 +166,7 @@ func (svc *Service) PatchSubmissionModel(ctx context.Context, params api.PatchSu
 //
 // Role Validator changes status from Publishing -> Published.
 //
-// PATCH /submissions/{SubmissionID}/status/publish
+// POST /submissions/{SubmissionID}/status/publish
 func (svc *Service) ActionSubmissionPublish(ctx context.Context, params api.ActionSubmissionPublishParams) error {
 	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
@@ -187,7 +187,7 @@ func (svc *Service) ActionSubmissionPublish(ctx context.Context, params api.Acti
 //
 // Role Reviewer changes status from Submitted -> Rejected.
 //
-// PATCH /submissions/{SubmissionID}/status/reject
+// POST /submissions/{SubmissionID}/status/reject
 func (svc *Service) ActionSubmissionReject(ctx context.Context, params api.ActionSubmissionRejectParams) error {
 	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
@@ -208,7 +208,7 @@ func (svc *Service) ActionSubmissionReject(ctx context.Context, params api.Actio
 //
 // Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested.
 //
-// PATCH /submissions/{SubmissionID}/status/request-changes
+// POST /submissions/{SubmissionID}/status/request-changes
 func (svc *Service) ActionSubmissionRequestChanges(ctx context.Context, params api.ActionSubmissionRequestChangesParams) error {
 	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
@@ -229,7 +229,7 @@ func (svc *Service) ActionSubmissionRequestChanges(ctx context.Context, params a
 //
 // Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction.
 //
-// PATCH /submissions/{SubmissionID}/status/revoke
+// POST /submissions/{SubmissionID}/status/revoke
 func (svc *Service) ActionSubmissionRevoke(ctx context.Context, params api.ActionSubmissionRevokeParams) error {
 	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
@@ -256,7 +256,7 @@ func (svc *Service) ActionSubmissionRevoke(ctx context.Context, params api.Actio
 //
 // Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted.
 //
-// PATCH /submissions/{SubmissionID}/status/submit
+// POST /submissions/{SubmissionID}/status/submit
 func (svc *Service) ActionSubmissionSubmit(ctx context.Context, params api.ActionSubmissionSubmitParams) error {
 	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
@@ -283,7 +283,7 @@ func (svc *Service) ActionSubmissionSubmit(ctx context.Context, params api.Actio
 //
 // Role Admin changes status from Validated -> Publishing.
 //
-// PATCH /submissions/{SubmissionID}/status/trigger-publish
+// POST /submissions/{SubmissionID}/status/trigger-publish
 func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params api.ActionSubmissionTriggerPublishParams) error {
 	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
@@ -304,7 +304,7 @@ func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params a
 //
 // Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating.
 //
-// PATCH /submissions/{SubmissionID}/status/trigger-validate
+// POST /submissions/{SubmissionID}/status/trigger-validate
 func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params api.ActionSubmissionTriggerValidateParams) error {
 	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
@@ -325,7 +325,7 @@ func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params 
 //
 // Role Validator changes status from Validating -> Validated.
 //
-// PATCH /submissions/{SubmissionID}/status/validate
+// POST /submissions/{SubmissionID}/status/validate
 func (svc *Service) ActionSubmissionValidate(ctx context.Context, params api.ActionSubmissionValidateParams) error {
 	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
 	if !ok{
