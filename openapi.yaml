@@ -643,7 +643,6 @@ components:
       - Submitter
       - AssetID
       - AssetVersion
-      - SubmissionType
 #     - TargetAssetID
       type: object
       properties:
@@ -663,9 +662,6 @@ components:
         AssetVersion:
           type: integer
           format: int64
-        SubmissionType:
-          type: integer
-          format: int32
         TargetAssetID:
           type: integer
           format: int64

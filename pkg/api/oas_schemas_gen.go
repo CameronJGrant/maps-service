@@ -720,14 +720,13 @@ func (s *Submission) SetStatusID(val int32) {
 
 // Ref: #/components/schemas/SubmissionCreate
 type SubmissionCreate struct {
-	DisplayName    string   `json:"DisplayName"`
-	Creator        string   `json:"Creator"`
-	GameID         int32    `json:"GameID"`
-	Submitter      int64    `json:"Submitter"`
-	AssetID        int64    `json:"AssetID"`
-	AssetVersion   int64    `json:"AssetVersion"`
-	SubmissionType int32    `json:"SubmissionType"`
-	TargetAssetID  OptInt64 `json:"TargetAssetID"`
+	DisplayName   string   `json:"DisplayName"`
+	Creator       string   `json:"Creator"`
+	GameID        int32    `json:"GameID"`
+	Submitter     int64    `json:"Submitter"`
+	AssetID       int64    `json:"AssetID"`
+	AssetVersion  int64    `json:"AssetVersion"`
+	TargetAssetID OptInt64 `json:"TargetAssetID"`
 }
 
 // GetDisplayName returns the value of DisplayName.
@@ -758,11 +757,6 @@ func (s *SubmissionCreate) GetAssetID() int64 {
 // GetAssetVersion returns the value of AssetVersion.
 func (s *SubmissionCreate) GetAssetVersion() int64 {
 	return s.AssetVersion
-}
-
-// GetSubmissionType returns the value of SubmissionType.
-func (s *SubmissionCreate) GetSubmissionType() int32 {
-	return s.SubmissionType
 }
 
 // GetTargetAssetID returns the value of TargetAssetID.
@@ -798,11 +792,6 @@ func (s *SubmissionCreate) SetAssetID(val int64) {
 // SetAssetVersion sets the value of AssetVersion.
 func (s *SubmissionCreate) SetAssetVersion(val int64) {
 	s.AssetVersion = val
-}
-
-// SetSubmissionType sets the value of SubmissionType.
-func (s *SubmissionCreate) SetSubmissionType(val int32) {
-	s.SubmissionType = val
 }
 
 // SetTargetAssetID sets the value of TargetAssetID.
