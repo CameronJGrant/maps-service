@@ -1446,10 +1446,6 @@ func (s *SubmissionCreate) encodeFields(e *jx.Encoder) {
 		e.Int32(s.GameID)
 	}
 	{
-		e.FieldStart("Submitter")
-		e.Int64(s.Submitter)
-	}
-	{
 		e.FieldStart("AssetID")
 		e.Int64(s.AssetID)
 	}
@@ -1465,14 +1461,13 @@ func (s *SubmissionCreate) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfSubmissionCreate = [7]string{
+var jsonFieldsNameOfSubmissionCreate = [6]string{
 	0: "DisplayName",
 	1: "Creator",
 	2: "GameID",
-	3: "Submitter",
-	4: "AssetID",
-	5: "AssetVersion",
-	6: "TargetAssetID",
+	3: "AssetID",
+	4: "AssetVersion",
+	5: "TargetAssetID",
 }
 
 // Decode decodes SubmissionCreate from json.
@@ -1520,20 +1515,8 @@ func (s *SubmissionCreate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"GameID\"")
 			}
-		case "Submitter":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				v, err := d.Int64()
-				s.Submitter = int64(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"Submitter\"")
-			}
 		case "AssetID":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				v, err := d.Int64()
 				s.AssetID = int64(v)
@@ -1545,7 +1528,7 @@ func (s *SubmissionCreate) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"AssetID\"")
 			}
 		case "AssetVersion":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := d.Int64()
 				s.AssetVersion = int64(v)
@@ -1576,7 +1559,7 @@ func (s *SubmissionCreate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00111111,
+		0b00011111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

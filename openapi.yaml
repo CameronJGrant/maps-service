@@ -636,11 +636,9 @@ components:
           format: int64
     SubmissionCreate:
       required:
-      - ID
       - DisplayName
       - Creator
       - GameID
-      - Submitter
       - AssetID
       - AssetVersion
 #     - TargetAssetID
@@ -653,9 +651,6 @@ components:
         GameID:
           type: integer
           format: int32
-        Submitter:
-          type: integer
-          format: int64
         AssetID:
           type: integer
           format: int64

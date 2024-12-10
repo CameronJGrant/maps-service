@@ -723,7 +723,6 @@ type SubmissionCreate struct {
 	DisplayName   string   `json:"DisplayName"`
 	Creator       string   `json:"Creator"`
 	GameID        int32    `json:"GameID"`
-	Submitter     int64    `json:"Submitter"`
 	AssetID       int64    `json:"AssetID"`
 	AssetVersion  int64    `json:"AssetVersion"`
 	TargetAssetID OptInt64 `json:"TargetAssetID"`
@@ -742,11 +741,6 @@ func (s *SubmissionCreate) GetCreator() string {
 // GetGameID returns the value of GameID.
 func (s *SubmissionCreate) GetGameID() int32 {
 	return s.GameID
-}
-
-// GetSubmitter returns the value of Submitter.
-func (s *SubmissionCreate) GetSubmitter() int64 {
-	return s.Submitter
 }
 
 // GetAssetID returns the value of AssetID.
@@ -777,11 +771,6 @@ func (s *SubmissionCreate) SetCreator(val string) {
 // SetGameID sets the value of GameID.
 func (s *SubmissionCreate) SetGameID(val int32) {
 	s.GameID = val
-}
-
-// SetSubmitter sets the value of Submitter.
-func (s *SubmissionCreate) SetSubmitter(val int64) {
-	s.Submitter = val
 }
 
 // SetAssetID sets the value of AssetID.
