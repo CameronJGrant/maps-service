@@ -98,9 +98,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /submissions/{SubmissionID}/model:
-    patch:
+    post:
       summary: Update model following role restrictions
-      operationId: patchSubmissionModel
+      operationId: updateSubmissionModel
       tags:
         - Submissions
       parameters:
@@ -132,9 +132,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /submissions/{SubmissionID}/completed:
-    patch:
+    post:
       summary: Retrieve map with ID
-      operationId: patchSubmissionCompleted
+      operationId: setSubmissionCompleted
       tags:
         - Submissions
       parameters:
@@ -154,7 +154,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /submissions/{SubmissionID}/status/submit:
-    patch:
+    post:
       summary: Role Submitter changes status from UnderConstruction|ChangesRequested -> Submitted
       operationId: actionSubmissionSubmit
       tags:
@@ -176,7 +176,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /submissions/{SubmissionID}/status/revoke:
-    patch:
+    post:
       summary: Role Submitter changes status from Submitted|ChangesRequested -> UnderConstruction
       operationId: actionSubmissionRevoke
       tags:
@@ -198,7 +198,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /submissions/{SubmissionID}/status/trigger-validate:
-    patch:
+    post:
       summary: Role Reviewer triggers validation and changes status from Submitted|Accepted -> Validating
       operationId: actionSubmissionTriggerValidate
       tags:
@@ -220,7 +220,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /submissions/{SubmissionID}/status/reject:
-    patch:
+    post:
       summary: Role Reviewer changes status from Submitted -> Rejected
       operationId: actionSubmissionReject
       tags:
@@ -242,7 +242,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /submissions/{SubmissionID}/status/request-changes:
-    patch:
+    post:
       summary: Role Reviewer changes status from Validated|Accepted|Submitted -> ChangesRequested
       operationId: actionSubmissionRequestChanges
       tags:
@@ -264,7 +264,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /submissions/{SubmissionID}/status/validate:
-    patch:
+    post:
       summary: Role Validator changes status from Validating -> Validated
       operationId: actionSubmissionValidate
       tags:
@@ -286,7 +286,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /submissions/{SubmissionID}/status/publish:
-    patch:
+    post:
       summary: Role Validator changes status from Publishing -> Published
       operationId: actionSubmissionPublish
       tags:
@@ -308,7 +308,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /submissions/{SubmissionID}/status/trigger-publish:
-    patch:
+    post:
       summary: Role Admin changes status from Validated -> Publishing
       operationId: actionSubmissionTriggerPublish
       tags:
@@ -407,7 +407,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    patch:
+    post:
       summary: Update the specified script policy by ID
       operationId: updateScriptPolicy
       tags:
@@ -506,7 +506,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    patch:
+    post:
       summary: Update the specified script by ID
       operationId: updateScript
       tags:
