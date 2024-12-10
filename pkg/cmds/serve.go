@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"git.itzana.me/strafesnet/go-grpc/auth"
 )
 
 func NewServeCommand() *cli.Command {
@@ -84,7 +85,7 @@ func serve(ctx *cli.Context) error {
 		log.Fatal(err)
 	}
 	sec := service.SecurityHandler{
-		Client: conn,
+		Client: auth.NewAuthServiceClient(conn),
 	}
 
 	srv, err := api.NewServer(svc, sec, api.WithPathPrefix("/v1"))

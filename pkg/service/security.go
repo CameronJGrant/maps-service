@@ -5,7 +5,6 @@ import (
 	"context"
 	"git.itzana.me/strafesnet/maps-service/pkg/api"
 	"git.itzana.me/strafesnet/go-grpc/auth"
-	"google.golang.org/grpc"
 )
 
 var (
@@ -40,7 +39,7 @@ func (usr UserInfo) IsSubmitter(submitter int64) bool{
 }
 
 type SecurityHandler struct {
-	Client *grpc.ClientConn
+	Client auth.AuthServiceClient
 }
 
 func (svc SecurityHandler) HandleCookieAuth(ctx context.Context, operationName api.OperationName, t api.CookieAuth) (context.Context, error){
@@ -49,23 +48,21 @@ func (svc SecurityHandler) HandleCookieAuth(ctx context.Context, operationName a
 		return nil, ErrMissingSessionID
 	}
 
-	client := auth.NewAuthServiceClient(svc.Client)
-
-	session, err := client.GetSessionUser(ctx, &auth.IdMessage{
+	session, err := svc.Client.GetSessionUser(ctx, &auth.IdMessage{
 		SessionID: sessionId,
 	})
 	if err != nil{
 		return nil, err
 	}
 
-	role, err := client.GetGroupRole(ctx, &auth.IdMessage{
+	role, err := svc.Client.GetGroupRole(ctx, &auth.IdMessage{
 		SessionID: sessionId,
 	})
 	if err != nil{
 		return nil, err
 	}
 
-	validate, err := client.ValidateSession(ctx, &auth.IdMessage{
+	validate, err := svc.Client.ValidateSession(ctx, &auth.IdMessage{
 		SessionID: sessionId,
 	})
 	if err != nil{
