@@ -585,7 +585,8 @@ type Submission struct {
 	DisplayName    string   `json:"DisplayName"`
 	Creator        string   `json:"Creator"`
 	GameID         int32    `json:"GameID"`
-	Date           int64    `json:"Date"`
+	CreatedAt      int64    `json:"CreatedAt"`
+	UpdatedAt      int64    `json:"UpdatedAt"`
 	Submitter      int64    `json:"Submitter"`
 	AssetID        int64    `json:"AssetID"`
 	AssetVersion   int64    `json:"AssetVersion"`
@@ -615,9 +616,14 @@ func (s *Submission) GetGameID() int32 {
 	return s.GameID
 }
 
-// GetDate returns the value of Date.
-func (s *Submission) GetDate() int64 {
-	return s.Date
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Submission) GetCreatedAt() int64 {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *Submission) GetUpdatedAt() int64 {
+	return s.UpdatedAt
 }
 
 // GetSubmitter returns the value of Submitter.
@@ -675,9 +681,14 @@ func (s *Submission) SetGameID(val int32) {
 	s.GameID = val
 }
 
-// SetDate sets the value of Date.
-func (s *Submission) SetDate(val int64) {
-	s.Date = val
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Submission) SetCreatedAt(val int64) {
+	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *Submission) SetUpdatedAt(val int64) {
+	s.UpdatedAt = val
 }
 
 // SetSubmitter sets the value of Submitter.
@@ -791,7 +802,6 @@ type SubmissionFilter struct {
 	DisplayName OptString `json:"DisplayName"`
 	Creator     OptString `json:"Creator"`
 	GameID      OptInt32  `json:"GameID"`
-	Date        OptInt64  `json:"Date"`
 }
 
 // GetID returns the value of ID.
@@ -814,11 +824,6 @@ func (s *SubmissionFilter) GetGameID() OptInt32 {
 	return s.GameID
 }
 
-// GetDate returns the value of Date.
-func (s *SubmissionFilter) GetDate() OptInt64 {
-	return s.Date
-}
-
 // SetID sets the value of ID.
 func (s *SubmissionFilter) SetID(val int64) {
 	s.ID = val
@@ -837,11 +842,6 @@ func (s *SubmissionFilter) SetCreator(val OptString) {
 // SetGameID sets the value of GameID.
 func (s *SubmissionFilter) SetGameID(val OptInt32) {
 	s.GameID = val
-}
-
-// SetDate sets the value of Date.
-func (s *SubmissionFilter) SetDate(val OptInt64) {
-	s.Date = val
 }
 
 // UpdateScriptOK is response for UpdateScript operation.

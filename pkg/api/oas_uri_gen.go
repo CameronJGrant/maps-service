@@ -152,23 +152,14 @@ func (s *SubmissionFilter) EncodeURI(e uri.Encoder) error {
 	}); err != nil {
 		return errors.Wrap(err, "encode field \"GameID\"")
 	}
-	if err := e.EncodeField("Date", func(e uri.Encoder) error {
-		if val, ok := s.Date.Get(); ok {
-			return e.EncodeValue(conv.Int64ToString(val))
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "encode field \"Date\"")
-	}
 	return nil
 }
 
-var uriFieldsNameOfSubmissionFilter = [5]string{
+var uriFieldsNameOfSubmissionFilter = [4]string{
 	0: "ID",
 	1: "DisplayName",
 	2: "Creator",
 	3: "GameID",
-	4: "Date",
 }
 
 // DecodeURI decodes SubmissionFilter from URI form.
@@ -269,30 +260,6 @@ func (s *SubmissionFilter) DecodeURI(d uri.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"GameID\"")
-			}
-		case "Date":
-			if err := func() error {
-				var sDotDateVal int64
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt64(val)
-					if err != nil {
-						return err
-					}
-
-					sDotDateVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				s.Date.SetTo(sDotDateVal)
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"Date\"")
 			}
 		default:
 			return nil

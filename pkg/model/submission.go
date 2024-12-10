@@ -19,11 +19,12 @@ const(
 )
 
 type Submission struct {
-	ID             int64
+	ID             int64  `gorm:"primaryKey"`
 	DisplayName    string
 	Creator        string
 	GameID         int32
-	Date           time.Time
+	CreatedAt time.Time
+	UpdatedAt time.Time
 	Submitter      int64 // UserID
 	AssetID        int64
 	AssetVersion   int64

@@ -1022,7 +1022,7 @@ func decodeListSubmissionsParams(args [0]string, argsEscaped bool, r *http.Reque
 			Name:    "filter",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
-			Fields:  []uri.QueryParameterObjectField{{Name: "ID", Required: true}, {Name: "DisplayName", Required: false}, {Name: "Creator", Required: false}, {Name: "GameID", Required: false}, {Name: "Date", Required: false}},
+			Fields:  []uri.QueryParameterObjectField{{Name: "ID", Required: true}, {Name: "DisplayName", Required: false}, {Name: "Creator", Required: false}, {Name: "GameID", Required: false}},
 		}
 
 		if err := q.HasParam(cfg); err == nil {

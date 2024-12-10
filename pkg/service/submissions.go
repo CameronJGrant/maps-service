@@ -1,7 +1,6 @@
 package service
 
 import (
-	"time"
 	"errors"
 	"context"
 	"git.itzana.me/strafesnet/maps-service/pkg/api"
@@ -26,7 +25,6 @@ func (svc *Service) CreateSubmission(ctx context.Context, request *api.Submissio
 		DisplayName:   request.DisplayName,
 		Creator:       request.Creator,
 		GameID:        request.GameID,
-		Date:          time.Now(),
 		Submitter:     int64(userInfo.UserID),
 		AssetID:       request.AssetID,
 		AssetVersion:  request.AssetVersion,
@@ -57,7 +55,8 @@ func (svc *Service) GetSubmission(ctx context.Context, params api.GetSubmissionP
 		DisplayName:    submission.DisplayName,
 		Creator:        submission.Creator,
 		GameID:         submission.GameID,
-		Date:           submission.Date.Unix(),
+		CreatedAt:      submission.CreatedAt.Unix(),
+		UpdatedAt:      submission.UpdatedAt.Unix(),
 		Submitter:      submission.Submitter,
 		AssetID:        submission.AssetID,
 		AssetVersion:   submission.AssetVersion,
@@ -96,7 +95,8 @@ func (svc *Service) ListSubmissions(ctx context.Context, request api.ListSubmiss
 			DisplayName:    items[i].DisplayName,
 			Creator:        items[i].Creator,
 			GameID:         items[i].GameID,
-			Date:           items[i].Date.Unix(),
+			CreatedAt:      items[i].CreatedAt.Unix(),
+			UpdatedAt:      items[i].UpdatedAt.Unix(),
 			Submitter:      items[i].Submitter,
 			AssetID:        items[i].AssetID,
 			AssetVersion:   items[i].AssetVersion,
