@@ -7,6 +7,7 @@ import (
 	"git.itzana.me/strafesnet/maps-service/pkg/datastore"
 	"git.itzana.me/strafesnet/maps-service/pkg/model"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Submissions struct {
@@ -67,7 +68,11 @@ func (env *Submissions) IfStatusThenUpdate(ctx context.Context, id int64, status
 // returns the updated value
 func (env *Submissions) IfStatusThenUpdateAndGet(ctx context.Context, id int64, statuses []model.Status, values datastore.OptionalMap) (model.Submission, error) {
 	var submission model.Submission
-	if err := env.db.First(&submission, id).Where("status_id IN ?",statuses).Updates(values.Map()).Error; err != nil {
+	if err := env.db.Model(&submission).
+		Clauses(clause.Returning{}).
+		Where("id = ?", id).
+		Where("status_id IN ?",statuses).
+		Updates(values.Map()).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return submission, datastore.ErrNotExist
 		}
