@@ -8,6 +8,7 @@ import (
 
 var (
 	ErrNotExist = errors.New("resource does not exist")
+	ErroNoRowsAffected = errors.New("query did not affect any rows")
 )
 
 type Datastore interface {

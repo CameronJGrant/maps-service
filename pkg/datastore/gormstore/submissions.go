@@ -10,10 +10,6 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-var (
-	ErrorStatus = errors.New("Status is not in allowed statuses")
-)
-
 type Submissions struct {
 	db *gorm.DB
 }
@@ -85,7 +81,7 @@ func (env *Submissions) IfStatusThenUpdateAndGet(ctx context.Context, id int64, 
 	}
 
 	if result.RowsAffected == 0 {
-		return submission, ErrorStatus
+		return submission, datastore.ErroNoRowsAffected
 	}
 
 	return submission, nil

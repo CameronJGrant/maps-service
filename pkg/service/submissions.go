@@ -3,17 +3,12 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"errors"
 
 	"git.itzana.me/strafesnet/maps-service/pkg/api"
 	"git.itzana.me/strafesnet/maps-service/pkg/datastore"
 	"git.itzana.me/strafesnet/maps-service/pkg/model"
 )
 
-var (
-	// ErrInvalidSourceStatus current submission status cannot change to destination status
-	ErrInvalidSourceStatus = errors.New("Invalid source status")
-)
 
 // POST /submissions
 func (svc *Service) CreateSubmission(ctx context.Context, request *api.SubmissionCreate) (*api.ID, error) {
