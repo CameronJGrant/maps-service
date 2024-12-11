@@ -10,6 +10,10 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+var (
+	ErrorStatus = errors.New("Status is not in allowed statuses")
+)
+
 type Submissions struct {
 	db *gorm.DB
 }
@@ -68,15 +72,20 @@ func (env *Submissions) IfStatusThenUpdate(ctx context.Context, id int64, status
 // returns the updated value
 func (env *Submissions) IfStatusThenUpdateAndGet(ctx context.Context, id int64, statuses []model.Status, values datastore.OptionalMap) (model.Submission, error) {
 	var submission model.Submission
-	if err := env.db.Model(&submission).
+	result := env.db.Model(&submission).
 		Clauses(clause.Returning{}).
 		Where("id = ?", id).
 		Where("status_id IN ?",statuses).
-		Updates(values.Map()).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
+		Updates(values.Map())
+	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
 			return submission, datastore.ErrNotExist
 		}
-		return submission, err
+		return submission, result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return submission, ErrorStatus
 	}
 
 	return submission, nil
