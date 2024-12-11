@@ -79,20 +79,10 @@ macro_rules! action{
 	};
 }
 impl Context{
-	pub fn new(
-		base_url:String,
-		// cert:reqwest::Certificate,
-		// identity:reqwest::Identity,
-	)->reqwest::Result<Self>{
+	pub fn new(base_url:String)->reqwest::Result<Self>{
 		Ok(Self{
 			base_url,
-			client:reqwest::Client::builder()
-				.use_rustls_tls()
-				//.tls_built_in_root_certs(false)
-				//.add_root_certificate(cert)
-				//.identity(identity)
-				.https_only(true)
-				.build()?,
+			client:reqwest::Client::new(),
 		})
 	}
 	async fn get(&self,url:impl reqwest::IntoUrl)->Result<reqwest::Response,reqwest::Error>{
