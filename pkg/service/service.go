@@ -24,8 +24,18 @@ type Service struct {
 //
 // Used for common default response.
 func (svc *Service) NewError(ctx context.Context, err error) *api.ErrorStatusCode {
+	status := 500
+	if errors.Is(err,ErrPermissionDenied){
+		status = 403
+	}
+	if errors.Is(err,ErrUserInfo){
+		status = 401
+	}
 	return &api.ErrorStatusCode{
-		StatusCode: 500,
-		Response:   api.Error{Message: err.Error()},
+		StatusCode: status,
+		Response:   api.Error{
+			Code: int64(status),
+			Message: err.Error(),
+		},
 	}
 }
