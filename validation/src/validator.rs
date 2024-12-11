@@ -160,9 +160,7 @@ impl Validator{
 					groupId:None,
 				},data).await.map_err(ValidateError::Upload)?;
 
-				// response.AssetVersionId is not the right one
-				let model_version=get_model_version_number();
-				(response.AssetId,model_version)
+				(response.AssetId,response.AssetVersionId)
 			}else{
 				// create new model
 				let response=self.roblox_cookie.create(rbx_asset::cookie::CreateRequest{
@@ -173,9 +171,7 @@ impl Validator{
 					groupId:None,
 				},data).await.map_err(ValidateError::Create)?;
 
-				// response.AssetVersionId is not the right one
-				let model_version=get_model_version_number();
-				(response.AssetId,model_version)
+				(response.AssetId,response.AssetVersionId)
 			};
 
 			// update the submission to use the validated model
@@ -193,10 +189,6 @@ impl Validator{
 
 		Ok(())
 	}
-}
-
-fn get_model_version_number()->u64{
-	unimplemented!()
 }
 
 #[allow(dead_code)]
