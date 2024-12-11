@@ -15,8 +15,10 @@ var (
 )
 
 var (
-	RoleAdmin = 128
-	RoleReviewer = 64
+	// has SubmissionPublish
+	RoleMapAdmin   int32 = 128
+	// has SubmissionReview
+	RoleMapCouncil int32 = 64
 )
 
 type Roles struct {
@@ -75,11 +77,11 @@ func (svc SecurityHandler) HandleCookieAuth(ctx context.Context, operationName a
 	roles := Roles{}
 
 	// fix this when roblox udpates group roles
-	for r := range role.Roles{
-		if RoleAdmin<=r{
+	for _,r := range role.Roles{
+		if RoleMapAdmin<=r.Rank{
 			roles.SubmissionPublish = true
 		}
-		if RoleReviewer<=r{
+		if RoleMapCouncil<=r.Rank{
 			roles.SubmissionReview = true
 		}
 	}
