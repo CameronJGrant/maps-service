@@ -17,7 +17,7 @@ var (
 
 type Service struct {
 	DB datastore.Datastore
-	Nats *nats.Conn
+	Nats nats.JetStreamContext
 }
 
 // NewError creates *ErrorStatusCode from error returned by handler.

@@ -87,9 +87,26 @@ func serve(ctx *cli.Context) error {
 	if err != nil {
 		log.WithError(err).Fatal("failed to connect nats")
 	}
+	js, err := nc.JetStream()
+	if err != nil {
+		log.WithError(err).Fatal("failed to start jetstream")
+	}
+	// this should be somewhere else but whatever
+	_, err = js.AddStream(&nats.StreamConfig{Name:"submissions_validate"})
+	if err != nil {
+		log.WithError(err).Fatal("failed to add stream submissions_validate")
+	}
+	_, err = js.AddStream(&nats.StreamConfig{Name:"submissions_publish_new"})
+	if err != nil {
+		log.WithError(err).Fatal("failed to add stream submissions_publish_new")
+	}
+	_, err = js.AddStream(&nats.StreamConfig{Name:"submissions_publish_fix"})
+	if err != nil {
+		log.WithError(err).Fatal("failed to add stream submissions_publish_fix")
+	}
 	svc := &service.Service{
 		DB: db,
-		Nats: nc,
+		Nats: js,
 	}
 
 	conn, err := grpc.Dial(ctx.String("auth-rpc-host"), grpc.WithTransportCredentials(insecure.NewCredentials()))
