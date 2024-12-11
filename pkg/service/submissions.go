@@ -170,15 +170,7 @@ func (svc *Service) UpdateSubmissionModel(ctx context.Context, params api.Update
 //
 // POST /submissions/{SubmissionID}/status/publish
 func (svc *Service) ActionSubmissionPublish(ctx context.Context, params api.ActionSubmissionPublishParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
-	if !ok{
-		return ErrUserInfo
-	}
-
-	// check if caller has required role
-	if !userInfo.Roles.Validator{
-		return ErrPermissionDenied
-	}
+	println("[ActionSubmissionPublish] Implicit Validator permission granted!")
 
 	// transaction
 	smap := datastore.Optional()
@@ -387,15 +379,7 @@ func (svc *Service) ActionSubmissionTriggerValidate(ctx context.Context, params 
 //
 // POST /submissions/{SubmissionID}/status/validate
 func (svc *Service) ActionSubmissionValidate(ctx context.Context, params api.ActionSubmissionValidateParams) error {
-	userInfo, ok := ctx.Value("UserInfo").(UserInfo)
-	if !ok{
-		return ErrUserInfo
-	}
-
-	// check if caller has required role
-	if !userInfo.Roles.Validator{
-		return ErrPermissionDenied
-	}
+	println("[ActionSubmissionValidate] Implicit Validator permission granted!")
 
 	// transaction
 	smap := datastore.Optional()
