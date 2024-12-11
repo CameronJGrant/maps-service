@@ -12,8 +12,6 @@ tags:
     description: Script operations
   - name: ScriptPolicy
     description: Script policy operations
-security:
-  - cookieAuth: []
 paths:
   /submissions:
     get:
@@ -32,6 +30,8 @@ paths:
           required: false
           schema:
             $ref: "#/components/schemas/SubmissionFilter"
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -58,6 +58,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SubmissionCreate'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -79,6 +81,8 @@ paths:
         - Submissions
       parameters:
         - $ref: '#/components/parameters/SubmissionID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -112,6 +116,8 @@ paths:
           schema:
             type: integer
             format: int64
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -129,6 +135,8 @@ paths:
         - Submissions
       parameters:
         - $ref: '#/components/parameters/SubmissionID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -146,6 +154,8 @@ paths:
         - Submissions
       parameters:
         - $ref: '#/components/parameters/SubmissionID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -163,6 +173,8 @@ paths:
         - Submissions
       parameters:
         - $ref: '#/components/parameters/SubmissionID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -180,6 +192,8 @@ paths:
         - Submissions
       parameters:
         - $ref: '#/components/parameters/SubmissionID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -197,6 +211,8 @@ paths:
         - Submissions
       parameters:
         - $ref: '#/components/parameters/SubmissionID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -214,6 +230,8 @@ paths:
         - Submissions
       parameters:
         - $ref: '#/components/parameters/SubmissionID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -265,6 +283,8 @@ paths:
         - Submissions
       parameters:
         - $ref: '#/components/parameters/SubmissionID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -286,6 +306,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ScriptPolicyCreate'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -313,6 +335,8 @@ paths:
             type: string
             minLength: 16
             maxLength: 16
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -334,6 +358,8 @@ paths:
         - ScriptPolicy
       parameters:
         - $ref: '#/components/parameters/ScriptPolicyID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -360,6 +386,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ScriptPolicyUpdate'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -376,6 +404,8 @@ paths:
         - ScriptPolicy
       parameters:
         - $ref: '#/components/parameters/ScriptPolicyID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -397,6 +427,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ScriptCreate'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -418,6 +450,8 @@ paths:
         - Scripts
       parameters:
         - $ref: '#/components/parameters/ScriptID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -444,6 +478,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ScriptUpdate'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
@@ -460,6 +496,8 @@ paths:
         - Scripts
       parameters:
         - $ref: '#/components/parameters/ScriptID'
+      security:
+      - cookieAuth: []
       responses:
         "200":
           description: Successful response
