@@ -25,11 +25,11 @@ func (svc *Service) CreateSubmission(ctx context.Context, request *api.Submissio
 		DisplayName:   request.DisplayName,
 		Creator:       request.Creator,
 		GameID:        request.GameID,
-		Submitter:     int64(userInfo.UserID),
-		AssetID:       request.AssetID,
-		AssetVersion:  request.AssetVersion,
+		Submitter:     userInfo.UserID,
+		AssetID:       uint64(request.AssetID),
+		AssetVersion:  uint64(request.AssetVersion),
 		Completed:     false,
-		TargetAssetID: request.TargetAssetID.Value,
+		TargetAssetID: uint64(request.TargetAssetID.Value),
 		StatusID:      model.StatusUnderConstruction,
 	})
 	if err != nil{
@@ -57,11 +57,11 @@ func (svc *Service) GetSubmission(ctx context.Context, params api.GetSubmissionP
 		GameID:         submission.GameID,
 		CreatedAt:      submission.CreatedAt.Unix(),
 		UpdatedAt:      submission.UpdatedAt.Unix(),
-		Submitter:      submission.Submitter,
-		AssetID:        submission.AssetID,
-		AssetVersion:   submission.AssetVersion,
+		Submitter:      int64(submission.Submitter),
+		AssetID:        int64(submission.AssetID),
+		AssetVersion:   int64(submission.AssetVersion),
 		Completed:      submission.Completed,
-		TargetAssetID:  api.NewOptInt64(submission.TargetAssetID),
+		TargetAssetID:  api.NewOptInt64(int64(submission.TargetAssetID)),
 		StatusID:       int32(submission.StatusID),
 	}, nil
 }
@@ -97,11 +97,11 @@ func (svc *Service) ListSubmissions(ctx context.Context, request api.ListSubmiss
 			GameID:         items[i].GameID,
 			CreatedAt:      items[i].CreatedAt.Unix(),
 			UpdatedAt:      items[i].UpdatedAt.Unix(),
-			Submitter:      items[i].Submitter,
-			AssetID:        items[i].AssetID,
-			AssetVersion:   items[i].AssetVersion,
+			Submitter:      int64(items[i].Submitter),
+			AssetID:        int64(items[i].AssetID),
+			AssetVersion:   int64(items[i].AssetVersion),
 			Completed:      items[i].Completed,
-			TargetAssetID:  api.NewOptInt64(items[i].TargetAssetID),
+			TargetAssetID:  api.NewOptInt64(int64(items[i].TargetAssetID)),
 			StatusID:       int32(items[i].StatusID),
 		})
 	}

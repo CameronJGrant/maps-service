@@ -33,10 +33,10 @@ type Roles struct {
 
 type UserInfo struct {
 	Roles Roles
-	UserID int64
+	UserID uint64
 }
 
-func (usr UserInfo) IsSubmitter(submitter int64) bool{
+func (usr UserInfo) IsSubmitter(submitter uint64) bool{
 	return usr.UserID == submitter
 }
 
@@ -88,7 +88,7 @@ func (svc SecurityHandler) HandleCookieAuth(ctx context.Context, operationName a
 
 	newCtx := context.WithValue(ctx, "UserInfo", UserInfo{
 		Roles: roles,
-		UserID: int64(session.UserID),
+		UserID: session.UserID,
 	})
 
 	return newCtx, nil

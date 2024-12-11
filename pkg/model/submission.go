@@ -25,10 +25,10 @@ type Submission struct {
 	GameID         int32
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	Submitter      int64 // UserID
-	AssetID        int64
-	AssetVersion   int64
+	Submitter      uint64 // UserID
+	AssetID        uint64
+	AssetVersion   uint64
 	Completed      bool // Has this version of the map been completed at least once on maptest
-	TargetAssetID  int64 // where to upload map fix.  if the TargetAssetID is 0, it's a new map.
+	TargetAssetID  uint64 // where to upload map fix.  if the TargetAssetID is 0, it's a new map.
 	StatusID       Status
 }
