@@ -1,0 +1,34 @@
+version: '3.9'
+networks:
+  maps-service-network:
+    driver: bridge
+
+services:
+  nats:
+    image: docker.io/nats:latest
+    container_name: nats
+    networks:
+      - maps-service-network
+
+  maps-service:
+    build:
+      context: .
+      dockerfile: Containerfile
+    container_name: maps-service
+    networks:
+      - maps-service-network
+
+  web:
+    build:
+      context: web
+      dockerfile: Containerfile
+    networks:
+      - maps-service-network
+
+  validation:
+    build:
+      context: validation
+      dockerfile: Containerfile
+    container_name: validation
+    networks:
+      - maps-service-network
