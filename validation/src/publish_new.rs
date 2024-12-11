@@ -52,13 +52,13 @@ impl Publisher{
 
 		// download the map model version
 		let model_data=self.roblox_cookie.get_asset(rbx_asset::cookie::GetAssetRequest{
-			asset_id:publish_info.model_id,
-			version:Some(publish_info.model_version),
+			asset_id:publish_info.ModelID,
+			version:Some(publish_info.ModelVersion),
 		}).await.map_err(PublishError::Get)?;
 
 		// upload the map to the strafesnet group
 		let upload_response=self.roblox_cookie.create(rbx_asset::cookie::CreateRequest{
-			name:publish_info.display_name,
+			name:publish_info.DisplayName,
 			description:"".to_owned(),
 			ispublic:false,
 			allowComments:false,
@@ -70,7 +70,7 @@ impl Publisher{
 
 		// mark submission as published
 		self.api.action_submission_publish(
-			api::SubmissionID(publish_info.submission_id)
+			api::SubmissionID(publish_info.SubmissionID)
 		).await.map_err(PublishError::ApiActionSubmissionPublish)?;
 
 		Ok(())

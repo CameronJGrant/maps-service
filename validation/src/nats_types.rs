@@ -4,30 +4,33 @@
 // Requests are sent from maps-service to validator
 // Validation invokes the REST api to update the submissions
 
+#[allow(nonstandard_style)]
 #[derive(serde::Deserialize)]
 pub struct ValidateRequest{
 	// submission_id is passed back in the response message
-	pub submission_id:i64,
-	pub model_id:u64,
-	pub model_version:u64,
-	pub validated_model_id:Option<u64>,
+	pub SubmissionID:i64,
+	pub ModelID:u64,
+	pub ModelVersion:u64,
+	pub ValidatedModelID:Option<u64>,
 }
 
 // Create a new map
+#[allow(nonstandard_style)]
 #[derive(serde::Deserialize)]
 pub struct PublishNewRequest{
-	pub submission_id:i64,
-	pub model_id:u64,
-	pub model_version:u64,
-	pub creator:String,
-	pub display_name:String,
+	pub SubmissionID:i64,
+	pub ModelID:u64,
+	pub ModelVersion:u64,
+	pub Creator:String,
+	pub DisplayName:String,
 	//games:HashSet<GameID>,
 }
 
+#[allow(nonstandard_style)]
 #[derive(serde::Deserialize)]
 pub struct PublishFixRequest{
-	pub submission_id:i64,
-	pub model_id:u64,
-	pub model_version:u64,
-	pub target_asset_id:u64,
+	pub SubmissionID:i64,
+	pub ModelID:u64,
+	pub ModelVersion:u64,
+	pub TargetAssetID:u64,
 }

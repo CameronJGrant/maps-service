@@ -69,8 +69,8 @@ impl Validator{
 
 		// download map
 		let data=self.roblox_cookie.get_asset(rbx_asset::cookie::GetAssetRequest{
-			asset_id:validate_info.model_id,
-			version:Some(validate_info.model_version),
+			asset_id:validate_info.ModelID,
+			version:Some(validate_info.ModelVersion),
 		}).await.map_err(ValidateError::Get)?;
 
 		// decode dom (slow!)
@@ -149,7 +149,7 @@ impl Validator{
 			rbx_binary::to_writer(&mut data,&dom,&[dom.root_ref()]).map_err(ValidateError::WriteDom)?;
 
 			// upload a model lol
-			let (model_id,model_version)=if let Some(model_id)=validate_info.validated_model_id{
+			let (model_id,model_version)=if let Some(model_id)=validate_info.ValidatedModelID{
 				// upload to existing id
 				let response=self.roblox_cookie.upload(rbx_asset::cookie::UploadRequest{
 					assetid:model_id,
@@ -176,7 +176,7 @@ impl Validator{
 
 			// update the submission to use the validated model
 			self.api.update_submission_model(api::UpdateSubmissionModelRequest{
-				ID:validate_info.submission_id,
+				ID:validate_info.SubmissionID,
 				ModelID:model_id,
 				ModelVersion:model_version,
 			}).await.map_err(ValidateError::ApiUpdateSubmissionModel)?;
@@ -184,7 +184,7 @@ impl Validator{
 
 		// update the submission model status to validated
 		self.api.action_submission_validate(
-			api::SubmissionID(validate_info.submission_id)
+			api::SubmissionID(validate_info.SubmissionID)
 		).await.map_err(ValidateError::ApiActionSubmissionValidate)?;
 
 		Ok(())
