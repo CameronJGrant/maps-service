@@ -71,7 +71,7 @@ macro_rules! action{
 			let url_raw=format!(concat!("{}/submissions/{}/status/",stringify!($action)),self.base_url,config.0);
 			let url=reqwest::Url::parse(url_raw.as_str()).map_err(Error::ParseError)?;
 
-			self.patch(url).await.map_err(Error::Reqwest)?
+			self.post(url).await.map_err(Error::Reqwest)?
 			.error_for_status().map_err(Error::Reqwest)?;
 
 			Ok(())
@@ -89,8 +89,8 @@ impl Context{
 		self.client.get(url)
 		.send().await
 	}
-	async fn patch(&self,url:impl reqwest::IntoUrl)->Result<reqwest::Response,reqwest::Error>{
-		self.client.patch(url)
+	async fn post(&self,url:impl reqwest::IntoUrl)->Result<reqwest::Response,reqwest::Error>{
+		self.client.post(url)
 		.send().await
 	}
 	pub async fn get_script(&self,config:GetScriptRequest)->Result<ScriptResponse,Error>{
@@ -119,7 +119,7 @@ impl Context{
 				.append_pair("ModelVersion",config.ModelVersion.to_string().as_str());
 		}
 
-		self.patch(url).await.map_err(Error::Reqwest)?
+		self.post(url).await.map_err(Error::Reqwest)?
 		.error_for_status().map_err(Error::Reqwest)?;
 
 		Ok(())
