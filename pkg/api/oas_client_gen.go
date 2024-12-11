@@ -222,7 +222,7 @@ func (c *Client) ActionSubmissionPublish(ctx context.Context, params ActionSubmi
 	return err
 }
 
-func (c *Client) sendActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) (res *ActionSubmissionPublishOK, err error) {
+func (c *Client) sendActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) (res *ActionSubmissionPublishNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionPublish"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -287,39 +287,6 @@ func (c *Client) sendActionSubmissionPublish(ctx context.Context, params ActionS
 		return res, errors.Wrap(err, "create request")
 	}
 
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:CookieAuth"
-			switch err := c.securityCookieAuth(ctx, ActionSubmissionPublishOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"CookieAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -346,7 +313,7 @@ func (c *Client) ActionSubmissionReject(ctx context.Context, params ActionSubmis
 	return err
 }
 
-func (c *Client) sendActionSubmissionReject(ctx context.Context, params ActionSubmissionRejectParams) (res *ActionSubmissionRejectOK, err error) {
+func (c *Client) sendActionSubmissionReject(ctx context.Context, params ActionSubmissionRejectParams) (res *ActionSubmissionRejectNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionReject"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -470,7 +437,7 @@ func (c *Client) ActionSubmissionRequestChanges(ctx context.Context, params Acti
 	return err
 }
 
-func (c *Client) sendActionSubmissionRequestChanges(ctx context.Context, params ActionSubmissionRequestChangesParams) (res *ActionSubmissionRequestChangesOK, err error) {
+func (c *Client) sendActionSubmissionRequestChanges(ctx context.Context, params ActionSubmissionRequestChangesParams) (res *ActionSubmissionRequestChangesNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionRequestChanges"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -594,7 +561,7 @@ func (c *Client) ActionSubmissionRevoke(ctx context.Context, params ActionSubmis
 	return err
 }
 
-func (c *Client) sendActionSubmissionRevoke(ctx context.Context, params ActionSubmissionRevokeParams) (res *ActionSubmissionRevokeOK, err error) {
+func (c *Client) sendActionSubmissionRevoke(ctx context.Context, params ActionSubmissionRevokeParams) (res *ActionSubmissionRevokeNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionRevoke"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -718,7 +685,7 @@ func (c *Client) ActionSubmissionSubmit(ctx context.Context, params ActionSubmis
 	return err
 }
 
-func (c *Client) sendActionSubmissionSubmit(ctx context.Context, params ActionSubmissionSubmitParams) (res *ActionSubmissionSubmitOK, err error) {
+func (c *Client) sendActionSubmissionSubmit(ctx context.Context, params ActionSubmissionSubmitParams) (res *ActionSubmissionSubmitNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionSubmit"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -842,7 +809,7 @@ func (c *Client) ActionSubmissionTriggerPublish(ctx context.Context, params Acti
 	return err
 }
 
-func (c *Client) sendActionSubmissionTriggerPublish(ctx context.Context, params ActionSubmissionTriggerPublishParams) (res *ActionSubmissionTriggerPublishOK, err error) {
+func (c *Client) sendActionSubmissionTriggerPublish(ctx context.Context, params ActionSubmissionTriggerPublishParams) (res *ActionSubmissionTriggerPublishNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionTriggerPublish"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -966,7 +933,7 @@ func (c *Client) ActionSubmissionTriggerValidate(ctx context.Context, params Act
 	return err
 }
 
-func (c *Client) sendActionSubmissionTriggerValidate(ctx context.Context, params ActionSubmissionTriggerValidateParams) (res *ActionSubmissionTriggerValidateOK, err error) {
+func (c *Client) sendActionSubmissionTriggerValidate(ctx context.Context, params ActionSubmissionTriggerValidateParams) (res *ActionSubmissionTriggerValidateNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionTriggerValidate"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -1090,7 +1057,7 @@ func (c *Client) ActionSubmissionValidate(ctx context.Context, params ActionSubm
 	return err
 }
 
-func (c *Client) sendActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) (res *ActionSubmissionValidateOK, err error) {
+func (c *Client) sendActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) (res *ActionSubmissionValidateNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionValidate"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -1153,39 +1120,6 @@ func (c *Client) sendActionSubmissionValidate(ctx context.Context, params Action
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:CookieAuth"
-			switch err := c.securityCookieAuth(ctx, ActionSubmissionValidateOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"CookieAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
 	}
 
 	stage = "SendRequest"
@@ -1538,7 +1472,7 @@ func (c *Client) DeleteScript(ctx context.Context, params DeleteScriptParams) er
 	return err
 }
 
-func (c *Client) sendDeleteScript(ctx context.Context, params DeleteScriptParams) (res *DeleteScriptOK, err error) {
+func (c *Client) sendDeleteScript(ctx context.Context, params DeleteScriptParams) (res *DeleteScriptNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteScript"),
 		semconv.HTTPRequestMethodKey.String("DELETE"),
@@ -1661,7 +1595,7 @@ func (c *Client) DeleteScriptPolicy(ctx context.Context, params DeleteScriptPoli
 	return err
 }
 
-func (c *Client) sendDeleteScriptPolicy(ctx context.Context, params DeleteScriptPolicyParams) (res *DeleteScriptPolicyOK, err error) {
+func (c *Client) sendDeleteScriptPolicy(ctx context.Context, params DeleteScriptPolicyParams) (res *DeleteScriptPolicyNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteScriptPolicy"),
 		semconv.HTTPRequestMethodKey.String("DELETE"),
@@ -2416,7 +2350,7 @@ func (c *Client) SetSubmissionCompleted(ctx context.Context, params SetSubmissio
 	return err
 }
 
-func (c *Client) sendSetSubmissionCompleted(ctx context.Context, params SetSubmissionCompletedParams) (res *SetSubmissionCompletedOK, err error) {
+func (c *Client) sendSetSubmissionCompleted(ctx context.Context, params SetSubmissionCompletedParams) (res *SetSubmissionCompletedNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("setSubmissionCompleted"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -2540,7 +2474,7 @@ func (c *Client) UpdateScript(ctx context.Context, request *ScriptUpdate, params
 	return err
 }
 
-func (c *Client) sendUpdateScript(ctx context.Context, request *ScriptUpdate, params UpdateScriptParams) (res *UpdateScriptOK, err error) {
+func (c *Client) sendUpdateScript(ctx context.Context, request *ScriptUpdate, params UpdateScriptParams) (res *UpdateScriptNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateScript"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -2666,7 +2600,7 @@ func (c *Client) UpdateScriptPolicy(ctx context.Context, request *ScriptPolicyUp
 	return err
 }
 
-func (c *Client) sendUpdateScriptPolicy(ctx context.Context, request *ScriptPolicyUpdate, params UpdateScriptPolicyParams) (res *UpdateScriptPolicyOK, err error) {
+func (c *Client) sendUpdateScriptPolicy(ctx context.Context, request *ScriptPolicyUpdate, params UpdateScriptPolicyParams) (res *UpdateScriptPolicyNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateScriptPolicy"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -2792,7 +2726,7 @@ func (c *Client) UpdateSubmissionModel(ctx context.Context, params UpdateSubmiss
 	return err
 }
 
-func (c *Client) sendUpdateSubmissionModel(ctx context.Context, params UpdateSubmissionModelParams) (res *UpdateSubmissionModelOK, err error) {
+func (c *Client) sendUpdateSubmissionModel(ctx context.Context, params UpdateSubmissionModelParams) (res *UpdateSubmissionModelNoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateSubmissionModel"),
 		semconv.HTTPRequestMethodKey.String("POST"),

@@ -10,29 +10,29 @@ func (s *ErrorStatusCode) Error() string {
 	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
 }
 
-// ActionSubmissionPublishOK is response for ActionSubmissionPublish operation.
-type ActionSubmissionPublishOK struct{}
+// ActionSubmissionPublishNoContent is response for ActionSubmissionPublish operation.
+type ActionSubmissionPublishNoContent struct{}
 
-// ActionSubmissionRejectOK is response for ActionSubmissionReject operation.
-type ActionSubmissionRejectOK struct{}
+// ActionSubmissionRejectNoContent is response for ActionSubmissionReject operation.
+type ActionSubmissionRejectNoContent struct{}
 
-// ActionSubmissionRequestChangesOK is response for ActionSubmissionRequestChanges operation.
-type ActionSubmissionRequestChangesOK struct{}
+// ActionSubmissionRequestChangesNoContent is response for ActionSubmissionRequestChanges operation.
+type ActionSubmissionRequestChangesNoContent struct{}
 
-// ActionSubmissionRevokeOK is response for ActionSubmissionRevoke operation.
-type ActionSubmissionRevokeOK struct{}
+// ActionSubmissionRevokeNoContent is response for ActionSubmissionRevoke operation.
+type ActionSubmissionRevokeNoContent struct{}
 
-// ActionSubmissionSubmitOK is response for ActionSubmissionSubmit operation.
-type ActionSubmissionSubmitOK struct{}
+// ActionSubmissionSubmitNoContent is response for ActionSubmissionSubmit operation.
+type ActionSubmissionSubmitNoContent struct{}
 
-// ActionSubmissionTriggerPublishOK is response for ActionSubmissionTriggerPublish operation.
-type ActionSubmissionTriggerPublishOK struct{}
+// ActionSubmissionTriggerPublishNoContent is response for ActionSubmissionTriggerPublish operation.
+type ActionSubmissionTriggerPublishNoContent struct{}
 
-// ActionSubmissionTriggerValidateOK is response for ActionSubmissionTriggerValidate operation.
-type ActionSubmissionTriggerValidateOK struct{}
+// ActionSubmissionTriggerValidateNoContent is response for ActionSubmissionTriggerValidate operation.
+type ActionSubmissionTriggerValidateNoContent struct{}
 
-// ActionSubmissionValidateOK is response for ActionSubmissionValidate operation.
-type ActionSubmissionValidateOK struct{}
+// ActionSubmissionValidateNoContent is response for ActionSubmissionValidate operation.
+type ActionSubmissionValidateNoContent struct{}
 
 type CookieAuth struct {
 	APIKey string
@@ -48,11 +48,11 @@ func (s *CookieAuth) SetAPIKey(val string) {
 	s.APIKey = val
 }
 
-// DeleteScriptOK is response for DeleteScript operation.
-type DeleteScriptOK struct{}
+// DeleteScriptNoContent is response for DeleteScript operation.
+type DeleteScriptNoContent struct{}
 
-// DeleteScriptPolicyOK is response for DeleteScriptPolicy operation.
-type DeleteScriptPolicyOK struct{}
+// DeleteScriptPolicyNoContent is response for DeleteScriptPolicy operation.
+type DeleteScriptPolicyNoContent struct{}
 
 // Represents error object.
 // Ref: #/components/schemas/Error
@@ -576,8 +576,8 @@ func (s *ScriptUpdate) SetSubmissionID(val OptInt64) {
 	s.SubmissionID = val
 }
 
-// SetSubmissionCompletedOK is response for SetSubmissionCompleted operation.
-type SetSubmissionCompletedOK struct{}
+// SetSubmissionCompletedNoContent is response for SetSubmissionCompleted operation.
+type SetSubmissionCompletedNoContent struct{}
 
 // Ref: #/components/schemas/Submission
 type Submission struct {
@@ -844,11 +844,11 @@ func (s *SubmissionFilter) SetGameID(val OptInt32) {
 	s.GameID = val
 }
 
-// UpdateScriptOK is response for UpdateScript operation.
-type UpdateScriptOK struct{}
+// UpdateScriptNoContent is response for UpdateScript operation.
+type UpdateScriptNoContent struct{}
 
-// UpdateScriptPolicyOK is response for UpdateScriptPolicy operation.
-type UpdateScriptPolicyOK struct{}
+// UpdateScriptPolicyNoContent is response for UpdateScriptPolicy operation.
+type UpdateScriptPolicyNoContent struct{}
 
-// UpdateSubmissionModelOK is response for UpdateSubmissionModel operation.
-type UpdateSubmissionModelOK struct{}
+// UpdateSubmissionModelNoContent is response for UpdateSubmissionModel operation.
+type UpdateSubmissionModelNoContent struct{}

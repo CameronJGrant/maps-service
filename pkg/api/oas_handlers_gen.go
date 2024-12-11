@@ -104,52 +104,6 @@ func (s *Server) handleActionSubmissionPublishRequest(args [1]string, argsEscape
 			ID:   "actionSubmissionPublish",
 		}
 	)
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			sctx, ok, err := s.securityCookieAuth(ctx, ActionSubmissionPublishOperation, r)
-			if err != nil {
-				err = &ogenerrors.SecurityError{
-					OperationContext: opErrContext,
-					Security:         "CookieAuth",
-					Err:              err,
-				}
-				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
-					defer recordError("Security:CookieAuth", err)
-				}
-				return
-			}
-			if ok {
-				satisfied[0] |= 1 << 0
-				ctx = sctx
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			err = &ogenerrors.SecurityError{
-				OperationContext: opErrContext,
-				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
-			}
-			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
-				defer recordError("Security", err)
-			}
-			return
-		}
-	}
 	params, err := decodeActionSubmissionPublishParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
@@ -161,7 +115,7 @@ func (s *Server) handleActionSubmissionPublishRequest(args [1]string, argsEscape
 		return
 	}
 
-	var response *ActionSubmissionPublishOK
+	var response *ActionSubmissionPublishNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -181,7 +135,7 @@ func (s *Server) handleActionSubmissionPublishRequest(args [1]string, argsEscape
 		type (
 			Request  = struct{}
 			Params   = ActionSubmissionPublishParams
-			Response = *ActionSubmissionPublishOK
+			Response = *ActionSubmissionPublishNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -356,7 +310,7 @@ func (s *Server) handleActionSubmissionRejectRequest(args [1]string, argsEscaped
 		return
 	}
 
-	var response *ActionSubmissionRejectOK
+	var response *ActionSubmissionRejectNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -376,7 +330,7 @@ func (s *Server) handleActionSubmissionRejectRequest(args [1]string, argsEscaped
 		type (
 			Request  = struct{}
 			Params   = ActionSubmissionRejectParams
-			Response = *ActionSubmissionRejectOK
+			Response = *ActionSubmissionRejectNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -551,7 +505,7 @@ func (s *Server) handleActionSubmissionRequestChangesRequest(args [1]string, arg
 		return
 	}
 
-	var response *ActionSubmissionRequestChangesOK
+	var response *ActionSubmissionRequestChangesNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -571,7 +525,7 @@ func (s *Server) handleActionSubmissionRequestChangesRequest(args [1]string, arg
 		type (
 			Request  = struct{}
 			Params   = ActionSubmissionRequestChangesParams
-			Response = *ActionSubmissionRequestChangesOK
+			Response = *ActionSubmissionRequestChangesNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -746,7 +700,7 @@ func (s *Server) handleActionSubmissionRevokeRequest(args [1]string, argsEscaped
 		return
 	}
 
-	var response *ActionSubmissionRevokeOK
+	var response *ActionSubmissionRevokeNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -766,7 +720,7 @@ func (s *Server) handleActionSubmissionRevokeRequest(args [1]string, argsEscaped
 		type (
 			Request  = struct{}
 			Params   = ActionSubmissionRevokeParams
-			Response = *ActionSubmissionRevokeOK
+			Response = *ActionSubmissionRevokeNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -941,7 +895,7 @@ func (s *Server) handleActionSubmissionSubmitRequest(args [1]string, argsEscaped
 		return
 	}
 
-	var response *ActionSubmissionSubmitOK
+	var response *ActionSubmissionSubmitNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -961,7 +915,7 @@ func (s *Server) handleActionSubmissionSubmitRequest(args [1]string, argsEscaped
 		type (
 			Request  = struct{}
 			Params   = ActionSubmissionSubmitParams
-			Response = *ActionSubmissionSubmitOK
+			Response = *ActionSubmissionSubmitNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -1136,7 +1090,7 @@ func (s *Server) handleActionSubmissionTriggerPublishRequest(args [1]string, arg
 		return
 	}
 
-	var response *ActionSubmissionTriggerPublishOK
+	var response *ActionSubmissionTriggerPublishNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -1156,7 +1110,7 @@ func (s *Server) handleActionSubmissionTriggerPublishRequest(args [1]string, arg
 		type (
 			Request  = struct{}
 			Params   = ActionSubmissionTriggerPublishParams
-			Response = *ActionSubmissionTriggerPublishOK
+			Response = *ActionSubmissionTriggerPublishNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -1331,7 +1285,7 @@ func (s *Server) handleActionSubmissionTriggerValidateRequest(args [1]string, ar
 		return
 	}
 
-	var response *ActionSubmissionTriggerValidateOK
+	var response *ActionSubmissionTriggerValidateNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -1351,7 +1305,7 @@ func (s *Server) handleActionSubmissionTriggerValidateRequest(args [1]string, ar
 		type (
 			Request  = struct{}
 			Params   = ActionSubmissionTriggerValidateParams
-			Response = *ActionSubmissionTriggerValidateOK
+			Response = *ActionSubmissionTriggerValidateNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -1469,52 +1423,6 @@ func (s *Server) handleActionSubmissionValidateRequest(args [1]string, argsEscap
 			ID:   "actionSubmissionValidate",
 		}
 	)
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			sctx, ok, err := s.securityCookieAuth(ctx, ActionSubmissionValidateOperation, r)
-			if err != nil {
-				err = &ogenerrors.SecurityError{
-					OperationContext: opErrContext,
-					Security:         "CookieAuth",
-					Err:              err,
-				}
-				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
-					defer recordError("Security:CookieAuth", err)
-				}
-				return
-			}
-			if ok {
-				satisfied[0] |= 1 << 0
-				ctx = sctx
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			err = &ogenerrors.SecurityError{
-				OperationContext: opErrContext,
-				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
-			}
-			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
-				defer recordError("Security", err)
-			}
-			return
-		}
-	}
 	params, err := decodeActionSubmissionValidateParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
@@ -1526,7 +1434,7 @@ func (s *Server) handleActionSubmissionValidateRequest(args [1]string, argsEscap
 		return
 	}
 
-	var response *ActionSubmissionValidateOK
+	var response *ActionSubmissionValidateNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -1546,7 +1454,7 @@ func (s *Server) handleActionSubmissionValidateRequest(args [1]string, argsEscap
 		type (
 			Request  = struct{}
 			Params   = ActionSubmissionValidateParams
-			Response = *ActionSubmissionValidateOK
+			Response = *ActionSubmissionValidateNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -2306,7 +2214,7 @@ func (s *Server) handleDeleteScriptRequest(args [1]string, argsEscaped bool, w h
 		return
 	}
 
-	var response *DeleteScriptOK
+	var response *DeleteScriptNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -2326,7 +2234,7 @@ func (s *Server) handleDeleteScriptRequest(args [1]string, argsEscaped bool, w h
 		type (
 			Request  = struct{}
 			Params   = DeleteScriptParams
-			Response = *DeleteScriptOK
+			Response = *DeleteScriptNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -2501,7 +2409,7 @@ func (s *Server) handleDeleteScriptPolicyRequest(args [1]string, argsEscaped boo
 		return
 	}
 
-	var response *DeleteScriptPolicyOK
+	var response *DeleteScriptPolicyNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -2521,7 +2429,7 @@ func (s *Server) handleDeleteScriptPolicyRequest(args [1]string, argsEscaped boo
 		type (
 			Request  = struct{}
 			Params   = DeleteScriptPolicyParams
-			Response = *DeleteScriptPolicyOK
+			Response = *DeleteScriptPolicyNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -3675,7 +3583,7 @@ func (s *Server) handleSetSubmissionCompletedRequest(args [1]string, argsEscaped
 		return
 	}
 
-	var response *SetSubmissionCompletedOK
+	var response *SetSubmissionCompletedNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -3695,7 +3603,7 @@ func (s *Server) handleSetSubmissionCompletedRequest(args [1]string, argsEscaped
 		type (
 			Request  = struct{}
 			Params   = SetSubmissionCompletedParams
-			Response = *SetSubmissionCompletedOK
+			Response = *SetSubmissionCompletedNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -3885,7 +3793,7 @@ func (s *Server) handleUpdateScriptRequest(args [1]string, argsEscaped bool, w h
 		}
 	}()
 
-	var response *UpdateScriptOK
+	var response *UpdateScriptNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -3905,7 +3813,7 @@ func (s *Server) handleUpdateScriptRequest(args [1]string, argsEscaped bool, w h
 		type (
 			Request  = *ScriptUpdate
 			Params   = UpdateScriptParams
-			Response = *UpdateScriptOK
+			Response = *UpdateScriptNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -4095,7 +4003,7 @@ func (s *Server) handleUpdateScriptPolicyRequest(args [1]string, argsEscaped boo
 		}
 	}()
 
-	var response *UpdateScriptPolicyOK
+	var response *UpdateScriptPolicyNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -4115,7 +4023,7 @@ func (s *Server) handleUpdateScriptPolicyRequest(args [1]string, argsEscaped boo
 		type (
 			Request  = *ScriptPolicyUpdate
 			Params   = UpdateScriptPolicyParams
-			Response = *UpdateScriptPolicyOK
+			Response = *UpdateScriptPolicyNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -4290,7 +4198,7 @@ func (s *Server) handleUpdateSubmissionModelRequest(args [1]string, argsEscaped 
 		return
 	}
 
-	var response *UpdateSubmissionModelOK
+	var response *UpdateSubmissionModelNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -4318,7 +4226,7 @@ func (s *Server) handleUpdateSubmissionModelRequest(args [1]string, argsEscaped 
 		type (
 			Request  = struct{}
 			Params   = UpdateSubmissionModelParams
-			Response = *UpdateSubmissionModelOK
+			Response = *UpdateSubmissionModelNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,

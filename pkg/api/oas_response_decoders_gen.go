@@ -15,11 +15,11 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func decodeActionSubmissionPublishResponse(resp *http.Response) (res *ActionSubmissionPublishOK, _ error) {
+func decodeActionSubmissionPublishResponse(resp *http.Response) (res *ActionSubmissionPublishNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &ActionSubmissionPublishOK{}, nil
+	case 204:
+		// Code 204.
+		return &ActionSubmissionPublishNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -66,11 +66,11 @@ func decodeActionSubmissionPublishResponse(resp *http.Response) (res *ActionSubm
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeActionSubmissionRejectResponse(resp *http.Response) (res *ActionSubmissionRejectOK, _ error) {
+func decodeActionSubmissionRejectResponse(resp *http.Response) (res *ActionSubmissionRejectNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &ActionSubmissionRejectOK{}, nil
+	case 204:
+		// Code 204.
+		return &ActionSubmissionRejectNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -117,11 +117,11 @@ func decodeActionSubmissionRejectResponse(resp *http.Response) (res *ActionSubmi
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeActionSubmissionRequestChangesResponse(resp *http.Response) (res *ActionSubmissionRequestChangesOK, _ error) {
+func decodeActionSubmissionRequestChangesResponse(resp *http.Response) (res *ActionSubmissionRequestChangesNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &ActionSubmissionRequestChangesOK{}, nil
+	case 204:
+		// Code 204.
+		return &ActionSubmissionRequestChangesNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -168,11 +168,11 @@ func decodeActionSubmissionRequestChangesResponse(resp *http.Response) (res *Act
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeActionSubmissionRevokeResponse(resp *http.Response) (res *ActionSubmissionRevokeOK, _ error) {
+func decodeActionSubmissionRevokeResponse(resp *http.Response) (res *ActionSubmissionRevokeNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &ActionSubmissionRevokeOK{}, nil
+	case 204:
+		// Code 204.
+		return &ActionSubmissionRevokeNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -219,11 +219,11 @@ func decodeActionSubmissionRevokeResponse(resp *http.Response) (res *ActionSubmi
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeActionSubmissionSubmitResponse(resp *http.Response) (res *ActionSubmissionSubmitOK, _ error) {
+func decodeActionSubmissionSubmitResponse(resp *http.Response) (res *ActionSubmissionSubmitNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &ActionSubmissionSubmitOK{}, nil
+	case 204:
+		// Code 204.
+		return &ActionSubmissionSubmitNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -270,11 +270,11 @@ func decodeActionSubmissionSubmitResponse(resp *http.Response) (res *ActionSubmi
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeActionSubmissionTriggerPublishResponse(resp *http.Response) (res *ActionSubmissionTriggerPublishOK, _ error) {
+func decodeActionSubmissionTriggerPublishResponse(resp *http.Response) (res *ActionSubmissionTriggerPublishNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &ActionSubmissionTriggerPublishOK{}, nil
+	case 204:
+		// Code 204.
+		return &ActionSubmissionTriggerPublishNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -321,11 +321,11 @@ func decodeActionSubmissionTriggerPublishResponse(resp *http.Response) (res *Act
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeActionSubmissionTriggerValidateResponse(resp *http.Response) (res *ActionSubmissionTriggerValidateOK, _ error) {
+func decodeActionSubmissionTriggerValidateResponse(resp *http.Response) (res *ActionSubmissionTriggerValidateNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &ActionSubmissionTriggerValidateOK{}, nil
+	case 204:
+		// Code 204.
+		return &ActionSubmissionTriggerValidateNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -372,11 +372,11 @@ func decodeActionSubmissionTriggerValidateResponse(resp *http.Response) (res *Ac
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeActionSubmissionValidateResponse(resp *http.Response) (res *ActionSubmissionValidateOK, _ error) {
+func decodeActionSubmissionValidateResponse(resp *http.Response) (res *ActionSubmissionValidateNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &ActionSubmissionValidateOK{}, nil
+	case 204:
+		// Code 204.
+		return &ActionSubmissionValidateNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -425,8 +425,8 @@ func decodeActionSubmissionValidateResponse(resp *http.Response) (res *ActionSub
 
 func decodeCreateScriptResponse(resp *http.Response) (res *ID, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
+	case 201:
+		// Code 201.
 		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
 		if err != nil {
 			return res, errors.Wrap(err, "parse media type")
@@ -508,8 +508,8 @@ func decodeCreateScriptResponse(resp *http.Response) (res *ID, _ error) {
 
 func decodeCreateScriptPolicyResponse(resp *http.Response) (res *ID, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
+	case 201:
+		// Code 201.
 		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
 		if err != nil {
 			return res, errors.Wrap(err, "parse media type")
@@ -591,8 +591,8 @@ func decodeCreateScriptPolicyResponse(resp *http.Response) (res *ID, _ error) {
 
 func decodeCreateSubmissionResponse(resp *http.Response) (res *ID, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
+	case 201:
+		// Code 201.
 		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
 		if err != nil {
 			return res, errors.Wrap(err, "parse media type")
@@ -672,11 +672,11 @@ func decodeCreateSubmissionResponse(resp *http.Response) (res *ID, _ error) {
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeDeleteScriptResponse(resp *http.Response) (res *DeleteScriptOK, _ error) {
+func decodeDeleteScriptResponse(resp *http.Response) (res *DeleteScriptNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &DeleteScriptOK{}, nil
+	case 204:
+		// Code 204.
+		return &DeleteScriptNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -723,11 +723,11 @@ func decodeDeleteScriptResponse(resp *http.Response) (res *DeleteScriptOK, _ err
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeDeleteScriptPolicyResponse(resp *http.Response) (res *DeleteScriptPolicyOK, _ error) {
+func decodeDeleteScriptPolicyResponse(resp *http.Response) (res *DeleteScriptPolicyNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &DeleteScriptPolicyOK{}, nil
+	case 204:
+		// Code 204.
+		return &DeleteScriptPolicyNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -1259,11 +1259,11 @@ func decodeListSubmissionsResponse(resp *http.Response) (res []Submission, _ err
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeSetSubmissionCompletedResponse(resp *http.Response) (res *SetSubmissionCompletedOK, _ error) {
+func decodeSetSubmissionCompletedResponse(resp *http.Response) (res *SetSubmissionCompletedNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &SetSubmissionCompletedOK{}, nil
+	case 204:
+		// Code 204.
+		return &SetSubmissionCompletedNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -1310,11 +1310,11 @@ func decodeSetSubmissionCompletedResponse(resp *http.Response) (res *SetSubmissi
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeUpdateScriptResponse(resp *http.Response) (res *UpdateScriptOK, _ error) {
+func decodeUpdateScriptResponse(resp *http.Response) (res *UpdateScriptNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &UpdateScriptOK{}, nil
+	case 204:
+		// Code 204.
+		return &UpdateScriptNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -1361,11 +1361,11 @@ func decodeUpdateScriptResponse(resp *http.Response) (res *UpdateScriptOK, _ err
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeUpdateScriptPolicyResponse(resp *http.Response) (res *UpdateScriptPolicyOK, _ error) {
+func decodeUpdateScriptPolicyResponse(resp *http.Response) (res *UpdateScriptPolicyNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &UpdateScriptPolicyOK{}, nil
+	case 204:
+		// Code 204.
+		return &UpdateScriptPolicyNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -1412,11 +1412,11 @@ func decodeUpdateScriptPolicyResponse(resp *http.Response) (res *UpdateScriptPol
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeUpdateSubmissionModelResponse(resp *http.Response) (res *UpdateSubmissionModelOK, _ error) {
+func decodeUpdateSubmissionModelResponse(resp *http.Response) (res *UpdateSubmissionModelNoContent, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &UpdateSubmissionModelOK{}, nil
+	case 204:
+		// Code 204.
+		return &UpdateSubmissionModelNoContent{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {

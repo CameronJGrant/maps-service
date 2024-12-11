@@ -13,66 +13,66 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeActionSubmissionPublishResponse(response *ActionSubmissionPublishOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeActionSubmissionPublishResponse(response *ActionSubmissionPublishNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeActionSubmissionRejectResponse(response *ActionSubmissionRejectOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeActionSubmissionRejectResponse(response *ActionSubmissionRejectNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeActionSubmissionRequestChangesResponse(response *ActionSubmissionRequestChangesOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeActionSubmissionRequestChangesResponse(response *ActionSubmissionRequestChangesNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeActionSubmissionRevokeResponse(response *ActionSubmissionRevokeOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeActionSubmissionRevokeResponse(response *ActionSubmissionRevokeNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeActionSubmissionSubmitResponse(response *ActionSubmissionSubmitOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeActionSubmissionSubmitResponse(response *ActionSubmissionSubmitNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeActionSubmissionTriggerPublishResponse(response *ActionSubmissionTriggerPublishOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeActionSubmissionTriggerPublishResponse(response *ActionSubmissionTriggerPublishNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeActionSubmissionTriggerValidateResponse(response *ActionSubmissionTriggerValidateOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeActionSubmissionTriggerValidateResponse(response *ActionSubmissionTriggerValidateNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeActionSubmissionValidateResponse(response *ActionSubmissionValidateOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeActionSubmissionValidateResponse(response *ActionSubmissionValidateNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
 func encodeCreateScriptResponse(response *ID, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+	w.WriteHeader(201)
+	span.SetStatus(codes.Ok, http.StatusText(201))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -85,8 +85,8 @@ func encodeCreateScriptResponse(response *ID, w http.ResponseWriter, span trace.
 
 func encodeCreateScriptPolicyResponse(response *ID, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+	w.WriteHeader(201)
+	span.SetStatus(codes.Ok, http.StatusText(201))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -99,8 +99,8 @@ func encodeCreateScriptPolicyResponse(response *ID, w http.ResponseWriter, span 
 
 func encodeCreateSubmissionResponse(response *ID, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+	w.WriteHeader(201)
+	span.SetStatus(codes.Ok, http.StatusText(201))
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -111,16 +111,16 @@ func encodeCreateSubmissionResponse(response *ID, w http.ResponseWriter, span tr
 	return nil
 }
 
-func encodeDeleteScriptResponse(response *DeleteScriptOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeDeleteScriptResponse(response *DeleteScriptNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeDeleteScriptPolicyResponse(response *DeleteScriptPolicyOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeDeleteScriptPolicyResponse(response *DeleteScriptPolicyNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
@@ -199,30 +199,30 @@ func encodeListSubmissionsResponse(response []Submission, w http.ResponseWriter,
 	return nil
 }
 
-func encodeSetSubmissionCompletedResponse(response *SetSubmissionCompletedOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeSetSubmissionCompletedResponse(response *SetSubmissionCompletedNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeUpdateScriptResponse(response *UpdateScriptOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeUpdateScriptResponse(response *UpdateScriptNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeUpdateScriptPolicyResponse(response *UpdateScriptPolicyOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeUpdateScriptPolicyResponse(response *UpdateScriptPolicyNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
 
-func encodeUpdateSubmissionModelResponse(response *UpdateSubmissionModelOK, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
+func encodeUpdateSubmissionModelResponse(response *UpdateSubmissionModelNoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
 
 	return nil
 }
