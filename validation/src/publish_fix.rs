@@ -1,10 +1,12 @@
 use futures::StreamExt;
-
+use crate::types::{MessageResult,NatsStartupError};
 use crate::nats_types::PublishFixRequest;
 
 #[allow(dead_code)]
 #[derive(Debug)]
 enum PublishError{
+	Messages(async_nats::jetstream::consumer::pull::MessagesError),
+	DoubleAck(async_nats::Error),
 	Get(rbx_asset::cookie::GetError),
 	Json(serde_json::Error),
 	Upload(rbx_asset::cookie::UploadError),
@@ -18,35 +20,42 @@ impl std::fmt::Display for PublishError{
 impl std::error::Error for PublishError{}
 
 pub struct Publisher{
-	subscriber:async_nats::Subscriber,
+	messages:async_nats::jetstream::consumer::pull::Stream,
 	roblox_cookie:rbx_asset::cookie::CookieContext,
 	api:api::Context,
 }
 impl Publisher{
 	pub async fn new(
-		nats:async_nats::Client,
+		nats:async_nats::jetstream::Context,
 		roblox_cookie:rbx_asset::cookie::CookieContext,
 		api:api::Context,
-	)->Result<Self,async_nats::SubscribeError>{
+	)->Result<Self,NatsStartupError>{
 		Ok(Self{
-			subscriber:nats.subscribe("publish_fix").await?,
+			messages:nats.get_stream("submissions_publish_new").await.map_err(NatsStartupError::GetStream)?
+			.create_consumer_strict(async_nats::jetstream::consumer::pull::Config{
+				durable_name:Some("pull".to_owned()),
+				..Default::default()
+			}).await.map_err(NatsStartupError::ConsumerCreateStrict)?
+			.messages().await.map_err(NatsStartupError::Stream)?,
 			roblox_cookie,
 			api,
 		})
 	}
 	pub async fn run(mut self){
-		while let Some(message)=self.subscriber.next().await{
-			self.publish_supress_error(message).await
+		while let Some(message_result)=self.messages.next().await{
+			self.publish_supress_error(message_result).await
 		}
 	}
-	async fn publish_supress_error(&self,message:async_nats::Message){
-		match self.publish(message).await{
+	async fn publish_supress_error(&self,message_result:MessageResult){
+		match self.publish(message_result).await{
 			Ok(())=>println!("[PublishFix] Published, hooray!"),
 			Err(e)=>println!("[PublishFix] There was an error, oopsie! {e}"),
 		}
 	}
-	async fn publish(&self,message:async_nats::Message)->Result<(),PublishError>{
-		println!("publish_fix {:?}",message);
+	async fn publish(&self,message_result:MessageResult)->Result<(),PublishError>{
+		println!("publish_fix {:?}",message_result);
+		let message=message_result.map_err(PublishError::Messages)?;
+		message.double_ack().await.map_err(PublishError::DoubleAck)?;
 		// decode json
 		let publish_info:PublishFixRequest=serde_json::from_slice(&message.payload).map_err(PublishError::Json)?;
 

@@ -1,3 +1,4 @@
+mod types;
 mod nats_types;
 mod validator;
 mod publish_new;
@@ -5,10 +6,10 @@ mod publish_fix;
 
 #[allow(dead_code)]
 #[derive(Debug)]
-enum StartupError{
+pub enum StartupError{
 	API(api::ReqwestError),
 	NatsConnect(async_nats::ConnectError),
-	NatsSubscribe(async_nats::SubscribeError),
+	NatsStartup(types::NatsStartupError),
 	GRPCConnect(tonic::transport::Error),
 }
 impl std::fmt::Display for StartupError{
@@ -19,9 +20,6 @@ impl std::fmt::Display for StartupError{
 impl std::error::Error for StartupError{}
 
 pub const GROUP_STRAFESNET:u64=6980477;
-
-// annoying mile-long type
-pub type MapsServiceClient=rust_grpc::maps::maps_service_client::MapsServiceClient<tonic::transport::channel::Channel>;
 
 #[tokio::main]
 async fn main()->Result<(),StartupError>{
@@ -39,16 +37,18 @@ async fn main()->Result<(),StartupError>{
 
 	// data-service grpc for creating map entries
 	let data_host=std::env::var("DATA_HOST").expect("DATA_HOST env required");
-	let maps_grpc=MapsServiceClient::connect(data_host).await.map_err(StartupError::GRPCConnect)?;
+	let maps_grpc=crate::types::MapsServiceClient::connect(data_host).await.map_err(StartupError::GRPCConnect)?;
+	// use nats jetstream
+	let jetstream=async_nats::jetstream::new(nasty);
 
 	// connect to nats
 	let (publish_new,publish_fix,validator)=tokio::try_join!(
-		publish_new::Publisher::new(nasty.clone(),cookie_context.clone(),api.clone(),maps_grpc),
-		publish_fix::Publisher::new(nasty.clone(),cookie_context.clone(),api.clone()),
+		publish_new::Publisher::new(jetstream.clone(),cookie_context.clone(),api.clone(),maps_grpc),
+		publish_fix::Publisher::new(jetstream.clone(),cookie_context.clone(),api.clone()),
 		// clone nats here because it's dropped within the function scope,
 		// meanining the last reference is dropped...
-		validator::Validator::new(nasty.clone(),cookie_context,api)
-	).map_err(StartupError::NatsSubscribe)?;
+		validator::Validator::new(jetstream.clone(),cookie_context,api)
+	).map_err(StartupError::NatsStartup)?;
 
 	// publisher threads
 	tokio::spawn(publish_new.run());

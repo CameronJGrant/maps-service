@@ -1,4 +1,5 @@
 use futures::{StreamExt,TryStreamExt};
+use crate::types::{MessageResult,NatsStartupError};
 use crate::nats_types::ValidateRequest;
 
 const SCRIPT_CONCURRENCY:usize=16;
@@ -15,6 +16,8 @@ enum Policy{
 enum ValidateError{
 	Blocked,
 	NotAllowed,
+	Messages(async_nats::jetstream::consumer::pull::MessagesError),
+	DoubleAck(async_nats::Error),
 	Get(rbx_asset::cookie::GetError),
 	Json(serde_json::Error),
 	ReadDom(ReadDomError),
@@ -34,36 +37,43 @@ impl std::fmt::Display for ValidateError{
 impl std::error::Error for ValidateError{}
 
 pub struct Validator{
-	subscriber:async_nats::Subscriber,
+	messages:async_nats::jetstream::consumer::pull::Stream,
 	roblox_cookie:rbx_asset::cookie::CookieContext,
 	api:api::Context,
 }
 
 impl Validator{
 	pub async fn new(
-		nats:async_nats::Client,
+		nats:async_nats::jetstream::Context,
 		roblox_cookie:rbx_asset::cookie::CookieContext,
 		api:api::Context,
-	)->Result<Self,async_nats::SubscribeError>{
+	)->Result<Self,NatsStartupError>{
 		Ok(Self{
-			subscriber:nats.subscribe("validate").await?,
+			messages:nats.get_stream("submissions_validate").await.map_err(NatsStartupError::GetStream)?
+			.create_consumer_strict(async_nats::jetstream::consumer::pull::Config{
+				durable_name:Some("pull".to_owned()),
+				..Default::default()
+			}).await.map_err(NatsStartupError::ConsumerCreateStrict)?
+			.messages().await.map_err(NatsStartupError::Stream)?,
 			roblox_cookie,
 			api,
 		})
 	}
 	pub async fn run(mut self){
-		while let Some(message)=self.subscriber.next().await{
-			self.validate_supress_error(message).await
+		while let Some(message_result)=self.messages.next().await{
+			self.validate_supress_error(message_result).await
 		}
 	}
-	async fn validate_supress_error(&self,message:async_nats::Message){
-		match self.validate(message).await{
-			Ok(())=>println!("Validated, hooray!"),
-			Err(e)=>println!("There was an error, oopsie! {e}"),
+	async fn validate_supress_error(&self,message_result:MessageResult){
+		match self.validate(message_result).await{
+			Ok(())=>println!("[Validation] Validated, hooray!"),
+			Err(e)=>println!("[Validation] There was an error, oopsie! {e}"),
 		}
 	}
-	async fn validate(&self,message:async_nats::Message)->Result<(),ValidateError>{
-		println!("validate {:?}",message);
+	async fn validate(&self,message_result:MessageResult)->Result<(),ValidateError>{
+		println!("validate {:?}",message_result);
+		let message=message_result.map_err(ValidateError::Messages)?;
+		message.double_ack().await.map_err(ValidateError::DoubleAck)?;
 		// decode json
 		let validate_info:ValidateRequest=serde_json::from_slice(&message.payload).map_err(ValidateError::Json)?;
 
