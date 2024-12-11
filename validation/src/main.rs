@@ -7,8 +7,8 @@ mod publish_fix;
 #[derive(Debug)]
 enum StartupError{
 	API(api::ReqwestError),
-	Connect(async_nats::ConnectError),
-	Subscribe(async_nats::SubscribeError),
+	NatsConnect(async_nats::ConnectError),
+	NatsSubscribe(async_nats::SubscribeError),
 }
 impl std::fmt::Display for StartupError{
 	fn fmt(&self,f:&mut std::fmt::Formatter<'_>)->std::fmt::Result{
@@ -31,7 +31,7 @@ async fn main()->Result<(),StartupError>{
 
 	// nats
 	let nats_host=std::env::var("NATS_HOST").expect("NATS_HOST env required");
-	let nasty=async_nats::connect(nats_host).await.map_err(StartupError::Connect)?;
+	let nasty=async_nats::connect(nats_host).await.map_err(StartupError::NatsConnect)?;
 
 	// connect to nats
 	let (publish_new,publish_fix,validator)=tokio::try_join!(
@@ -40,7 +40,7 @@ async fn main()->Result<(),StartupError>{
 		// clone nats here because it's dropped within the function scope,
 		// meanining the last reference is dropped...
 		validator::Validator::new(nasty.clone(),cookie_context,api)
-	).map_err(StartupError::Subscribe)?;
+	).map_err(StartupError::NatsSubscribe)?;
 
 	// publisher threads
 	tokio::spawn(publish_new.run());
