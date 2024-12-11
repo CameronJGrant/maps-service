@@ -8,6 +8,7 @@ import Image from "next/image"
 interface AssetID {
     id: SubmissionInfo["AssetID"]
 }
+
 function MapImage(asset: AssetID) {
 	const [assetImage, setAssetImage] = useState("");
 

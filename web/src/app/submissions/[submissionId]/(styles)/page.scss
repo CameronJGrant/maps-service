@@ -1,8 +1,9 @@
+@forward "./page/commentWindow.scss";
+@forward "./page/reviewStatus.scss";
+@forward "./page/ratingWindow.scss";
+@forward "./page/reviewButtons.scss";
 @forward "./page/comments.scss";
 @forward "./page/review.scss";
-@forward "./page/rating_window.scss";
-@forward "./page/leave_comment_window.scss";
-@forward "./page/review_status.scss";
 @forward "./page/map.scss";
 
 @use "../../../globals.scss";

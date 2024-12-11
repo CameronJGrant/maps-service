@@ -3,7 +3,6 @@
 .rating-window {
     @include globals.border-with-radius;
     width: 100%;
-    height: 225px;
 
     .rating-type {
         display: flex;
