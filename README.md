@@ -28,8 +28,13 @@ Prerequisite: bun installed
 
 1. `cd web`
 2. `bun install`
+
+#### For development:
+3. `bun run dev`
+
+#### For production:
 3. `bun run build`
-4. `bun run start`
+4. `bun run start` (optionally start a node server)
 
 ### Script Validation
 
