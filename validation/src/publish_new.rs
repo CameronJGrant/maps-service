@@ -2,6 +2,7 @@ use futures::StreamExt;
 
 use crate::nats_types::PublishNewRequest;
 
+#[allow(dead_code)]
 #[derive(Debug)]
 enum PublishError{
 	Get(rbx_asset::cookie::GetError),
