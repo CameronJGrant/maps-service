@@ -2,8 +2,17 @@ const FALLBACK_IMAGE = ""
 
 type thumbsizes = "420" | "720"
 type thumbsize<S extends thumbsizes> = `${S}x${S}`
+type ParsedJson<A> = {
+	errors: A,
+	data: {
+		[0]: {
+			state: string,
+			imageUrl: string,
+		}
+	}
+}
 
-function Parse(json: any): string {
+function Parse<A>(json: ParsedJson<A>): string {
 	if (json.errors) {
 		console.warn(json.errors)
 		return FALLBACK_IMAGE

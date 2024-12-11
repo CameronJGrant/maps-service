@@ -13,7 +13,7 @@ function MapImage(asset: AssetID) {
 
 	useEffect(() => {
 		AssetImage(asset.id, "420x420").then(image => setAssetImage(image))
-	}, []);
+	}, [asset.id]);
 	if (!assetImage) {
         return <p>Fetching map image...</p>;
     }

@@ -1,7 +1,7 @@
-import Header from "./_components/header";
+import Webpage from "./_components/webpage";
 
 export default function Home() {
 	return (
-		<Header/>
+		<Webpage></Webpage>
 	);
 }

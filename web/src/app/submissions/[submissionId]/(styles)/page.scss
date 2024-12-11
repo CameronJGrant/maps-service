@@ -7,6 +7,12 @@
 
 @use "../../../globals.scss";
 
+.map-page-main {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+}
+
 .spacer {
     display: block;
     width: 100%;

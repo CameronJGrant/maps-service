@@ -1,18 +1,20 @@
-"use client"
+'use client'
 
 import { SubmissionStatus, SubmissionStatusToString, type SubmissionInfo } from "@/app/ts/Submission";
-import { MapImage, type AssetID } from "./map";
+import { MapImage, type AssetID } from "./_map";
 import { Rating, Button } from "@mui/material";
-import type {ReactNode} from "react";
 import SendIcon from '@mui/icons-material/Send';
+import Webpage from "@/app/_components/webpage";
+import { useParams } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 
-import "./styles/page.scss";
+import "./(styles)/page.scss";
 
 interface Window {
     className: string,
     title: string,
-    children: ReactNode
+    children: React.ReactNode
 }
 interface Comment {
     picture?: string, //TEMP
@@ -23,12 +25,8 @@ interface Comment {
 interface CreatorAndReviewStatus {
     creator: SubmissionInfo["DisplayName"],
     review: SubmissionInfo["StatusID"],
-    comments: Comment[]
-}
-interface MapInfo {
-    assetid: SubmissionInfo["AssetID"],
-    status: SubmissionStatus,
-    comments: Comment[]
+    comments: Comment[],
+    name: string
 }
 
 function Window(window: Window) {
@@ -73,7 +71,7 @@ function Comment(comment: Comment) {
 
     return (
         <div className="commenter" data-highlighted={IsBhopMaptest}>
-            <img src={comment.picture} alt={`${comment.name}'s comment`}/>
+            <Image src={comment.picture as string} alt={`${comment.name}'s comment`}/>
             <div className="details">
                 <header>
                     <p className="name">{comment.name}</p>
@@ -91,7 +89,7 @@ function TitleAndComments(stats: CreatorAndReviewStatus) {
 	return (
         <main className="review-info">
             <div>
-                <h1>bhop_quaternions</h1>
+                <h1>{stats.name}</h1>
                 <aside data-review-status={stats.review} className="review-status">
                     <p>{Review}</p>
                 </aside>
@@ -99,7 +97,9 @@ function TitleAndComments(stats: CreatorAndReviewStatus) {
             <p className="by-creator">by <Link href="" target="_blank">{stats.creator}</Link></p>
             <span className="spacer"></span>
             <section className="comments">
-            	{stats.comments.length===0 && <p className="no-comments">There are no comments.</p> || stats.comments.map(comment => (
+            	{stats.comments.length===0
+                && <p className="no-comments">There are no comments.</p>
+                || stats.comments.map(comment => (
                 	<Comment key={comment.name} name={comment.name} date={comment.date} comment={comment.comment}/>
              	))}
             </section>
@@ -111,11 +111,35 @@ function TitleAndComments(stats: CreatorAndReviewStatus) {
     )
 }
 
-export default function MapInfoPage(info: MapInfo) {
-	return (
-        <section className="review-section">
-            <ImageAndRatings id={info.assetid}/>
-            <TitleAndComments creator="Quaternions" review={info.status} comments={info.comments}/>
-        </section>
+// const placeholder_Comments = [
+//     {
+//         comment: "This map has been accepted and is in the game.",
+//         date: "on Dec 8 '24 at 18:46",
+//         name: "BhopMaptest"
+//     },
+//     {
+//         comment: "This map is so mid...",
+//         date: "on Dec 8 '24 at 18:46",
+//         name: "vmsize"
+//     },
+//     {
+//         comment: "I prefer strafe client",
+//         date: "on Dec 8 '24 at 18:46",
+//         name: "Quaternions"
+//     }
+// ]
+
+export default function SubmissionInfoPage() {
+    const params = useParams<{submissionId: string}>()
+
+    return (
+        <Webpage>
+            <main className="map-page-main">
+                <section className="review-section">
+                    <ImageAndRatings id={432}/>
+                    <TitleAndComments name={params.submissionId} creator="Quaternions" review={SubmissionStatus.Accepted} comments={[]}/>
+                </section>
+            </main>
+        </Webpage>
 	)
 }
