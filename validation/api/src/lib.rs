@@ -79,7 +79,8 @@ macro_rules! action{
 	};
 }
 impl Context{
-	pub fn new(base_url:String)->reqwest::Result<Self>{
+	pub fn new(mut base_url:String)->reqwest::Result<Self>{
+		base_url+="/v1";
 		Ok(Self{
 			base_url,
 			client:reqwest::Client::new(),
