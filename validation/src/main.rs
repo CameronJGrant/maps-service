@@ -21,14 +21,17 @@ pub const GROUP_STRAFESNET:u64=6980477;
 
 #[tokio::main]
 async fn main()->Result<(),StartupError>{
-	// talk to roblox
-	let cookie_context=rbx_asset::cookie::CookieContext::new(rbx_asset::cookie::Cookie::new("".to_owned()));
+	// talk to roblox through STRAFESNET_CI2 account
+	let cookie=std::env::var("RBXCOOKIE").expect("RBXCOOKIE env required");
+	let cookie_context=rbx_asset::cookie::CookieContext::new(rbx_asset::cookie::Cookie::new(cookie));
 
 	// maps-service api
-	let api=api::Context::new("https:://localhost:1234/v1".to_owned()).map_err(StartupError::API)?;
+	let api_host=std::env::var("API_HOST").expect("API_HOST env required");
+	let api=api::Context::new(api_host).map_err(StartupError::API)?;
 
 	// nats
-	let nasty=async_nats::connect("nats").await.map_err(StartupError::Connect)?;
+	let nats_host=std::env::var("NATS_HOST").expect("NATS_HOST env required");
+	let nasty=async_nats::connect(nats_host).await.map_err(StartupError::Connect)?;
 
 	// connect to nats
 	let (publish_new,publish_fix,validator)=tokio::try_join!(
