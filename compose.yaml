@@ -60,7 +60,15 @@ services:
       context: validation
       dockerfile: Containerfile
     container_name: validation
+    environment:
+      - RBXCOOKIE=RBXCOOKIE
+      - API_HOST=http://localhost:8081
+      - NATS_HOST=nats:4222
+      - DATA_HOST=http://localhost:9000
     depends_on:
       - nats
+      # note: this races the maps-service which creates a nats stream
+      # the validation will panic if the nats stream is not created
+      - maps-service
     networks:
       - maps-service-network
