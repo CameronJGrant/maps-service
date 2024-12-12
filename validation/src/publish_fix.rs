@@ -33,7 +33,6 @@ impl Publisher{
 		Ok(Self{
 			messages:nats.get_stream("submissions_publish_new").await.map_err(NatsStartupError::GetStream)?
 			.create_consumer_strict(async_nats::jetstream::consumer::pull::Config{
-				durable_name:Some("pull".to_owned()),
 				..Default::default()
 			}).await.map_err(NatsStartupError::ConsumerCreateStrict)?
 			.messages().await.map_err(NatsStartupError::Stream)?,
