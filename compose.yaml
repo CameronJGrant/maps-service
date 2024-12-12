@@ -24,7 +24,21 @@ services:
       context: .
       dockerfile: Containerfile
     container_name: maps-service
-    command: ["--debug","serve","--pg-host","10.0.0.29","--pg-port","5432","--pg-db","maps","--pg-user","quat","--pg-password","happypostgresuser","--port","8081","--auth-rpc-host","localhost:8090","--nats-host","0.0.0.0:4222"]
+    command: [
+      # debug
+      "--debug","serve",
+      # http service port
+      "--port","8081",
+      # postgres
+      "--pg-host","10.0.0.29",
+      "--pg-port","5432",
+      "--pg-db","maps",
+      "--pg-user","quat",
+      "--pg-password","happypostgresuser",
+      # other hosts
+      "--nats-host","nats:4222",
+      "--auth-rpc-host","localhost:8090"
+    ]
     depends_on:
       - nats
     networks:

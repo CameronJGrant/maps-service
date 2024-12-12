@@ -33,4 +33,4 @@ COPY --from=builder /app/service .
 EXPOSE 8081
 
 # Command to run the application
-CMD ["./service"]
+ENTRYPOINT ["./service"]
