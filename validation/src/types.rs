@@ -5,7 +5,6 @@ pub type MessageResult=Result<async_nats::jetstream::Message,async_nats::jetstre
 
 #[derive(Debug)]
 pub enum NatsStartupError{
-	GetStream(async_nats::jetstream::context::GetStreamError),
 	ConsumerCreateStrict(async_nats::jetstream::stream::ConsumerCreateStrictError),
 	Stream(async_nats::jetstream::consumer::StreamError),
 }

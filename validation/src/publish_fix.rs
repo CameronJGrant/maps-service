@@ -26,13 +26,13 @@ pub struct Publisher{
 }
 impl Publisher{
 	pub async fn new(
-		nats:async_nats::jetstream::Context,
+		stream:async_nats::jetstream::stream::Stream,
 		roblox_cookie:rbx_asset::cookie::CookieContext,
 		api:api::Context,
 	)->Result<Self,NatsStartupError>{
 		Ok(Self{
-			messages:nats.get_stream("submissions_publish_new").await.map_err(NatsStartupError::GetStream)?
-			.create_consumer_strict(async_nats::jetstream::consumer::pull::Config{
+			messages:stream.create_consumer_strict(async_nats::jetstream::consumer::pull::Config{
+				filter_subject:"maptest.submissions.publish.fix".to_owned(),
 				..Default::default()
 			}).await.map_err(NatsStartupError::ConsumerCreateStrict)?
 			.messages().await.map_err(NatsStartupError::Stream)?,

@@ -9,6 +9,7 @@ mod publish_fix;
 pub enum StartupError{
 	API(api::ReqwestError),
 	NatsConnect(async_nats::ConnectError),
+	NatsGetStream(async_nats::jetstream::context::GetStreamError),
 	NatsStartup(types::NatsStartupError),
 	GRPCConnect(tonic::transport::Error),
 }
@@ -33,21 +34,21 @@ async fn main()->Result<(),StartupError>{
 
 	// nats
 	let nats_host=std::env::var("NATS_HOST").expect("NATS_HOST env required");
-	let nasty=async_nats::connect(nats_host).await.map_err(StartupError::NatsConnect)?;
+	let nasty=async_nats::connect(nats_host).await.map_err(StartupError::NatsConnect)?;	// use nats jetstream
+	let stream=async_nats::jetstream::new(nasty)
+		.get_stream("maptest").await.map_err(StartupError::NatsGetStream)?;
 
 	// data-service grpc for creating map entries
 	let data_host=std::env::var("DATA_HOST").expect("DATA_HOST env required");
 	let maps_grpc=crate::types::MapsServiceClient::connect(data_host).await.map_err(StartupError::GRPCConnect)?;
-	// use nats jetstream
-	let jetstream=async_nats::jetstream::new(nasty);
 
 	// connect to nats
 	let (publish_new,publish_fix,validator)=tokio::try_join!(
-		publish_new::Publisher::new(jetstream.clone(),cookie_context.clone(),api.clone(),maps_grpc),
-		publish_fix::Publisher::new(jetstream.clone(),cookie_context.clone(),api.clone()),
+		publish_new::Publisher::new(stream.clone(),cookie_context.clone(),api.clone(),maps_grpc),
+		publish_fix::Publisher::new(stream.clone(),cookie_context.clone(),api.clone()),
 		// clone nats here because it's dropped within the function scope,
 		// meanining the last reference is dropped...
-		validator::Validator::new(jetstream.clone(),cookie_context,api)
+		validator::Validator::new(stream.clone(),cookie_context,api)
 	).map_err(StartupError::NatsStartup)?;
 
 	// publisher threads

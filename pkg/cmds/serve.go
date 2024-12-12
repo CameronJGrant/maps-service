@@ -91,19 +91,15 @@ func serve(ctx *cli.Context) error {
 	if err != nil {
 		log.WithError(err).Fatal("failed to start jetstream")
 	}
-	// this should be somewhere else but whatever
-	_, err = js.AddStream(&nats.StreamConfig{Name:"submissions_validate"})
+
+	_, err = js.AddStream(&nats.StreamConfig{
+		Name:"maptest",
+		Subjects: []string{"maptest.>"},
+	})
 	if err != nil {
-		log.WithError(err).Fatal("failed to add stream submissions_validate")
+		log.WithError(err).Fatal("failed to add stream")
 	}
-	_, err = js.AddStream(&nats.StreamConfig{Name:"submissions_publish_new"})
-	if err != nil {
-		log.WithError(err).Fatal("failed to add stream submissions_publish_new")
-	}
-	_, err = js.AddStream(&nats.StreamConfig{Name:"submissions_publish_fix"})
-	if err != nil {
-		log.WithError(err).Fatal("failed to add stream submissions_publish_fix")
-	}
+
 	svc := &service.Service{
 		DB: db,
 		Nats: js,
