@@ -35,10 +35,12 @@ impl Publisher{
 		maps_grpc:crate::types::MapsServiceClient,
 	)->Result<Self,NatsStartupError>{
 		Ok(Self{
-			messages:stream.create_consumer_strict(async_nats::jetstream::consumer::pull::Config{
+			messages:stream.get_or_create_consumer("publish_new",async_nats::jetstream::consumer::pull::Config{
+				name:Some("publish_new".to_owned()),
+				durable_name:Some("publish_new".to_owned()),
 				filter_subject:"maptest.submissions.publish.new".to_owned(),
 				..Default::default()
-			}).await.map_err(NatsStartupError::ConsumerCreateStrict)?
+			}).await.map_err(NatsStartupError::Consumer)?
 			.messages().await.map_err(NatsStartupError::Stream)?,
 			roblox_cookie,
 			api,

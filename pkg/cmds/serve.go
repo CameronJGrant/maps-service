@@ -95,6 +95,7 @@ func serve(ctx *cli.Context) error {
 	_, err = js.AddStream(&nats.StreamConfig{
 		Name:"maptest",
 		Subjects: []string{"maptest.>"},
+		Retention: nats.WorkQueuePolicy,
 	})
 	if err != nil {
 		log.WithError(err).Fatal("failed to add stream")
