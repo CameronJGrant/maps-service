@@ -3,6 +3,10 @@ networks:
   maps-service-network:
     driver: bridge
 
+secrets:
+  netrc:
+    file: /home/quat/.netrc
+
 services:
   nats:
     image: docker.io/nats:latest
@@ -15,6 +19,8 @@ services:
 
   maps-service:
     build:
+      secrets:
+        - netrc
       context: .
       dockerfile: Containerfile
     container_name: maps-service
