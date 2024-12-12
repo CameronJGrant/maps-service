@@ -23,6 +23,7 @@ pub struct PublishNewRequest{
 	pub ModelVersion:u64,
 	pub Creator:String,
 	pub DisplayName:String,
+	pub GameID:u32,
 	//games:HashSet<GameID>,
 }
 

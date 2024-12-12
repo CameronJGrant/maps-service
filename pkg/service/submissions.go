@@ -301,6 +301,7 @@ func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params a
 			ModelVersion: submission.AssetVersion,
 			Creator:      submission.Creator,
 			DisplayName:  submission.DisplayName,
+			GameID:       uint32(submission.GameID),
 		}
 
 		j, err := json.Marshal(publish_new_request)

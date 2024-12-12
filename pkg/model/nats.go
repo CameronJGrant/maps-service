@@ -20,6 +20,7 @@ type PublishNewRequest struct{
 	ModelVersion uint64
 	Creator      string
 	DisplayName  string
+	GameID       uint32
 	//games HashSet<GameID>
 }
 
