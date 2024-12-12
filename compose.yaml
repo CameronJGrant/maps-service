@@ -7,16 +7,24 @@ services:
   nats:
     image: docker.io/nats:latest
     container_name: nats
+    command: ["-js"]
     networks:
       - maps-service-network
+    ports:
+      - "4222:4222"
 
   maps-service:
     build:
       context: .
       dockerfile: Containerfile
     container_name: maps-service
+    command: ["--debug","serve","--pg-host","10.0.0.29","--pg-port","5432","--pg-db","maps","--pg-user","quat","--pg-password","happypostgresuser","--port","8081","--auth-rpc-host","localhost:8090","--nats-host","0.0.0.0:4222"]
+    depends_on:
+      - nats
     networks:
       - maps-service-network
+    ports:
+      - "8081:8081"
 
   web:
     build:
@@ -24,11 +32,15 @@ services:
       dockerfile: Containerfile
     networks:
       - maps-service-network
+    ports:
+      - "3000:3000"
 
   validation:
     build:
       context: validation
       dockerfile: Containerfile
     container_name: validation
+    depends_on:
+      - nats
     networks:
       - maps-service-network
