@@ -8,27 +8,8 @@ interface ReviewButton {
 	color: ButtonOwnProps["color"]
 }
 
-// CREATE:
-// curl -H 'Content-Type: application/json' \
-// --cookie "session_id=123" \
-// -d '{"ID":0,"DisplayName":"Example Map","Creator":"Quaternions","GameID":1,"Date":"2024-12-09T20:43:49.957660142-08:00","Submitter":52250025,"AssetID":255299419,"AssetVersion":7,"Completed":true,"TargetAssetID":5692134283,"StatusID":0}' \
-// -X POST \
-// localhost:8081/v1/submissions
-
-// GET:
-// curl -H 'Content-Type: application/json' \
-// --cookie "session_id=c5191ddc-eee1-4010-900c-6b2c7b6780ab" \
-// -X GET \
-// localhost:8081/v1/submissions/1
-
-// SUBMIT:
-// curl -H 'Content-Type: application/json' \
-// --cookie "session_id=c5191ddc-eee1-4010-900c-6b2c7b6780ab" \
-// -X POST \
-// localhost:8081/v1/submissions/1/status/submit
-
 function ReviewButtonClicked(action: Action) {
-	const post = fetch(`http://localhost:8081/v1/submissions/1/status/${action}`, {
+	const post = fetch(`http://localhost:3000/v1/submissions/1/status/${action}`, {
 		method: "POST",
 		headers: {
 			"Content-type": "application/json",

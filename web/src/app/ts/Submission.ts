@@ -25,39 +25,28 @@ interface SubmissionInfo {
 }
 
 function SubmissionStatusToString(submission_status: SubmissionStatus): string {
-	let Review: string
 	switch (submission_status) {
     	case SubmissionStatus.Published:
-     		Review = "PUBLISHED"
-       		break
+     		return "PUBLISHED"
      	case SubmissionStatus.Rejected:
-      		Review = "REJECTED"
-        	break
+      		return "REJECTED"
 		case SubmissionStatus.Publishing:
-			Review = "PUBLISHING"
-			break
+			return "PUBLISHING"
 		case SubmissionStatus.Validated:
-			Review = "VALIDATED"
-			break
+			return "VALIDATED"
 		case SubmissionStatus.Validating:
-			Review = "VALIDATING"
-			break
+			return "VALIDATING"
 		case SubmissionStatus.Accepted:
-			Review = "ACCEPTED"
-			break
+			return "ACCEPTED"
 		case SubmissionStatus.ChangesRequested:
-			Review = "CHANGES REQUESTED"
-			break
+			return "CHANGES REQUESTED"
 		case SubmissionStatus.Submitted:
-			Review = "SUBMITTED"
-			break
+			return "SUBMITTED"
 		case SubmissionStatus.UnderConstruction:
-			Review = "UNDER CONSTRUCTION"
-			break
+			return "UNDER CONSTRUCTION"
 		default:
-			Review = "UNKNOWN"
+			return "UNKNOWN"
     }
-    return Review
 }
 
 export {
