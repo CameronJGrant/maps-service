@@ -14,21 +14,19 @@ services:
     command: ["-js"]
     networks:
       - maps-service-network
-    ports:
-      - "4222:4222"
 
-  maps-service:
+  mapsservice:
     build:
       secrets:
         - netrc
       context: .
       dockerfile: Containerfile
-    container_name: maps-service
+    container_name: mapsservice
     command: [
       # debug
       "--debug","serve",
       # http service port
-      "--port","8081",
+      "--port","8082",
       # postgres
       "--pg-host","10.0.0.29",
       "--pg-port","5432",
@@ -37,14 +35,15 @@ services:
       "--pg-password","happypostgresuser",
       # other hosts
       "--nats-host","nats:4222",
-      "--auth-rpc-host","localhost:8090"
+      "--auth-rpc-host","authrpc:8081"
     ]
     depends_on:
+      - authrpc
       - nats
     networks:
       - maps-service-network
     ports:
-      - "8081:8081"
+      - "8082:8082"
 
   web:
     build:
@@ -62,13 +61,66 @@ services:
     container_name: validation
     environment:
       - RBXCOOKIE=RBXCOOKIE
-      - API_HOST=http://localhost:8081
+      - API_HOST=http://mapsservice:8082
       - NATS_HOST=nats:4222
-      - DATA_HOST=http://localhost:9000
+      - DATA_HOST=http://dataservice:9000
     depends_on:
       - nats
-      # note: this races the maps-service which creates a nats stream
+      # note: this races the mapsservice which creates a nats stream
       # the validation will panic if the nats stream is not created
-      - maps-service
+      - mapsservice
+      - dataservice
     networks:
       - maps-service-network
+
+  dataservice:
+    image: registry.itzana.me/strafesnet/data-service:master
+    container_name: dataservice
+    environment:
+      - DEBUG=true
+      - PG_HOST=10.0.0.29
+      - PG_PORT=5432
+      - PG_USER=quat
+      - PG_DB=data
+      - PG_PASS=happypostgresuser
+    networks:
+      - maps-service-network
+
+  authredis:
+    image: docker.io/redis:latest
+    container_name: authredis
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    networks:
+      - maps-service-network
+
+  authrpc:
+    image: registry.itzana.me/strafesnet/auth-service:master
+    container_name: authrpc
+    command: ["serve", "rpc"]
+    environment:
+      - REDIS_ADDR=authredis:6379
+    env_file:
+      - ../auth-compose/auth-service.env
+    depends_on:
+      - authredis
+    networks:
+      - maps-service-network
+
+  auth-web:
+    image: registry.itzana.me/strafesnet/auth-service:master
+    command: ["serve", "web"]
+    environment:
+      - REDIS_ADDR=authredis:6379
+    env_file:
+      - ../auth-compose/auth-service.env
+    depends_on:
+      - authredis
+    networks:
+      - maps-service-network
+    ports:
+      - "8080:8080"
+
+volumes:
+  redis-data:
