@@ -356,29 +356,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								break
 							}
 							switch elem[0] {
-							case 'p': // Prefix: "publish"
-								origElem := elem
-								if l := len("publish"); len(elem) >= l && elem[0:l] == "publish" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch r.Method {
-									case "POST":
-										s.handleActionSubmissionPublishRequest([1]string{
-											args[0],
-										}, elemIsEscaped, w, r)
-									default:
-										s.notAllowed(w, r, "POST")
-									}
-
-									return
-								}
-
-								elem = origElem
 							case 'r': // Prefix: "re"
 								origElem := elem
 								if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
@@ -547,26 +524,64 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								}
 
 								elem = origElem
-							case 'v': // Prefix: "validate"
+							case 'v': // Prefix: "validator-"
 								origElem := elem
-								if l := len("validate"); len(elem) >= l && elem[0:l] == "validate" {
+								if l := len("validator-"); len(elem) >= l && elem[0:l] == "validator-" {
 									elem = elem[l:]
 								} else {
 									break
 								}
 
 								if len(elem) == 0 {
-									// Leaf node.
-									switch r.Method {
-									case "POST":
-										s.handleActionSubmissionValidateRequest([1]string{
-											args[0],
-										}, elemIsEscaped, w, r)
-									default:
-										s.notAllowed(w, r, "POST")
+									break
+								}
+								switch elem[0] {
+								case 'p': // Prefix: "published"
+									origElem := elem
+									if l := len("published"); len(elem) >= l && elem[0:l] == "published" {
+										elem = elem[l:]
+									} else {
+										break
 									}
 
-									return
+									if len(elem) == 0 {
+										// Leaf node.
+										switch r.Method {
+										case "POST":
+											s.handleActionSubmissionPublishRequest([1]string{
+												args[0],
+											}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, "POST")
+										}
+
+										return
+									}
+
+									elem = origElem
+								case 'v': // Prefix: "validated"
+									origElem := elem
+									if l := len("validated"); len(elem) >= l && elem[0:l] == "validated" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch r.Method {
+										case "POST":
+											s.handleActionSubmissionValidateRequest([1]string{
+												args[0],
+											}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, "POST")
+										}
+
+										return
+									}
+
+									elem = origElem
 								}
 
 								elem = origElem
@@ -1018,31 +1033,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								break
 							}
 							switch elem[0] {
-							case 'p': // Prefix: "publish"
-								origElem := elem
-								if l := len("publish"); len(elem) >= l && elem[0:l] == "publish" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch method {
-									case "POST":
-										r.name = ActionSubmissionPublishOperation
-										r.summary = "Role Validator changes status from Publishing -> Published"
-										r.operationID = "actionSubmissionPublish"
-										r.pathPattern = "/submissions/{SubmissionID}/status/publish"
-										r.args = args
-										r.count = 1
-										return r, true
-									default:
-										return
-									}
-								}
-
-								elem = origElem
 							case 'r': // Prefix: "re"
 								origElem := elem
 								if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
@@ -1223,28 +1213,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								}
 
 								elem = origElem
-							case 'v': // Prefix: "validate"
+							case 'v': // Prefix: "validator-"
 								origElem := elem
-								if l := len("validate"); len(elem) >= l && elem[0:l] == "validate" {
+								if l := len("validator-"); len(elem) >= l && elem[0:l] == "validator-" {
 									elem = elem[l:]
 								} else {
 									break
 								}
 
 								if len(elem) == 0 {
-									// Leaf node.
-									switch method {
-									case "POST":
-										r.name = ActionSubmissionValidateOperation
-										r.summary = "Role Validator changes status from Validating -> Validated"
-										r.operationID = "actionSubmissionValidate"
-										r.pathPattern = "/submissions/{SubmissionID}/status/validate"
-										r.args = args
-										r.count = 1
-										return r, true
-									default:
-										return
+									break
+								}
+								switch elem[0] {
+								case 'p': // Prefix: "published"
+									origElem := elem
+									if l := len("published"); len(elem) >= l && elem[0:l] == "published" {
+										elem = elem[l:]
+									} else {
+										break
 									}
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch method {
+										case "POST":
+											r.name = ActionSubmissionPublishOperation
+											r.summary = "(Internal endpoint) Role Validator changes status from Publishing -> Published"
+											r.operationID = "actionSubmissionPublish"
+											r.pathPattern = "/submissions/{SubmissionID}/status/validator-published"
+											r.args = args
+											r.count = 1
+											return r, true
+										default:
+											return
+										}
+									}
+
+									elem = origElem
+								case 'v': // Prefix: "validated"
+									origElem := elem
+									if l := len("validated"); len(elem) >= l && elem[0:l] == "validated" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch method {
+										case "POST":
+											r.name = ActionSubmissionValidateOperation
+											r.summary = "(Internal endpoint) Role Validator changes status from Validating -> Validated"
+											r.operationID = "actionSubmissionValidate"
+											r.pathPattern = "/submissions/{SubmissionID}/status/validator-validated"
+											r.args = args
+											r.count = 1
+											return r, true
+										default:
+											return
+										}
+									}
+
+									elem = origElem
 								}
 
 								elem = origElem

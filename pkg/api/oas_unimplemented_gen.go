@@ -15,9 +15,9 @@ var _ Handler = UnimplementedHandler{}
 
 // ActionSubmissionPublish implements actionSubmissionPublish operation.
 //
-// Role Validator changes status from Publishing -> Published.
+// (Internal endpoint) Role Validator changes status from Publishing -> Published.
 //
-// POST /submissions/{SubmissionID}/status/publish
+// POST /submissions/{SubmissionID}/status/validator-published
 func (UnimplementedHandler) ActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) error {
 	return ht.ErrNotImplemented
 }
@@ -78,9 +78,9 @@ func (UnimplementedHandler) ActionSubmissionTriggerValidate(ctx context.Context,
 
 // ActionSubmissionValidate implements actionSubmissionValidate operation.
 //
-// Role Validator changes status from Validating -> Validated.
+// (Internal endpoint) Role Validator changes status from Validating -> Validated.
 //
-// POST /submissions/{SubmissionID}/status/validate
+// POST /submissions/{SubmissionID}/status/validator-validated
 func (UnimplementedHandler) ActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) error {
 	return ht.ErrNotImplemented
 }

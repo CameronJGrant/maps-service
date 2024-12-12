@@ -10,9 +10,9 @@ import (
 type Handler interface {
 	// ActionSubmissionPublish implements actionSubmissionPublish operation.
 	//
-	// Role Validator changes status from Publishing -> Published.
+	// (Internal endpoint) Role Validator changes status from Publishing -> Published.
 	//
-	// POST /submissions/{SubmissionID}/status/publish
+	// POST /submissions/{SubmissionID}/status/validator-published
 	ActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) error
 	// ActionSubmissionReject implements actionSubmissionReject operation.
 	//
@@ -52,9 +52,9 @@ type Handler interface {
 	ActionSubmissionTriggerValidate(ctx context.Context, params ActionSubmissionTriggerValidateParams) error
 	// ActionSubmissionValidate implements actionSubmissionValidate operation.
 	//
-	// Role Validator changes status from Validating -> Validated.
+	// (Internal endpoint) Role Validator changes status from Validating -> Validated.
 	//
-	// POST /submissions/{SubmissionID}/status/validate
+	// POST /submissions/{SubmissionID}/status/validator-validated
 	ActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) error
 	// CreateScript implements createScript operation.
 	//

@@ -66,9 +66,9 @@ pub type ReqwestError=reqwest::Error;
 
 // there are lots of action endpoints and they all follow the same pattern
 macro_rules! action{
-	($fname:ident,$action:ident)=>{
+	($fname:ident,$action:expr)=>{
 		pub async fn $fname(&self,config:SubmissionID)->Result<(),Error>{
-			let url_raw=format!(concat!("{}/submissions/{}/status/",stringify!($action)),self.base_url,config.0);
+			let url_raw=format!(concat!("{}/submissions/{}/status/",$action),self.base_url,config.0);
 			let url=reqwest::Url::parse(url_raw.as_str()).map_err(Error::ParseError)?;
 
 			self.post(url).await.map_err(Error::Reqwest)?
@@ -125,6 +125,6 @@ impl Context{
 
 		Ok(())
 	}
-	action!(action_submission_validate,validate);
-	action!(action_submission_publish,publish);
+	action!(action_submission_validate,"validator-validated");
+	action!(action_submission_publish,"validator-published");
 }

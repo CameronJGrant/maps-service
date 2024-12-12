@@ -241,9 +241,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /submissions/{SubmissionID}/status/validate:
+  /submissions/{SubmissionID}/status/validator-validated:
     post:
-      summary: Role Validator changes status from Validating -> Validated
+      summary: (Internal endpoint) Role Validator changes status from Validating -> Validated
       operationId: actionSubmissionValidate
       tags:
         - Submissions
@@ -258,9 +258,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /submissions/{SubmissionID}/status/publish:
+  /submissions/{SubmissionID}/status/validator-published:
     post:
-      summary: Role Validator changes status from Publishing -> Published
+      summary: (Internal endpoint) Role Validator changes status from Publishing -> Published
       operationId: actionSubmissionPublish
       tags:
         - Submissions

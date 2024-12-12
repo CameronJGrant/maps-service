@@ -26,9 +26,9 @@ import (
 type Invoker interface {
 	// ActionSubmissionPublish invokes actionSubmissionPublish operation.
 	//
-	// Role Validator changes status from Publishing -> Published.
+	// (Internal endpoint) Role Validator changes status from Publishing -> Published.
 	//
-	// POST /submissions/{SubmissionID}/status/publish
+	// POST /submissions/{SubmissionID}/status/validator-published
 	ActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) error
 	// ActionSubmissionReject invokes actionSubmissionReject operation.
 	//
@@ -68,9 +68,9 @@ type Invoker interface {
 	ActionSubmissionTriggerValidate(ctx context.Context, params ActionSubmissionTriggerValidateParams) error
 	// ActionSubmissionValidate invokes actionSubmissionValidate operation.
 	//
-	// Role Validator changes status from Validating -> Validated.
+	// (Internal endpoint) Role Validator changes status from Validating -> Validated.
 	//
-	// POST /submissions/{SubmissionID}/status/validate
+	// POST /submissions/{SubmissionID}/status/validator-validated
 	ActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) error
 	// CreateScript invokes createScript operation.
 	//
@@ -214,9 +214,9 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 
 // ActionSubmissionPublish invokes actionSubmissionPublish operation.
 //
-// Role Validator changes status from Publishing -> Published.
+// (Internal endpoint) Role Validator changes status from Publishing -> Published.
 //
-// POST /submissions/{SubmissionID}/status/publish
+// POST /submissions/{SubmissionID}/status/validator-published
 func (c *Client) ActionSubmissionPublish(ctx context.Context, params ActionSubmissionPublishParams) error {
 	_, err := c.sendActionSubmissionPublish(ctx, params)
 	return err
@@ -226,7 +226,7 @@ func (c *Client) sendActionSubmissionPublish(ctx context.Context, params ActionS
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionPublish"),
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/publish"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/validator-published"),
 	}
 
 	// Run stopwatch.
@@ -278,7 +278,7 @@ func (c *Client) sendActionSubmissionPublish(ctx context.Context, params ActionS
 		}
 		pathParts[1] = encoded
 	}
-	pathParts[2] = "/status/publish"
+	pathParts[2] = "/status/validator-published"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -1049,9 +1049,9 @@ func (c *Client) sendActionSubmissionTriggerValidate(ctx context.Context, params
 
 // ActionSubmissionValidate invokes actionSubmissionValidate operation.
 //
-// Role Validator changes status from Validating -> Validated.
+// (Internal endpoint) Role Validator changes status from Validating -> Validated.
 //
-// POST /submissions/{SubmissionID}/status/validate
+// POST /submissions/{SubmissionID}/status/validator-validated
 func (c *Client) ActionSubmissionValidate(ctx context.Context, params ActionSubmissionValidateParams) error {
 	_, err := c.sendActionSubmissionValidate(ctx, params)
 	return err
@@ -1061,7 +1061,7 @@ func (c *Client) sendActionSubmissionValidate(ctx context.Context, params Action
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionValidate"),
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/validate"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/validator-validated"),
 	}
 
 	// Run stopwatch.
@@ -1113,7 +1113,7 @@ func (c *Client) sendActionSubmissionValidate(ctx context.Context, params Action
 		}
 		pathParts[1] = encoded
 	}
-	pathParts[2] = "/status/validate"
+	pathParts[2] = "/status/validator-validated"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"

@@ -32,16 +32,16 @@ func (c *codeRecorder) WriteHeader(status int) {
 
 // handleActionSubmissionPublishRequest handles actionSubmissionPublish operation.
 //
-// Role Validator changes status from Publishing -> Published.
+// (Internal endpoint) Role Validator changes status from Publishing -> Published.
 //
-// POST /submissions/{SubmissionID}/status/publish
+// POST /submissions/{SubmissionID}/status/validator-published
 func (s *Server) handleActionSubmissionPublishRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionPublish"),
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/publish"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/validator-published"),
 	}
 
 	// Start a span for this request.
@@ -120,7 +120,7 @@ func (s *Server) handleActionSubmissionPublishRequest(args [1]string, argsEscape
 		mreq := middleware.Request{
 			Context:          ctx,
 			OperationName:    ActionSubmissionPublishOperation,
-			OperationSummary: "Role Validator changes status from Publishing -> Published",
+			OperationSummary: "(Internal endpoint) Role Validator changes status from Publishing -> Published",
 			OperationID:      "actionSubmissionPublish",
 			Body:             nil,
 			Params: middleware.Parameters{
@@ -1351,16 +1351,16 @@ func (s *Server) handleActionSubmissionTriggerValidateRequest(args [1]string, ar
 
 // handleActionSubmissionValidateRequest handles actionSubmissionValidate operation.
 //
-// Role Validator changes status from Validating -> Validated.
+// (Internal endpoint) Role Validator changes status from Validating -> Validated.
 //
-// POST /submissions/{SubmissionID}/status/validate
+// POST /submissions/{SubmissionID}/status/validator-validated
 func (s *Server) handleActionSubmissionValidateRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("actionSubmissionValidate"),
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/validate"),
+		semconv.HTTPRouteKey.String("/submissions/{SubmissionID}/status/validator-validated"),
 	}
 
 	// Start a span for this request.
@@ -1439,7 +1439,7 @@ func (s *Server) handleActionSubmissionValidateRequest(args [1]string, argsEscap
 		mreq := middleware.Request{
 			Context:          ctx,
 			OperationName:    ActionSubmissionValidateOperation,
-			OperationSummary: "Role Validator changes status from Validating -> Validated",
+			OperationSummary: "(Internal endpoint) Role Validator changes status from Validating -> Validated",
 			OperationID:      "actionSubmissionValidate",
 			Body:             nil,
 			Params: middleware.Parameters{
