@@ -44,7 +44,7 @@ async fn main()->Result<(),StartupError>{
 	// connect to nats
 	let (publish_new,publish_fix,validator)=tokio::try_join!(
 		publish_new::Publisher::new(nasty.clone(),cookie_context.clone(),api.clone(),maps_grpc),
-		publish_fix::Publisher::new(nasty.clone(),cookie_context.clone()),
+		publish_fix::Publisher::new(nasty.clone(),cookie_context.clone(),api.clone()),
 		// clone nats here because it's dropped within the function scope,
 		// meanining the last reference is dropped...
 		validator::Validator::new(nasty.clone(),cookie_context,api)
