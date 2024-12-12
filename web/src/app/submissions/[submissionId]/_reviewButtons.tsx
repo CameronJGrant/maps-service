@@ -1,8 +1,10 @@
 import { Button, ButtonOwnProps } from "@mui/material";
 
 type Review = "Completed" | "Submit" | "Reject" | "Revoke" | "Validate" | "Publish"
+type Action = "completed" | "submit" | "reject" | "revoke" | "trigger-validate" | "trigger-publish"
 interface ReviewButton {
 	name: Review,
+	action: Action,
 	color: ButtonOwnProps["color"]
 }
 
@@ -25,8 +27,8 @@ interface ReviewButton {
 // -X POST \
 // localhost:8081/v1/submissions/1/status/submit
 
-function ReviewButtonClicked(type: Review) {
-	const post = fetch(`http://localhost:8081/v1/submissions/1/status/${type.toLowerCase()}`, {
+function ReviewButtonClicked(action: Action) {
+	const post = fetch(`http://localhost:8081/v1/submissions/1/status/${action}`, {
 		method: "POST",
 		headers: {
 			"Content-type": "application/json",
@@ -36,18 +38,18 @@ function ReviewButtonClicked(type: Review) {
 }
 
 function ReviewButton(props: ReviewButton) {
-	return <Button color={props.color} variant="contained" onClick={() => { ReviewButtonClicked(props.name) }}>{props.name}</Button>
+	return <Button color={props.color} variant="contained" onClick={() => { ReviewButtonClicked(props.action) }}>{props.name}</Button>
 }
 
 export default function ReviewButtons() {
 	return (
 		<section className="review-set">
-			<ReviewButton color="error" name="Reject"/>
-			<ReviewButton color="info"  name="Revoke"/>
-			<ReviewButton color="info"  name="Publish"/>
-			<ReviewButton color="info"  name="Completed"/>
-			<ReviewButton color="info"  name="Submit"/>
-			<ReviewButton color="info"  name="Validate"/>
+			<ReviewButton color="error" name="Reject"    action="reject"/>
+			<ReviewButton color="info"  name="Revoke"    action="revoke"/>
+			<ReviewButton color="info"  name="Publish"   action="trigger-publish"/>
+			<ReviewButton color="info"  name="Completed" action="completed"/>
+			<ReviewButton color="info"  name="Submit"    action="submit"/>
+			<ReviewButton color="info"  name="Validate"  action="trigger-validate"/>
 		</section>
 	)
 }
