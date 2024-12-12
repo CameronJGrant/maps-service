@@ -16,7 +16,7 @@ var (
 )
 
 type Service struct {
-	DB datastore.Datastore
+	DB   datastore.Datastore
 	Nats nats.JetStreamContext
 }
 
@@ -25,16 +25,16 @@ type Service struct {
 // Used for common default response.
 func (svc *Service) NewError(ctx context.Context, err error) *api.ErrorStatusCode {
 	status := 500
-	if errors.Is(err,ErrPermissionDenied){
+	if errors.Is(err, ErrPermissionDenied) {
 		status = 403
 	}
-	if errors.Is(err,ErrUserInfo){
+	if errors.Is(err, ErrUserInfo) {
 		status = 401
 	}
 	return &api.ErrorStatusCode{
 		StatusCode: status,
-		Response:   api.Error{
-			Code: int64(status),
+		Response: api.Error{
+			Code:    int64(status),
 			Message: err.Error(),
 		},
 	}

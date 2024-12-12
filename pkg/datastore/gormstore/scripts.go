@@ -53,7 +53,7 @@ func (env *Scripts) Update(ctx context.Context, id int64, values datastore.Optio
 
 // the update can only occur if the status matches one of the provided values.
 func (env *Scripts) IfStatusThenUpdate(ctx context.Context, id int64, statuses []model.Status, values datastore.OptionalMap) error {
-	if err := env.db.Model(&model.Script{}).Where("id = ?", id).Where("status IN ?",statuses).Updates(values.Map()).Error; err != nil {
+	if err := env.db.Model(&model.Script{}).Where("id = ?", id).Where("status IN ?", statuses).Updates(values.Map()).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return datastore.ErrNotExist
 		}

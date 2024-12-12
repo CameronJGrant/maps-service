@@ -2,16 +2,16 @@ package cmds
 
 import (
 	"fmt"
+	"git.itzana.me/strafesnet/go-grpc/auth"
 	"git.itzana.me/strafesnet/maps-service/pkg/api"
 	"git.itzana.me/strafesnet/maps-service/pkg/datastore/gormstore"
 	"git.itzana.me/strafesnet/maps-service/pkg/service"
+	"github.com/nats-io/nats.go"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
-	"net/http"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"git.itzana.me/strafesnet/go-grpc/auth"
-	"github.com/nats-io/nats.go"
+	"net/http"
 )
 
 func NewServeCommand() *cli.Command {
@@ -93,8 +93,8 @@ func serve(ctx *cli.Context) error {
 	}
 
 	_, err = js.AddStream(&nats.StreamConfig{
-		Name:"maptest",
-		Subjects: []string{"maptest.>"},
+		Name:      "maptest",
+		Subjects:  []string{"maptest.>"},
 		Retention: nats.WorkQueuePolicy,
 	})
 	if err != nil {
@@ -102,7 +102,7 @@ func serve(ctx *cli.Context) error {
 	}
 
 	svc := &service.Service{
-		DB: db,
+		DB:   db,
 		Nats: js,
 	}
 

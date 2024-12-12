@@ -54,7 +54,7 @@ func (env *Submissions) Update(ctx context.Context, id int64, values datastore.O
 
 // the update can only occur if the status matches one of the provided values.
 func (env *Submissions) IfStatusThenUpdate(ctx context.Context, id int64, statuses []model.Status, values datastore.OptionalMap) error {
-	if err := env.db.Model(&model.Submission{}).Where("id = ?", id).Where("status_id IN ?",statuses).Updates(values.Map()).Error; err != nil {
+	if err := env.db.Model(&model.Submission{}).Where("id = ?", id).Where("status_id IN ?", statuses).Updates(values.Map()).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return datastore.ErrNotExist
 		}
@@ -71,7 +71,7 @@ func (env *Submissions) IfStatusThenUpdateAndGet(ctx context.Context, id int64, 
 	result := env.db.Model(&submission).
 		Clauses(clause.Returning{}).
 		Where("id = ?", id).
-		Where("status_id IN ?",statuses).
+		Where("status_id IN ?", statuses).
 		Updates(values.Map())
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {

@@ -5,7 +5,7 @@ package model
 
 // Requests are sent from maps-service to validator
 
-type ValidateRequest struct{
+type ValidateRequest struct {
 	// submission_id is passed back in the response message
 	SubmissionID     int64
 	ModelID          uint64
@@ -14,7 +14,7 @@ type ValidateRequest struct{
 }
 
 // Create a new map
-type PublishNewRequest struct{
+type PublishNewRequest struct {
 	SubmissionID int64
 	ModelID      uint64
 	ModelVersion uint64
@@ -24,7 +24,7 @@ type PublishNewRequest struct{
 	//games HashSet<GameID>
 }
 
-type PublishFixRequest struct{
+type PublishFixRequest struct {
 	SubmissionID  int64
 	ModelID       uint64
 	ModelVersion  uint64
