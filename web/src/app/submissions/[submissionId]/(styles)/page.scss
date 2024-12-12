@@ -18,7 +18,7 @@
     display: block;
     width: 100%;
     height: 1px;
-    background-color: globals.$review-border-color;
+    background-color: var(--review-border);
 }
 
 .by-creator {

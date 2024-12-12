@@ -16,7 +16,7 @@ $comments-size: 60px;
 
         //BhopMaptest comment
         &[data-highlighted="true"] {
-            background-color: #ffffd7;
+            background-color: var(--comment-highlighted);
         }
         > img {
             border-radius: 50%;

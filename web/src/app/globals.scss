@@ -1,5 +1,4 @@
-$review-border-color: #c8c8c8;
-$review-border: 1px solid $review-border-color;
+$review-border: 1px solid var(--review-border);
 
 @mixin border-with-radius {
     border: $review-border {
@@ -8,13 +7,42 @@ $review-border: 1px solid $review-border-color;
 }
 
 :root {
-	color-scheme: light;
+	color-scheme: light dark;
+
+	--page:                white;
+	--header-grad-left:    #363b40;
+	--header-grad-right:   #353a40;
+	--header-button-left:  white;
+	--header-button-right: #b4b4b4;
+	--header-button-hover: white;
+	--review-border:       #c8c8c8;
+	--text-color:          #1e1e1e;
+	--anchor-link-review:  #008fd6;
+	--window-header:       #f5f5f5;
+	--comment-highlighted: #ffffd7;
+	--comment-area:        white;
+
+	@media (prefers-color-scheme: dark) {
+		--page:                rgb(15,15,15);
+		--header-grad-left:    #363b40;
+		--header-grad-right:   #353a40;
+		--header-button-left:  white;
+		--header-button-right: #b4b4b4;
+		--header-button-hover: white;
+		--review-border:       rgb(50,50,50);
+		--text-color:          rgb(230,230,230);
+		--anchor-link-review:  #008fd6;
+		--window-header:       rgb(10,10,10);
+		--comment-highlighted: #ffffd7;
+		--comment-area:        rgb(20,20,20);
+	}
 }
 
 body {
 	font-family: -apple-system, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla";
 	box-sizing: border-box;
 	margin: 0;
+	background-color: var(--page);
 }
 
 button {

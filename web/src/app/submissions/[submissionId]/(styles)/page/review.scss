@@ -8,10 +8,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-
     }
     p, h1 {
-        color: #1e1e1e;
+        color: var(--text-color);
     }
     h1 {
         font: {
@@ -21,7 +20,7 @@
         margin: 0;
     }
     a {
-        color: #008fd6;
+        color: var(--anchor-link-review);
 
         &:hover {
             text-decoration: underline;

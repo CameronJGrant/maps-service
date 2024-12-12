@@ -4,34 +4,34 @@
 	align-items: center;
 	width: 100vw;
 	height: 60px;
-	background: rgb(59,64,70);
-	background: linear-gradient(180deg, #363b40 0%, #353a40 100%);
+	background: var(--header-grad-left);
+	background: linear-gradient(180deg, var(--header-grad-left) 0%, var(--header-grad-right) 100%);
 
 	button {
 		background-color: transparent;
 		border: 0;
-		color: white;
+		color: var(--header-button-left);
 	}
-	
+
 	.left {
 		margin-left: 15px;
-	
+
 		button {
 			font-size: 1.2rem;
 		}
 	}
-	
+
 	.right {
 		display: flex;
 		gap: 7px;
 		margin-right: 50px;
-	
+
 		button {
 			font-size: 1rem;
-			color: rgb(180,180,180);
-	
+			color: var(--header-button-right);
+
 			&:hover {
-				color: white
+				color: var(--header-button-hover)
 			}
 		}
 	}
