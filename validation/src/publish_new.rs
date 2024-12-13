@@ -1,12 +1,8 @@
-use futures::StreamExt;
-use crate::types::{MessageResult,NatsStartupError};
 use crate::nats_types::PublishNewRequest;
 
 #[allow(dead_code)]
 #[derive(Debug)]
-enum PublishError{
-	Messages(async_nats::jetstream::consumer::pull::MessagesError),
-	DoubleAck(async_nats::Error),
+pub enum PublishError{
 	Get(rbx_asset::cookie::GetError),
 	Json(serde_json::Error),
 	Create(rbx_asset::cookie::CreateError),
@@ -22,46 +18,24 @@ impl std::fmt::Display for PublishError{
 impl std::error::Error for PublishError{}
 
 pub struct Publisher{
-	messages:async_nats::jetstream::consumer::pull::Stream,
 	roblox_cookie:rbx_asset::cookie::CookieContext,
 	api:api::Context,
-	maps_grpc:crate::types::MapsServiceClient,
+	maps_grpc:crate::MapsServiceClient,
 }
 impl Publisher{
-	pub async fn new(
-		stream:async_nats::jetstream::stream::Stream,
+	pub const fn new(
 		roblox_cookie:rbx_asset::cookie::CookieContext,
 		api:api::Context,
-		maps_grpc:crate::types::MapsServiceClient,
-	)->Result<Self,NatsStartupError>{
-		Ok(Self{
-			messages:stream.get_or_create_consumer("publish_new",async_nats::jetstream::consumer::pull::Config{
-				name:Some("publish_new".to_owned()),
-				durable_name:Some("publish_new".to_owned()),
-				filter_subject:"maptest.submissions.publish.new".to_owned(),
-				..Default::default()
-			}).await.map_err(NatsStartupError::Consumer)?
-			.messages().await.map_err(NatsStartupError::Stream)?,
+		maps_grpc:crate::MapsServiceClient,
+	)->Self{
+		Self{
 			roblox_cookie,
 			api,
 			maps_grpc,
-		})
-	}
-	pub async fn run(mut self){
-		while let Some(message_result)=self.messages.next().await{
-			self.publish_supress_error(message_result).await
 		}
 	}
-	async fn publish_supress_error(&self,message_result:MessageResult){
-		match self.publish(message_result).await{
-			Ok(())=>println!("[PublishNew] Published, hooray!"),
-			Err(e)=>println!("[PublishNew] There was an error, oopsie! {e}"),
-		}
-	}
-	async fn publish(&self,message_result:MessageResult)->Result<(),PublishError>{
-		println!("publish_new {:?}",message_result);
-		let message=message_result.map_err(PublishError::Messages)?;
-		message.double_ack().await.map_err(PublishError::DoubleAck)?;
+	pub async fn publish(&self,message:async_nats::jetstream::Message)->Result<(),PublishError>{
+		println!("publish_new {:?}",message);
 		// decode json
 		let publish_info:PublishNewRequest=serde_json::from_slice(&message.payload).map_err(PublishError::Json)?;
 

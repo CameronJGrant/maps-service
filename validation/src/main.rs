@@ -1,8 +1,10 @@
-mod types;
+use futures::StreamExt;
+
 mod nats_types;
 mod validator;
 mod publish_new;
 mod publish_fix;
+mod message_handler;
 
 #[allow(dead_code)]
 #[derive(Debug)]
@@ -10,7 +12,8 @@ pub enum StartupError{
 	API(api::ReqwestError),
 	NatsConnect(async_nats::ConnectError),
 	NatsGetStream(async_nats::jetstream::context::GetStreamError),
-	NatsStartup(types::NatsStartupError),
+	NatsConsumer(async_nats::jetstream::stream::ConsumerError),
+	NatsStream(async_nats::jetstream::consumer::StreamError),
 	GRPCConnect(tonic::transport::Error),
 }
 impl std::fmt::Display for StartupError{
@@ -19,6 +22,9 @@ impl std::fmt::Display for StartupError{
 	}
 }
 impl std::error::Error for StartupError{}
+
+// annoying mile-long type
+pub type MapsServiceClient=rust_grpc::maps::maps_service_client::MapsServiceClient<tonic::transport::channel::Channel>;
 
 pub const GROUP_STRAFESNET:u64=6980477;
 
@@ -35,27 +41,35 @@ async fn main()->Result<(),StartupError>{
 	// nats
 	let nats_host=std::env::var("NATS_HOST").expect("NATS_HOST env required");
 	let nasty=async_nats::connect(nats_host).await.map_err(StartupError::NatsConnect)?;	// use nats jetstream
-	let stream=async_nats::jetstream::new(nasty)
-		.get_stream("maptest").await.map_err(StartupError::NatsGetStream)?;
+	let mut messages=async_nats::jetstream::new(nasty)
+		.get_stream("maptest").await.map_err(StartupError::NatsGetStream)?
+		.get_or_create_consumer("validation",async_nats::jetstream::consumer::pull::Config{
+			name:Some("validation".to_owned()),
+			durable_name:Some("validation".to_owned()),
+			filter_subject:"maptest.submissions.>".to_owned(),
+			..Default::default()
+		}).await.map_err(StartupError::NatsConsumer)?
+		.messages().await.map_err(StartupError::NatsStream)?;
 
 	// data-service grpc for creating map entries
 	let data_host=std::env::var("DATA_HOST").expect("DATA_HOST env required");
-	let maps_grpc=crate::types::MapsServiceClient::connect(data_host).await.map_err(StartupError::GRPCConnect)?;
+	let maps_grpc=crate::MapsServiceClient::connect(data_host).await.map_err(StartupError::GRPCConnect)?;
 
 	// Create a signal listener for SIGTERM
 	let mut sig_term = tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate()).expect("Failed to create SIGTERM signal listener");
 
-	// connect to nats
-	let (publish_new,publish_fix,validator)=tokio::try_join!(
-		publish_new::Publisher::new(stream.clone(),cookie_context.clone(),api.clone(),maps_grpc),
-		publish_fix::Publisher::new(stream.clone(),cookie_context.clone(),api.clone()),
-		validator::Validator::new(stream,cookie_context,api)
-	).map_err(StartupError::NatsStartup)?;
+	// the guy
+	let message_handler=message_handler::MessageHandler::new(cookie_context,api,maps_grpc);
 
-	// nats consumer threads
-	tokio::spawn(publish_new.run());
-	tokio::spawn(publish_fix.run());
-	tokio::spawn(validator.run());
+	// nats consumer thread
+	tokio::spawn(async move{
+		while let Some(message_result)=messages.next().await{
+			match message_handler.handle_message_result(message_result).await{
+				Ok(())=>println!("[Validation] Success, hooray!"),
+				Err(e)=>println!("[Validation] There was an error, oopsie! {e}"),
+			}
+		}
+	});
 
 	sig_term.recv().await;
 

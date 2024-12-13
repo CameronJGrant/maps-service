@@ -1,5 +1,5 @@
-use futures::{StreamExt,TryStreamExt};
-use crate::types::{MessageResult,NatsStartupError};
+use futures::TryStreamExt;
+
 use crate::nats_types::ValidateRequest;
 
 const SCRIPT_CONCURRENCY:usize=16;
@@ -13,11 +13,9 @@ enum Policy{
 
 #[allow(dead_code)]
 #[derive(Debug)]
-enum ValidateError{
+pub enum ValidateError{
 	Blocked,
 	NotAllowed,
-	Messages(async_nats::jetstream::consumer::pull::MessagesError),
-	DoubleAck(async_nats::Error),
 	Get(rbx_asset::cookie::GetError),
 	Json(serde_json::Error),
 	ReadDom(ReadDomError),
@@ -37,45 +35,22 @@ impl std::fmt::Display for ValidateError{
 impl std::error::Error for ValidateError{}
 
 pub struct Validator{
-	messages:async_nats::jetstream::consumer::pull::Stream,
 	roblox_cookie:rbx_asset::cookie::CookieContext,
 	api:api::Context,
 }
 
 impl Validator{
-	pub async fn new(
-		stream:async_nats::jetstream::stream::Stream,
+	pub const fn new(
 		roblox_cookie:rbx_asset::cookie::CookieContext,
 		api:api::Context,
-	)->Result<Self,NatsStartupError>{
-		Ok(Self{
-			messages:stream.get_or_create_consumer("validation",async_nats::jetstream::consumer::pull::Config{
-				name:Some("validation".to_owned()),
-				durable_name:Some("validation".to_owned()),
-				ack_policy:async_nats::jetstream::consumer::AckPolicy::Explicit,
-				filter_subject:"maptest.submissions.validate".to_owned(),
-				..Default::default()
-			}).await.map_err(NatsStartupError::Consumer)?
-			.messages().await.map_err(NatsStartupError::Stream)?,
+	)->Self{
+		Self{
 			roblox_cookie,
 			api,
-		})
-	}
-	pub async fn run(mut self){
-		while let Some(message_result)=self.messages.next().await{
-			self.validate_supress_error(message_result).await
 		}
 	}
-	async fn validate_supress_error(&self,message_result:MessageResult){
-		match self.validate(message_result).await{
-			Ok(())=>println!("[Validation] Validated, hooray!"),
-			Err(e)=>println!("[Validation] There was an error, oopsie! {e}"),
-		}
-	}
-	async fn validate(&self,message_result:MessageResult)->Result<(),ValidateError>{
-		println!("validate {:?}",message_result);
-		let message=message_result.map_err(ValidateError::Messages)?;
-		message.double_ack().await.map_err(ValidateError::DoubleAck)?;
+	pub async fn validate(&self,message:async_nats::jetstream::Message)->Result<(),ValidateError>{
+		println!("validate {:?}",message);
 		// decode json
 		let validate_info:ValidateRequest=serde_json::from_slice(&message.payload).map_err(ValidateError::Json)?;
 
@@ -205,7 +180,7 @@ impl Validator{
 
 #[allow(dead_code)]
 #[derive(Debug)]
-enum ReadDomError{
+pub enum ReadDomError{
 	Binary(rbx_binary::DecodeError),
 	Xml(rbx_xml::DecodeError),
 	Read(std::io::Error),
