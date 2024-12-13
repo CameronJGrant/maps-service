@@ -49,9 +49,7 @@ async fn main()->Result<(),StartupError>{
 	let (publish_new,publish_fix,validator)=tokio::try_join!(
 		publish_new::Publisher::new(stream.clone(),cookie_context.clone(),api.clone(),maps_grpc),
 		publish_fix::Publisher::new(stream.clone(),cookie_context.clone(),api.clone()),
-		// clone nats here because it's dropped within the function scope,
-		// meanining the last reference is dropped...
-		validator::Validator::new(stream.clone(),cookie_context,api)
+		validator::Validator::new(stream,cookie_context,api)
 	).map_err(StartupError::NatsStartup)?;
 
 	// nats consumer threads
