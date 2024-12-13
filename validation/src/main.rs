@@ -42,6 +42,9 @@ async fn main()->Result<(),StartupError>{
 	let data_host=std::env::var("DATA_HOST").expect("DATA_HOST env required");
 	let maps_grpc=crate::types::MapsServiceClient::connect(data_host).await.map_err(StartupError::GRPCConnect)?;
 
+	// Create a signal listener for SIGTERM
+	let mut sig_term = tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate()).expect("Failed to create SIGTERM signal listener");
+
 	// connect to nats
 	let (publish_new,publish_fix,validator)=tokio::try_join!(
 		publish_new::Publisher::new(stream.clone(),cookie_context.clone(),api.clone(),maps_grpc),
@@ -51,12 +54,12 @@ async fn main()->Result<(),StartupError>{
 		validator::Validator::new(stream.clone(),cookie_context,api)
 	).map_err(StartupError::NatsStartup)?;
 
-	// publisher threads
+	// nats consumer threads
 	tokio::spawn(publish_new.run());
 	tokio::spawn(publish_fix.run());
+	tokio::spawn(validator.run());
 
-	// run validator on the main thread indefinitely
-	validator.run().await;
+	sig_term.recv().await;
 
 	Ok(())
 }

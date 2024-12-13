@@ -16,5 +16,5 @@ rust-grpc = { version = "1.0.3", registry = "strafesnet" }
 serde = { version = "1.0.215", features = ["derive"] }
 serde_json = "1.0.133"
 siphasher = "1.0.1"
-tokio = { version = "1.41.1", features = ["macros", "rt-multi-thread", "fs"] }
+tokio = { version = "1.41.1", features = ["macros", "rt-multi-thread", "fs", "signal"] }
 tonic = "0.12.3"
