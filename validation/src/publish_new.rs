@@ -35,7 +35,7 @@ impl Publisher{
 		}
 	}
 	pub async fn publish(&self,message:async_nats::jetstream::Message)->Result<(),PublishError>{
-		println!("publish_new {:?}",message);
+		println!("publish_new {:?}",message.message.payload);
 		// decode json
 		let publish_info:PublishNewRequest=serde_json::from_slice(&message.payload).map_err(PublishError::Json)?;
 

@@ -50,7 +50,7 @@ impl Validator{
 		}
 	}
 	pub async fn validate(&self,message:async_nats::jetstream::Message)->Result<(),ValidateError>{
-		println!("validate {:?}",message);
+		println!("validate {:?}",message.message.payload);
 		// decode json
 		let validate_info:ValidateRequest=serde_json::from_slice(&message.payload).map_err(ValidateError::Json)?;
 

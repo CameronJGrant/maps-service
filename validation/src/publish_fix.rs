@@ -30,7 +30,7 @@ impl Publisher{
 		}
 	}
 	pub async fn publish(&self,message:async_nats::jetstream::Message)->Result<(),PublishError>{
-		println!("publish_fix {:?}",message);
+		println!("publish_fix {:?}",message.message.payload);
 		// decode json
 		let publish_info:PublishFixRequest=serde_json::from_slice(&message.payload).map_err(PublishError::Json)?;
 
