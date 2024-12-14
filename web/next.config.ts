@@ -6,8 +6,8 @@ const nextConfig: NextConfig = {
     rewrites: async () => {
     	return [
      		{
-       			source: "/v1/submissions/1/status/:statustype",
-          		destination: "http://localhost:8082/v1/submissions/:statustype"
+       			source: "/v1/submissions/:submissionid/status/:statustype",
+          		destination: "http://mapsservice:8082/v1/submissions/:submissionid/status/:statustype"
        		}
      	]
     }
