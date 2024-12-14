@@ -13,7 +13,6 @@ function ReviewButtonClicked(action: Action) {
 		method: "POST",
 		headers: {
 			"Content-type": "application/json",
-			"Cookie": "session_id=c5191ddc-eee1-4010-900c-6b2c7b6780ab"
 		}
 	})
 }
