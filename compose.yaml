@@ -51,7 +51,7 @@ services:
       maps-service-validation
     container_name: validation
     environment:
-      - RBXCOOKIE=RBXCOOKIE
+      - RBXCOOKIE
       - API_HOST=http://mapsservice:8082
       - NATS_HOST=nats:4222
       - DATA_HOST=http://dataservice:9000
