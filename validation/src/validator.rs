@@ -136,7 +136,7 @@ impl Validator{
 			rbx_binary::to_writer(&mut data,&dom,&[dom.root_ref()]).map_err(ValidateError::WriteDom)?;
 
 			// upload a model lol
-			let (model_id,model_version)=if let Some(model_id)=validate_info.ValidatedModelID{
+			let model_id=if let Some(model_id)=validate_info.ValidatedModelID{
 				// upload to existing id
 				let response=self.roblox_cookie.upload(rbx_asset::cookie::UploadRequest{
 					assetid:model_id,
@@ -147,7 +147,7 @@ impl Validator{
 					groupId:None,
 				},data).await.map_err(ValidateError::Upload)?;
 
-				(response.AssetId,response.AssetVersionId)
+				response.AssetId
 			}else{
 				// create new model
 				let response=self.roblox_cookie.create(rbx_asset::cookie::CreateRequest{
@@ -158,14 +158,14 @@ impl Validator{
 					groupId:None,
 				},data).await.map_err(ValidateError::Create)?;
 
-				(response.AssetId,response.AssetVersionId)
+				response.AssetId
 			};
 
 			// update the submission to use the validated model
 			self.api.update_submission_model(api::UpdateSubmissionModelRequest{
 				ID:validate_info.SubmissionID,
 				ModelID:model_id,
-				ModelVersion:model_version,
+				ModelVersion:1, //TODO
 			}).await.map_err(ValidateError::ApiUpdateSubmissionModel)?;
 		};
 
