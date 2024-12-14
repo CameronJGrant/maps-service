@@ -7,7 +7,7 @@ services:
   nats:
     image: docker.io/nats:latest
     container_name: nats
-    command: ["-js"]
+    command: ["-js"] #"-DVV"
     networks:
       - maps-service-network
 
@@ -98,6 +98,8 @@ services:
       - authredis
     networks:
       - maps-service-network
+    logging:
+      driver: "none"
 
   auth-web:
     image: registry.itzana.me/strafesnet/auth-service:master
