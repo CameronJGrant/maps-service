@@ -133,7 +133,7 @@ impl Validator{
 		if modified{
 			// serialize model (slow!)
 			let mut data=Vec::new();
-			rbx_binary::to_writer(&mut data,&dom,&[dom.root_ref()]).map_err(ValidateError::WriteDom)?;
+			rbx_binary::to_writer(&mut data,&dom,dom.root().children()).map_err(ValidateError::WriteDom)?;
 
 			// upload a model lol
 			let model_id=if let Some(model_id)=validate_info.ValidatedModelID{
