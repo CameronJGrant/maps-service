@@ -1,6 +1,6 @@
 import { Button, ButtonOwnProps } from "@mui/material";
 
-type Review = "Completed" | "Submit" | "Reject" | "Revoke" | "Validate" | "Publish"
+type Review = "Completed" | "Submit" | "Reject" | "Revoke" | "Accept" | "Publish"
 type Action = "completed" | "submit" | "reject" | "revoke" | "trigger-validate" | "trigger-publish"
 interface ReviewButton {
 	name: Review,
@@ -24,12 +24,12 @@ function ReviewButton(props: ReviewButton) {
 export default function ReviewButtons() {
 	return (
 		<section className="review-set">
-			<ReviewButton color="error" name="Reject"    action="reject"/>
+			<ReviewButton color="info"  name="Submit"    action="submit"/>
 			<ReviewButton color="info"  name="Revoke"    action="revoke"/>
+			<ReviewButton color="info"  name="Accept"    action="trigger-validate"/>
+			<ReviewButton color="error" name="Reject"    action="reject"/>
 			<ReviewButton color="info"  name="Publish"   action="trigger-publish"/>
 			<ReviewButton color="info"  name="Completed" action="completed"/>
-			<ReviewButton color="info"  name="Submit"    action="submit"/>
-			<ReviewButton color="info"  name="Validate"  action="trigger-validate"/>
 		</section>
 	)
 }
