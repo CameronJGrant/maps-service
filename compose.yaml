@@ -3,10 +3,6 @@ networks:
   maps-service-network:
     driver: bridge
 
-secrets:
-  netrc:
-    file: /home/quat/.netrc
-
 services:
   nats:
     image: docker.io/nats:latest
@@ -16,11 +12,8 @@ services:
       - maps-service-network
 
   mapsservice:
-    build:
-      secrets:
-        - netrc
-      context: .
-      dockerfile: Containerfile
+    image:
+      maps-service
     container_name: mapsservice
     command: [
       # debug
@@ -46,18 +39,16 @@ services:
       - "8082:8082"
 
   web:
-    build:
-      context: web
-      dockerfile: Containerfile
+    image:
+      maps-service-web
     networks:
       - maps-service-network
     ports:
       - "3000:3000"
 
   validation:
-    build:
-      context: validation
-      dockerfile: Containerfile
+    image:
+      maps-service-validation
     container_name: validation
     environment:
       - RBXCOOKIE=RBXCOOKIE
