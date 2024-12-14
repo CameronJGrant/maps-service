@@ -313,7 +313,7 @@ func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params a
 			return err
 		}
 
-		svc.Nats.Publish("maptest.submissions.publish.new", []byte(j))
+		svc.Nats.Publish("maptest.submissions.publishnew", []byte(j))
 	} else {
 		// this is a map fix
 		publish_fix_request := model.PublishFixRequest{
@@ -328,7 +328,7 @@ func (svc *Service) ActionSubmissionTriggerPublish(ctx context.Context, params a
 			return err
 		}
 
-		svc.Nats.Publish("maptest.submissions.publish.fix", []byte(j))
+		svc.Nats.Publish("maptest.submissions.publishfix", []byte(j))
 	}
 
 	return nil

@@ -39,8 +39,8 @@ impl MessageHandler{
 		let message=message_result.map_err(HandleMessageError::Messages)?;
 		message.double_ack().await.map_err(HandleMessageError::DoubleAck)?;
 		match message.subject.as_str(){
-			"maptest.submissions.publish.new"=>self.publish_new.publish(message).await.map_err(HandleMessageError::PublishNew),
-			"maptest.submissions.publish.fix"=>self.publish_fix.publish(message).await.map_err(HandleMessageError::PublishFix),
+			"maptest.submissions.publishnew"=>self.publish_new.publish(message).await.map_err(HandleMessageError::PublishNew),
+			"maptest.submissions.publishfix"=>self.publish_fix.publish(message).await.map_err(HandleMessageError::PublishFix),
 			"maptest.submissions.validate"=>self.validator.validate(message).await.map_err(HandleMessageError::Validation),
 			other=>Err(HandleMessageError::UnknownSubject(other.to_owned()))
 		}
