@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     	return [
      		{
        			source: "/v1/submissions/1/status/:statustype",
-          		destination: "http://localhost:8081/v1/submissions/:statustype"
+          		destination: "http://localhost:8082/v1/submissions/:statustype"
        		}
      	]
     }
